@@ -11,7 +11,7 @@ export async function getSalaryTableRows(): Promise<SalaryTableResult> {
     return { ok: false, error: roster.error, rows: [] };
   }
 
-  const rows: SalaryTableRow[] = roster.rows.map((row) => {
+  const mapped: SalaryTableRow[] = roster.rows.map((row) => {
     return {
       playerId: row.player.id,
       name: row.player.name,
@@ -34,6 +34,10 @@ export async function getSalaryTableRows(): Promise<SalaryTableResult> {
       sourceUrl: row.contract?.source_url ?? null,
     };
   });
+
+  const rows = mapped.filter(
+    (row) => row.weeklyWageGbp != null || row.annualWageGbp != null,
+  );
 
   return { ok: true, rows };
 }

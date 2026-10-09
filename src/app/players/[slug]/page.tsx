@@ -44,11 +44,16 @@ export async function generateMetadata({
     contract?.currency?.toUpperCase() ??
     club?.league?.currency?.toUpperCase() ??
     "GBP";
+  const hasPublishedWage =
+    contract != null &&
+    (contract.weekly_wage_gbp != null || contract.annual_wage_gbp != null);
   const weekly = formatMoney(contract?.weekly_wage_gbp, wageCurrency);
   const annual = formatMoney(contract?.annual_wage_gbp, wageCurrency);
   const title = `${player.name} Salary & Contract`;
   const description = contract
-    ? `${player.name} salary: ${weekly} per week (${annual} per year). Contract dates, sources, and ${CURRENT_SEASON} stats on FB Salaries.`
+    ? hasPublishedWage
+      ? `${player.name} salary: ${weekly} per week (${annual} per year). Contract dates, sources, and ${CURRENT_SEASON} stats on FB Salaries.`
+      : `${player.name} contract and transfer sources on FB Salaries; published wage not on file yet.`
     : `${player.name} wages, contract, and ${CURRENT_SEASON} stats when available on FB Salaries.`;
 
   const url = `${getSiteUrl()}/players/${slug}`;
@@ -82,6 +87,9 @@ async function PlayerContent({ params }: { params: Params }) {
     contract?.weekly_wage_gbp,
     contract?.contract_end,
   );
+  const hasPublishedWage =
+    contract != null &&
+    (contract.weekly_wage_gbp != null || contract.annual_wage_gbp != null);
 
   return (
     <div className="space-y-8">
@@ -110,7 +118,7 @@ async function PlayerContent({ params }: { params: Params }) {
             {player.name} salary
           </h1>
         </div>
-        {contract ? (
+        {contract && hasPublishedWage ? (
           <div className="space-y-2 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
             <div className="flex flex-wrap items-center gap-2">
               <WageStatusBadge status={contract.status} />
@@ -145,6 +153,29 @@ async function PlayerContent({ params }: { params: Params }) {
                 year
               </p>
             ) : null}
+            {contract.wage_notes ? (
+              <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                {contract.wage_notes}
+              </p>
+            ) : null}
+          </div>
+        ) : contract ? (
+          <div className="space-y-3 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
+            <div className="flex flex-wrap items-center gap-2">
+              <WageStatusBadge status={contract.status} />
+              <ContractTimingBadge contractEnd={contract.contract_end} />
+              {contract.reviewed_at || contract.last_reviewed ? (
+                <span className="text-xs text-zinc-500">
+                  Last reviewed:{" "}
+                  {formatDate(contract.reviewed_at ?? contract.last_reviewed)}
+                </span>
+              ) : null}
+            </div>
+            <ContractExpiredNote contractEnd={contract.contract_end} />
+            <StateMessage
+              title="No published wage"
+              message="We track this contract and source below, but no weekly or annual figure is on file yet."
+            />
             {contract.wage_notes ? (
               <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
                 {contract.wage_notes}
