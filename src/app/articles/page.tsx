@@ -3,7 +3,7 @@ import Link from "next/link";
 import { formatDate } from "@/lib/format";
 import { articleDefinitions } from "@/content/article-definitions";
 import { getArticlePreview } from "@/lib/queries/get-article-data";
-import { PREFERRED_SITE_DOMAIN } from "@/lib/brand";
+import { siteUrl } from "@/lib/site-url";
 
 const INDEX_TITLE = "Football Salary Rankings & Analysis | FB Salaries";
 
@@ -12,13 +12,13 @@ export const metadata: Metadata = {
   description:
     "Data-driven football salary rankings and contract analysis, updated from our live wage database.",
   alternates: {
-    canonical: `${PREFERRED_SITE_DOMAIN}/articles`,
+    canonical: siteUrl("/articles"),
   },
   openGraph: {
     title: INDEX_TITLE,
     description:
       "Live highest-paid lists, league breakdowns, and expiring contracts.",
-    url: `${PREFERRED_SITE_DOMAIN}/articles`,
+    url: siteUrl("/articles"),
   },
   twitter: {
     card: "summary",

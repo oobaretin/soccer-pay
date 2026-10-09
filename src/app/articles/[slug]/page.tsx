@@ -10,7 +10,8 @@ import {
   getArticleSlugs,
   type ArticleSlug,
 } from "@/content/article-definitions";
-import { PREFERRED_SITE_DOMAIN, pageTitleFull } from "@/lib/brand";
+import { pageTitleFull } from "@/lib/brand";
+import { siteUrl } from "@/lib/site-url";
 import { formatDate } from "@/lib/format";
 import { getArticleData } from "@/lib/queries/get-article-data";
 
@@ -30,7 +31,7 @@ export async function generateMetadata({
   if (!article) return { title: "Article not found" };
 
   const title = `${article.title} 2026`;
-  const canonical = `${PREFERRED_SITE_DOMAIN}/articles/${article.slug}`;
+  const canonical = siteUrl(`/articles/${article.slug}`);
 
   return {
     title,

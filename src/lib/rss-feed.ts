@@ -1,5 +1,6 @@
 import { articleDefinitions } from "@/content/article-definitions";
-import { PREFERRED_SITE_DOMAIN, SITE_NAME, SITE_TAGLINE } from "@/lib/brand";
+import { SITE_NAME, SITE_TAGLINE } from "@/lib/brand";
+import { getSiteUrl, siteUrl } from "@/lib/site-url";
 import { parseIsoDateUtc } from "@/lib/format";
 
 const FEED_PATH = "/feed.xml";
@@ -35,7 +36,7 @@ export function getRssFeedItems(): RssFeedItem[] {
   });
 
   return sorted.slice(0, FEED_LIMIT).map((article) => {
-    const link = `${PREFERRED_SITE_DOMAIN}/articles/${article.slug}`;
+    const link = siteUrl(`/articles/${article.slug}`);
     return {
       title: `${article.title} 2026`,
       link,
@@ -47,7 +48,8 @@ export function getRssFeedItems(): RssFeedItem[] {
 }
 
 export function buildRssXml(): string {
-  const feedUrl = `${PREFERRED_SITE_DOMAIN}${FEED_PATH}`;
+  const feedUrl = siteUrl(FEED_PATH);
+  const siteBase = getSiteUrl();
   const items = getRssFeedItems();
 
   const itemXml = items
@@ -66,7 +68,7 @@ export function buildRssXml(): string {
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${escapeXml(SITE_NAME)}</title>
-    <link>${escapeXml(PREFERRED_SITE_DOMAIN)}</link>
+    <link>${escapeXml(siteBase)}</link>
     <description>${escapeXml(SITE_TAGLINE)}</description>
     <language>en</language>
     <atom:link href="${escapeXml(feedUrl)}" rel="self" type="application/rss+xml" />

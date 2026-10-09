@@ -1,3 +1,7 @@
+/**
+ * Public site origin for links, feeds, and metadata.
+ * Set `NEXT_PUBLIC_SITE_URL` to your `*.vercel.app` URL until the custom domain is live.
+ */
 export function getSiteUrl(): string {
   const url = process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "");
   if (url) return url;

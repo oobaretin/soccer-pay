@@ -1,4 +1,5 @@
-import { PREFERRED_SITE_DOMAIN, SITE_NAME } from "@/lib/brand";
+import { SITE_NAME } from "@/lib/brand";
+import { getSiteUrl, siteUrl } from "@/lib/site-url";
 import type { ArticleDefinition } from "@/content/article-definitions";
 
 type Props = {
@@ -7,7 +8,8 @@ type Props = {
 };
 
 export function ArticleJsonLd({ article, dateModified }: Props) {
-  const url = `${PREFERRED_SITE_DOMAIN}/articles/${article.slug}`;
+  const url = siteUrl(`/articles/${article.slug}`);
+  const siteBase = getSiteUrl();
   const headline = `${article.title} 2026`;
 
   const data = {
@@ -21,7 +23,7 @@ export function ArticleJsonLd({ article, dateModified }: Props) {
     publisher: {
       "@type": "Organization",
       name: SITE_NAME,
-      url: PREFERRED_SITE_DOMAIN,
+      url: siteBase,
     },
     mainEntityOfPage: {
       "@type": "WebPage",
