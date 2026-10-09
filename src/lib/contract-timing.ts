@@ -1,3 +1,5 @@
+import { parseIsoDateUtc } from "@/lib/format";
+
 export type ContractTiming =
   | "unknown"
   | "active"
@@ -14,7 +16,7 @@ function startOfUtcDay(d: Date): Date {
 }
 
 function parseEnd(iso: string): Date {
-  return startOfUtcDay(new Date(`${iso.slice(0, 10)}T12:00:00.000Z`));
+  return startOfUtcDay(parseIsoDateUtc(iso));
 }
 
 /** Contract timing relative to today (UTC calendar days). */

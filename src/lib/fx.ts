@@ -64,7 +64,12 @@ export function sortableWageAmountUsd(
 export function fxRatesAsOfLabel(): string {
   return new Date(`${FX_RATES_AS_OF}T12:00:00.000Z`).toLocaleDateString(
     "en-GB",
-    { day: "numeric", month: "short", year: "numeric" },
+    {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+      timeZone: "UTC",
+    },
   );
 }
 

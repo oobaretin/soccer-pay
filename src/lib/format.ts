@@ -112,12 +112,25 @@ export function formatGbpCompact(
   return formatMoney(amount, currency);
 }
 
+/** Calendar date from ISO date or timestamp, interpreted in UTC. */
+export function parseIsoDateUtc(iso: string): Date {
+  const day = iso.slice(0, 10);
+  return new Date(`${day}T12:00:00.000Z`);
+}
+
+function startOfUtcDay(d: Date): Date {
+  return new Date(
+    Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()),
+  );
+}
+
 export function formatDate(iso: string | null | undefined): string {
   if (!iso) return "—";
-  return new Date(iso).toLocaleDateString("en-GB", {
+  return parseIsoDateUtc(iso).toLocaleDateString("en-GB", {
     day: "numeric",
     month: "short",
     year: "numeric",
+    timeZone: "UTC",
   });
 }
 
@@ -138,10 +151,11 @@ export function remainingContractValueGbp(
   asOf: Date = referenceDate(),
 ): number | null {
   if (weeklyWage == null || !contractEnd) return null;
-  const end = new Date(contractEnd);
-  if (end <= asOf) return 0;
+  const end = parseIsoDateUtc(contractEnd);
+  const today = startOfUtcDay(asOf);
+  if (end <= today) return 0;
   const msPerWeek = 7 * 24 * 60 * 60 * 1000;
-  const weeks = Math.ceil((end.getTime() - asOf.getTime()) / msPerWeek);
+  const weeks = Math.ceil((end.getTime() - today.getTime()) / msPerWeek);
   return weeks * weeklyWage;
 }
 
@@ -150,10 +164,10 @@ export function monthsUntil(
   asOf: Date = referenceDate(),
 ): number | null {
   if (!iso) return null;
-  const end = new Date(iso);
-  const now = asOf;
+  const end = startOfUtcDay(parseIsoDateUtc(iso));
+  const now = startOfUtcDay(asOf);
   const months =
-    (end.getFullYear() - now.getFullYear()) * 12 +
-    (end.getMonth() - now.getMonth());
+    (end.getUTCFullYear() - now.getUTCFullYear()) * 12 +
+    (end.getUTCMonth() - now.getUTCMonth());
   return months;
 }

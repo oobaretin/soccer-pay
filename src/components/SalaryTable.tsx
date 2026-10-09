@@ -29,7 +29,14 @@ import { WageStatusBadge } from "./WageStatusBadge";
 
 type Props = {
   rows: SalaryTableRow[];
+  /** Path used when syncing sort/search query params (default `/`). */
+  urlBasePath?: string;
 };
+
+const TOGGLE_INACTIVE =
+  "min-h-11 rounded-md px-3 py-2 text-xs font-medium bg-zinc-100 text-zinc-700 hover:bg-zinc-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700";
+const TOGGLE_ACTIVE =
+  "min-h-11 rounded-md px-3 py-2 text-xs font-medium bg-emerald-800 text-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-600 dark:bg-emerald-600";
 
 const RANK_WIDTH = "w-11 min-w-[2.75rem]";
 const NAME_STICKY = "sticky left-11 z-10 min-w-[9rem] sm:min-w-[11rem]";
@@ -74,7 +81,7 @@ function sortAriaValue(
   return sortDir === "asc" ? "ascending" : "descending";
 }
 
-function SalaryTableInner({ rows }: Props) {
+function SalaryTableInner({ rows, urlBasePath = "/" }: Props) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState(() => searchParams.get("q") ?? "");
@@ -90,11 +97,8 @@ function SalaryTableInner({ rows }: Props) {
   const [wageDisplay, setWageDisplay] = useState<WageDisplay>(() =>
     parseWageDisplay(searchParams.get("display")),
   );
-  const league = searchParams.get("league") ?? "";
-
   useEffect(() => {
     const params = new URLSearchParams();
-    if (league) params.set("league", league);
     const q = query.trim();
     if (q) params.set("q", q);
     if (sortKey !== "annual") params.set("sort", sortKey);
@@ -102,21 +106,27 @@ function SalaryTableInner({ rows }: Props) {
     if (period !== "annual") params.set("period", period);
     if (wageDisplay === "usd") params.set("display", "usd");
     const next = params.toString();
-    const current = searchParams.toString();
-    if (next !== current) {
-      router.replace(next ? `/?${next}` : "/", { scroll: false });
+    const pathQuery = searchParams.toString();
+    if (next !== pathQuery) {
+      router.replace(next ? `${urlBasePath}?${next}` : urlBasePath, {
+        scroll: false,
+      });
     }
-  }, [query, sortKey, sortDir, period, wageDisplay, league, router, searchParams]);
-
-  const inLeague = useMemo(() => {
-    if (!league) return rows;
-    return rows.filter((row) => row.leagueSlug === league);
-  }, [rows, league]);
+  }, [
+    query,
+    sortKey,
+    sortDir,
+    period,
+    wageDisplay,
+    urlBasePath,
+    router,
+    searchParams,
+  ]);
 
   const visible = useMemo(() => {
-    const filtered = filterSalaryRows(inLeague, query);
+    const filtered = filterSalaryRows(rows, query);
     return sortSalaryRows(filtered, sortKey, sortDir);
-  }, [inLeague, query, sortKey, sortDir]);
+  }, [rows, query, sortKey, sortDir]);
 
   const trimmedQuery = query.trim();
   const isFiltering = trimmedQuery.length > 0;
@@ -164,8 +174,8 @@ function SalaryTableInner({ rows }: Props) {
         </label>
         <p className="text-xs text-zinc-500">
           {isFiltering
-            ? `${visible.length} of ${inLeague.length} players`
-            : `${inLeague.length} players`}
+            ? `${visible.length} of ${rows.length} players`
+            : `${rows.length} players`}
           {isFiltering ? (
             <>
               {" · "}
@@ -180,25 +190,30 @@ function SalaryTableInner({ rows }: Props) {
           ) : null}
         </p>
         <div className="flex flex-wrap items-center gap-3 pt-1">
-          <div className="flex gap-1">
-            <span className="sr-only">Show wages as</span>
+          <div
+            className="flex gap-1"
+            role="group"
+            aria-label="Show wages as"
+          >
             {(["annual", "weekly"] as const).map((p) => (
               <button
                 key={p}
                 type="button"
+                aria-pressed={period === p}
                 onClick={() => setPayPeriod(p)}
-                className={`min-h-11 rounded-md px-3 py-2 text-xs font-medium capitalize ${
-                  period === p
-                    ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
-                    : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300"
+                className={`capitalize ${
+                  period === p ? TOGGLE_ACTIVE : TOGGLE_INACTIVE
                 }`}
               >
                 {p}
               </button>
             ))}
           </div>
-          <div className="flex gap-1">
-            <span className="sr-only">Currency display</span>
+          <div
+            className="flex gap-1"
+            role="group"
+            aria-label="Currency display"
+          >
             {(
               [
                 ["native", "Local"],
@@ -208,12 +223,11 @@ function SalaryTableInner({ rows }: Props) {
               <button
                 key={value}
                 type="button"
+                aria-pressed={wageDisplay === value}
                 onClick={() => setWageDisplay(value)}
-                className={`min-h-11 rounded-md px-3 py-2 text-xs font-medium ${
-                  wageDisplay === value
-                    ? "bg-emerald-800 text-white dark:bg-emerald-600"
-                    : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300"
-                }`}
+                className={
+                  wageDisplay === value ? TOGGLE_ACTIVE : TOGGLE_INACTIVE
+                }
               >
                 {label}
               </button>
@@ -357,7 +371,7 @@ function SalaryTableInner({ rows }: Props) {
         </table>
         {visible.length === 0 ? (
           <p className="px-4 py-8 text-center text-sm text-zinc-500">
-            {inLeague.length === 0
+            {rows.length === 0
               ? "No wages published for this league yet."
               : (
                 <>

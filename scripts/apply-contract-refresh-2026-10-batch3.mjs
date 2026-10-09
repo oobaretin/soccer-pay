@@ -16,12 +16,6 @@ async function ensureLeagues() {
       country: "Netherlands",
       currency: "EUR",
     },
-    {
-      name: "Trendyol 1. Lig",
-      slug: "turkish-1-lig",
-      country: "Turkey",
-      currency: "EUR",
-    },
   ];
   for (const row of rows) {
     const { error } = await supabase
@@ -94,7 +88,7 @@ async function upsertContract(playerSlug, contract, clubSlug) {
 
 await ensureLeagues();
 await ensureClub("N.E.C.", "nec-nijmegen", "eredivisie");
-await ensureClub("Bodrum FK", "bodrum-fk", "turkish-1-lig");
+await ensureClub("Bodrum FK", "bodrum-fk", "super-lig");
 
 await upsertContract(
   "dusan-tadic",
