@@ -3,7 +3,13 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState, type MouseEvent } from "react";
-import { formatDate, formatGbpCompact, formatMoney } from "@/lib/format";
+import {
+  FX_DISCLAIMER,
+  formatDate,
+  formatWageCompact,
+  formatWageMoney,
+  type WageDisplay,
+} from "@/lib/format";
 import {
   filterSalaryRows,
   sortSalaryRows,
@@ -13,6 +19,7 @@ import {
   parsePayPeriod,
   parseSortDir,
   parseSortKey,
+  parseWageDisplay,
   type PayPeriod,
 } from "@/lib/table-url-state";
 import type { SalaryTableRow, TableSortKey } from "@/lib/types";
@@ -67,6 +74,9 @@ function SalaryTableInner({ rows }: Props) {
   const [period, setPeriod] = useState<PayPeriod>(() =>
     parsePayPeriod(searchParams.get("period")),
   );
+  const [wageDisplay, setWageDisplay] = useState<WageDisplay>(() =>
+    parseWageDisplay(searchParams.get("display")),
+  );
   const league = searchParams.get("league") ?? "";
 
   useEffect(() => {
@@ -77,12 +87,13 @@ function SalaryTableInner({ rows }: Props) {
     if (sortKey !== "annual") params.set("sort", sortKey);
     if (sortDir !== "desc") params.set("dir", sortDir);
     if (period !== "annual") params.set("period", period);
+    if (wageDisplay === "usd") params.set("display", "usd");
     const next = params.toString();
     const current = searchParams.toString();
     if (next !== current) {
       router.replace(next ? `/?${next}` : "/", { scroll: false });
     }
-  }, [query, sortKey, sortDir, period, league, router, searchParams]);
+  }, [query, sortKey, sortDir, period, wageDisplay, league, router, searchParams]);
 
   const inLeague = useMemo(() => {
     if (!league) return rows;
@@ -91,8 +102,8 @@ function SalaryTableInner({ rows }: Props) {
 
   const visible = useMemo(() => {
     const filtered = filterSalaryRows(inLeague, query);
-    return sortSalaryRows(filtered, sortKey, sortDir);
-  }, [inLeague, query, sortKey, sortDir]);
+    return sortSalaryRows(filtered, sortKey, sortDir, wageDisplay);
+  }, [inLeague, query, sortKey, sortDir, wageDisplay]);
 
   const trimmedQuery = query.trim();
   const isFiltering = trimmedQuery.length > 0;
@@ -160,23 +171,50 @@ function SalaryTableInner({ rows }: Props) {
             </>
           ) : null}
         </p>
-        <div className="flex gap-1 pt-1">
-          <span className="sr-only">Show wages as</span>
-          {(["annual", "weekly"] as const).map((p) => (
-            <button
-              key={p}
-              type="button"
-              onClick={() => setPayPeriod(p)}
-              className={`rounded-md px-3 py-1.5 text-xs font-medium capitalize ${
-                period === p
-                  ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
-                  : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300"
-              }`}
-            >
-              {p}
-            </button>
-          ))}
+        <div className="flex flex-wrap items-center gap-3 pt-1">
+          <div className="flex gap-1">
+            <span className="sr-only">Show wages as</span>
+            {(["annual", "weekly"] as const).map((p) => (
+              <button
+                key={p}
+                type="button"
+                onClick={() => setPayPeriod(p)}
+                className={`rounded-md px-3 py-1.5 text-xs font-medium capitalize ${
+                  period === p
+                    ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
+                    : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300"
+                }`}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+          <div className="flex gap-1">
+            <span className="sr-only">Currency display</span>
+            {(
+              [
+                ["native", "Local currency"],
+                ["usd", "USD (approx.)"],
+              ] as const
+            ).map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setWageDisplay(value)}
+                className={`rounded-md px-3 py-1.5 text-xs font-medium ${
+                  wageDisplay === value
+                    ? "bg-emerald-800 text-white dark:bg-emerald-600"
+                    : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
+          </div>
         </div>
+        {wageDisplay === "usd" ? (
+          <p className="text-xs text-zinc-500">{FX_DISCLAIMER}</p>
+        ) : null}
       </div>
 
       {/* Mobile: card list */}
@@ -216,11 +254,19 @@ function SalaryTableInner({ rows }: Props) {
                 </div>
                 <div className="shrink-0 text-right">
                   <p className="text-lg font-semibold tabular-nums text-zinc-900 dark:text-zinc-50">
-                    {formatGbpCompact(primaryAmount(row), row.currency)}
+                    {formatWageCompact(
+                      primaryAmount(row),
+                      row.currency,
+                      wageDisplay,
+                    )}
                   </p>
                   <p className="text-xs text-zinc-500">{primaryLabel}</p>
                   <p className="mt-1 text-sm tabular-nums text-zinc-600 dark:text-zinc-400">
-                    {formatGbpCompact(secondaryAmount(row), row.currency)}
+                    {formatWageCompact(
+                      secondaryAmount(row),
+                      row.currency,
+                      wageDisplay,
+                    )}
                     {period === "annual" ? "/wk" : ` ${secondaryLabel}`}
                   </p>
                 </div>
@@ -348,7 +394,11 @@ function SalaryTableInner({ rows }: Props) {
                         : "text-zinc-600 dark:text-zinc-400"
                     }`}
                   >
-                    {formatMoney(row.weeklyWageGbp, row.currency)}
+                    {formatWageMoney(
+                      row.weeklyWageGbp,
+                      row.currency,
+                      wageDisplay,
+                    )}
                   </td>
                   <td
                     className={`px-4 py-3 text-right tabular-nums ${
@@ -357,7 +407,11 @@ function SalaryTableInner({ rows }: Props) {
                         : "text-zinc-600 dark:text-zinc-400"
                     }`}
                   >
-                    {formatMoney(row.annualWageGbp, row.currency)}
+                    {formatWageMoney(
+                      row.annualWageGbp,
+                      row.currency,
+                      wageDisplay,
+                    )}
                   </td>
                   <td className="px-4 py-3">
                     <span>{formatDate(row.contractEnd)}</span>

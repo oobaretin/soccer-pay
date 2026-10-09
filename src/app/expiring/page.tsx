@@ -4,7 +4,7 @@ import { connection } from "next/server";
 import { Suspense } from "react";
 import { StateMessage } from "@/components/StateMessage";
 import { WageStatusBadge } from "@/components/WageStatusBadge";
-import { formatDate, formatGbp } from "@/lib/format";
+import { formatDate, formatMoney, formatUsdEquivalent } from "@/lib/format";
 import { getSalaryTableRows } from "@/lib/queries/get-salary-table";
 import { sortSalaryRows } from "@/lib/sort-salary-rows";
 import { getSiteUrl } from "@/lib/site-url";
@@ -69,8 +69,17 @@ async function ExpiringList() {
             </div>
           </div>
           <div className="text-right tabular-nums">
-            <p className="font-semibold">{formatGbp(row.weeklyWageGbp)}/wk</p>
-            <p className="text-sm text-zinc-500">{formatGbp(row.annualWageGbp)}/yr</p>
+            <p className="font-semibold">
+              {formatMoney(row.weeklyWageGbp, row.currency)}/wk
+            </p>
+            {formatUsdEquivalent(row.weeklyWageGbp, row.currency) ? (
+              <p className="text-xs text-zinc-500">
+                {formatUsdEquivalent(row.weeklyWageGbp, row.currency)}/wk
+              </p>
+            ) : null}
+            <p className="text-sm text-zinc-500">
+              {formatMoney(row.annualWageGbp, row.currency)}/yr
+            </p>
           </div>
         </li>
       ))}

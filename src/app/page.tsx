@@ -4,7 +4,7 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { SalaryTable } from "@/components/SalaryTable";
 import { StateMessage } from "@/components/StateMessage";
-import { formatMoney } from "@/lib/format";
+import { formatMoney, formatUsdEquivalent } from "@/lib/format";
 import { getLeagues } from "@/lib/queries/get-leagues";
 import { getSalaryTableRows } from "@/lib/queries/get-salary-table";
 import { sortSalaryRows } from "@/lib/sort-salary-rows";
@@ -98,7 +98,13 @@ function TopEarnerCallout({
       at{" "}
       <span className="font-semibold tabular-nums">
         {formatMoney(annual, currency)}
-      </span>{" "}
+      </span>
+      {formatUsdEquivalent(annual, currency) ? (
+        <span className="tabular-nums text-zinc-600 dark:text-zinc-400">
+          {" "}
+          ({formatUsdEquivalent(annual, currency)})
+        </span>
+      ) : null}{" "}
       per year
     </p>
   );
@@ -138,7 +144,12 @@ async function SalaryTableSection({
   const scoped = league
     ? result.rows.filter((row) => row.leagueSlug === league)
     : result.rows;
-  const top = sortSalaryRows(scoped, "annual", "desc")[0];
+  const top = sortSalaryRows(
+    scoped,
+    "annual",
+    "desc",
+    league ? "native" : "usd",
+  )[0];
 
   return (
     <div className="space-y-4">

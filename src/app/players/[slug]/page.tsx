@@ -13,6 +13,7 @@ import {
   formatGbp,
   formatMoney,
   formatPerMetric,
+  formatUsdEquivalent,
   remainingContractValueGbp,
 } from "@/lib/format";
 import { CURRENT_SEASON } from "@/lib/queries/load-roster";
@@ -112,10 +113,22 @@ async function PlayerContent({ params }: { params: Params }) {
                 per week
               </span>
             </p>
+            {formatUsdEquivalent(contract.weekly_wage_gbp, wageCurrency) ? (
+              <p className="text-sm tabular-nums text-zinc-500">
+                {formatUsdEquivalent(contract.weekly_wage_gbp, wageCurrency)} per
+                week
+              </p>
+            ) : null}
             <p className="text-lg tabular-nums text-zinc-700 dark:text-zinc-300">
               {fmt(contract.annual_wage_gbp)}{" "}
               <span className="text-base font-normal text-zinc-500">per year</span>
             </p>
+            {formatUsdEquivalent(contract.annual_wage_gbp, wageCurrency) ? (
+              <p className="text-sm tabular-nums text-zinc-500">
+                {formatUsdEquivalent(contract.annual_wage_gbp, wageCurrency)} per
+                year
+              </p>
+            ) : null}
             {contract.wage_notes ? (
               <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
                 {contract.wage_notes}

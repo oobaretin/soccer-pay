@@ -1,3 +1,12 @@
+import {
+  convertToUsd,
+  type WageDisplay,
+  wageForDisplay,
+} from "@/lib/fx-rates";
+
+export type { WageDisplay };
+export { FX_DISCLAIMER } from "@/lib/fx-rates";
+
 /** Stable reference for SSG/prerender (contract remaining value, expiry flags). */
 export const WAGE_REFERENCE_ISO =
   process.env.NEXT_PUBLIC_WAGE_REFERENCE_DATE ?? "2025-10-01";
@@ -47,6 +56,44 @@ const compactPrefix: Record<string, string> = {
 };
 
 /** Shorter figures for dense mobile rows (e.g. £375k, €19.5m). */
+export function formatUsdEquivalent(
+  amount: number | null | undefined,
+  fromCurrency: string,
+): string | null {
+  if (amount == null) return null;
+  const code = (fromCurrency || "GBP").toUpperCase();
+  if (code === "USD") return null;
+  const usd = convertToUsd(amount, code);
+  if (usd == null) return null;
+  return `≈ ${formatMoney(usd, "USD")}`;
+}
+
+export function formatWageCompact(
+  amount: number | null | undefined,
+  fromCurrency: string,
+  display: WageDisplay = "native",
+): string {
+  const { amount: value, currency } = wageForDisplay(
+    amount,
+    fromCurrency,
+    display,
+  );
+  return formatGbpCompact(value, currency);
+}
+
+export function formatWageMoney(
+  amount: number | null | undefined,
+  fromCurrency: string,
+  display: WageDisplay = "native",
+): string {
+  const { amount: value, currency } = wageForDisplay(
+    amount,
+    fromCurrency,
+    display,
+  );
+  return formatMoney(value, currency);
+}
+
 export function formatGbpCompact(
   amount: number | null | undefined,
   currency = "GBP",

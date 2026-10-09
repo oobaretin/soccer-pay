@@ -5,7 +5,7 @@ import { Suspense } from "react";
 import { WageStatusBadge } from "@/components/WageStatusBadge";
 import { getClubBySlug, getClubSlugs } from "@/lib/queries/get-clubs";
 import { StateMessage } from "@/components/StateMessage";
-import { formatDate, formatGbp } from "@/lib/format";
+import { formatDate, formatMoney, formatUsdEquivalent } from "@/lib/format";
 import { getSiteUrl } from "@/lib/site-url";
 
 type Params = Promise<{ slug: string }>;
@@ -44,6 +44,12 @@ async function ClubContent({ params }: { params: Params }) {
   if (!detail) notFound();
 
   const { club, squad, weeklyWageBill, annualWageBill } = detail;
+  const leagueCurrency =
+    squad[0]?.club?.league?.currency?.toUpperCase() ??
+    club.league?.currency?.toUpperCase() ??
+    "GBP";
+  const fmt = (amount: number | null | undefined) =>
+    formatMoney(amount, leagueCurrency);
 
   return (
     <div className="space-y-8">
@@ -72,16 +78,26 @@ async function ClubContent({ params }: { params: Params }) {
                 Weekly wage bill (on file)
               </p>
               <p className="mt-1 text-2xl font-semibold tabular-nums">
-                {formatGbp(weeklyWageBill)}
+                {fmt(weeklyWageBill)}
               </p>
+              {formatUsdEquivalent(weeklyWageBill, leagueCurrency) ? (
+                <p className="mt-1 text-sm tabular-nums text-zinc-500">
+                  {formatUsdEquivalent(weeklyWageBill, leagueCurrency)}
+                </p>
+              ) : null}
             </div>
             <div className="rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
               <p className="text-xs uppercase tracking-wide text-zinc-500">
                 Annual wage bill (on file)
               </p>
               <p className="mt-1 text-2xl font-semibold tabular-nums">
-                {formatGbp(annualWageBill)}
+                {fmt(annualWageBill)}
               </p>
+              {formatUsdEquivalent(annualWageBill, leagueCurrency) ? (
+                <p className="mt-1 text-sm tabular-nums text-zinc-500">
+                  {formatUsdEquivalent(annualWageBill, leagueCurrency)}
+                </p>
+              ) : null}
             </div>
           </section>
 
@@ -107,7 +123,10 @@ async function ClubContent({ params }: { params: Params }) {
                   </Link>
                 </td>
                 <td className="px-4 py-3 text-right tabular-nums">
-                  {formatGbp(row.contract?.weekly_wage_gbp)}
+                  {formatMoney(
+                    row.contract?.weekly_wage_gbp,
+                    row.contract?.currency?.toUpperCase() ?? leagueCurrency,
+                  )}
                 </td>
                 <td className="px-4 py-3">
                   {formatDate(row.contract?.contract_end)}

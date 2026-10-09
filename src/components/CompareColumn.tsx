@@ -3,8 +3,9 @@ import { PlayerPhoto } from "@/components/PlayerPhoto";
 import { SourceCitation } from "@/components/SourceCitation";
 import {
   formatDate,
-  formatGbp,
+  formatMoney,
   formatPerMetric,
+  formatUsdEquivalent,
   remainingContractValueGbp,
 } from "@/lib/format";
 import type { PlayerDetail } from "@/lib/types";
@@ -17,6 +18,12 @@ export function CompareColumn({
   otherName: string;
 }) {
   const { player, club, contract, stats } = detail;
+  const wageCurrency =
+    contract?.currency?.toUpperCase() ??
+    club?.league?.currency?.toUpperCase() ??
+    "GBP";
+  const fmt = (amount: number | null | undefined) =>
+    formatMoney(amount, wageCurrency);
   const remaining = remainingContractValueGbp(
     contract?.weekly_wage_gbp,
     contract?.contract_end,
@@ -50,13 +57,21 @@ export function CompareColumn({
         </div>
       </div>
       <dl className="grid grid-cols-2 gap-3 text-sm">
-        <CompareRow label="Weekly" value={formatGbp(contract?.weekly_wage_gbp)} />
-        <CompareRow label="Annual" value={formatGbp(contract?.annual_wage_gbp)} />
+        <CompareRow
+          label="Weekly"
+          value={fmt(contract?.weekly_wage_gbp)}
+          hint={formatUsdEquivalent(contract?.weekly_wage_gbp, wageCurrency)}
+        />
+        <CompareRow
+          label="Annual"
+          value={fmt(contract?.annual_wage_gbp)}
+          hint={formatUsdEquivalent(contract?.annual_wage_gbp, wageCurrency)}
+        />
         <CompareRow
           label="Contract end"
           value={formatDate(contract?.contract_end)}
         />
-        <CompareRow label="Remaining value" value={formatGbp(remaining)} />
+        <CompareRow label="Remaining value" value={fmt(remaining)} />
         {stats ? (
           <>
             <CompareRow label="Goals" value={String(stats.goals ?? "—")} />
@@ -67,6 +82,7 @@ export function CompareColumn({
                 contract?.annual_wage_gbp,
                 stats.goals,
                 "goal",
+                wageCurrency,
               )}
             />
             <CompareRow
@@ -75,6 +91,7 @@ export function CompareColumn({
                 contract?.annual_wage_gbp,
                 stats.assists,
                 "assist",
+                wageCurrency,
               )}
             />
           </>
@@ -91,11 +108,22 @@ export function CompareColumn({
   );
 }
 
-function CompareRow({ label, value }: { label: string; value: string }) {
+function CompareRow({
+  label,
+  value,
+  hint,
+}: {
+  label: string;
+  value: string;
+  hint?: string | null;
+}) {
   return (
     <div>
       <dt className="text-xs uppercase tracking-wide text-zinc-500">{label}</dt>
       <dd className="font-medium tabular-nums">{value}</dd>
+      {hint ? (
+        <dd className="text-xs tabular-nums text-zinc-500">{hint}</dd>
+      ) : null}
     </div>
   );
 }

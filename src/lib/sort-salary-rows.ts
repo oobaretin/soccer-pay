@@ -1,3 +1,4 @@
+import { sortableWageAmount, type WageDisplay } from "@/lib/fx-rates";
 import type { SalaryTableRow, TableSortKey } from "@/lib/types";
 
 export type TableSortDir = "asc" | "desc";
@@ -14,6 +15,7 @@ export function sortSalaryRows(
   rows: SalaryTableRow[],
   key: TableSortKey,
   dir: TableSortDir,
+  display: WageDisplay = "native",
 ): SalaryTableRow[] {
   const mult = dir === "asc" ? 1 : -1;
   return [...rows].sort((a, b) => {
@@ -29,10 +31,16 @@ export function sortSalaryRows(
         cmp = compareStrings(a.position, b.position);
         break;
       case "weekly":
-        cmp = compareNumbers(a.weeklyWageGbp, b.weeklyWageGbp);
+        cmp = compareNumbers(
+          sortableWageAmount(a.weeklyWageGbp, a.currency, display),
+          sortableWageAmount(b.weeklyWageGbp, b.currency, display),
+        );
         break;
       case "annual":
-        cmp = compareNumbers(a.annualWageGbp, b.annualWageGbp);
+        cmp = compareNumbers(
+          sortableWageAmount(a.annualWageGbp, a.currency, display),
+          sortableWageAmount(b.annualWageGbp, b.currency, display),
+        );
         break;
       case "contract_end":
         cmp = compareStrings(a.contractEnd, b.contractEnd);

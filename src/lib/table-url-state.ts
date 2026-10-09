@@ -1,3 +1,4 @@
+import type { WageDisplay } from "@/lib/fx-rates";
 import type { TableSortKey } from "@/lib/types";
 import type { TableSortDir } from "@/lib/sort-salary-rows";
 
@@ -26,4 +27,8 @@ export function parseSortDir(raw: string | null): TableSortDir {
 
 export function parsePayPeriod(raw: string | null): PayPeriod {
   return raw === "weekly" ? "weekly" : "annual";
+}
+
+export function parseWageDisplay(raw: string | null): WageDisplay {
+  return raw === "usd" ? "usd" : "native";
 }
