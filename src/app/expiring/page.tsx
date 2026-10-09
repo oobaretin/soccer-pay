@@ -5,7 +5,8 @@ import { Suspense } from "react";
 import { ContractTimingBadge } from "@/components/ContractTimingBadge";
 import { StateMessage } from "@/components/StateMessage";
 import { WageStatusBadge } from "@/components/WageStatusBadge";
-import { SITE_DOMAIN } from "@/lib/brand";
+import { pageTitleFull } from "@/lib/brand";
+import { siteUrl } from "@/lib/site-url";
 import {
   isExpiringWithin12Months,
   isRecentlyExpiredNeedsVerification,
@@ -20,14 +21,14 @@ export const metadata: Metadata = {
   description:
     "Football contracts ending in the next 12 months, plus recently expired deals that may need verification.",
   openGraph: {
-    title: "Contracts Expiring Soon | FB Salaries",
+    title: pageTitleFull("Contracts Expiring Soon"),
     description:
       "Track expiring and recently expired player contracts with cited wage figures.",
-    url: `${SITE_DOMAIN}/expiring`,
+    url: siteUrl("/expiring"),
   },
   twitter: {
     card: "summary",
-    title: "Contracts Expiring Soon | FB Salaries",
+    title: pageTitleFull("Contracts Expiring Soon"),
     description:
       "Expiring deals in the next year and recently expired contracts to verify.",
   },

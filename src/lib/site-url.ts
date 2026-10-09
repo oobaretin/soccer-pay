@@ -6,3 +6,10 @@ export function getSiteUrl(): string {
   }
   return "http://localhost:3000";
 }
+
+/** Absolute URL for a path (sitemap, Open Graph, JSON-LD). */
+export function siteUrl(path = ""): string {
+  const base = getSiteUrl();
+  if (!path) return base;
+  return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+}

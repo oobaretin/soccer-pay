@@ -53,13 +53,13 @@ const columns: {
   { key: "status", label: "Status", sortable: true },
   {
     key: "position",
-    label: "Pos",
+    label: "Position",
     sortable: true,
-    className: "hidden lg:table-cell",
+    className: "hidden sm:table-cell",
   },
   {
     key: "contract_end",
-    label: "Contract",
+    label: "Contract End",
     sortable: true,
     className: "hidden sm:table-cell",
   },
@@ -227,30 +227,45 @@ function SalaryTableInner({ rows }: Props) {
 
       <div className="max-w-full overflow-x-auto overscroll-x-contain rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
         <table className="w-full min-w-[36rem] text-left text-sm">
+          <caption className="sr-only">Football player salaries</caption>
           <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wide text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
             <tr>
               {columns.map((col) => (
                 <th
                   key={col.key}
                   scope="col"
+                  aria-sort={
+                    col.sortable
+                      ? sortAriaValue(
+                          sortKey,
+                          col.key as TableSortKey,
+                          sortDir,
+                        )
+                      : undefined
+                  }
                   className={`px-3 py-3 font-medium sm:px-4 ${col.className ?? ""} ${
                     col.key === "rank"
                       ? `sticky left-0 z-20 ${RANK_WIDTH} bg-zinc-50 dark:bg-zinc-900`
                       : col.key === "name"
                         ? `${NAME_STICKY} z-20 bg-zinc-50 shadow-[4px_0_8px_-4px_rgba(0,0,0,0.08)] dark:bg-zinc-900 dark:shadow-[4px_0_8px_-4px_rgba(0,0,0,0.4)]`
-                        : ""
+                        : col.key === "weekly" ||
+                            col.key === "annual" ||
+                            col.key === "contract_end"
+                          ? "text-right"
+                          : ""
                   }`}
                 >
                   {col.sortable ? (
                     <button
                       type="button"
                       onClick={() => onSort(col.key as TableSortKey)}
-                      aria-sort={sortAriaValue(
-                        sortKey,
-                        col.key as TableSortKey,
-                        sortDir,
-                      )}
-                      className="inline-flex min-h-11 items-center gap-1 hover:text-emerald-700 dark:hover:text-emerald-400"
+                      className={`inline-flex min-h-11 items-center gap-1 hover:text-emerald-700 dark:hover:text-emerald-400 ${
+                        col.key === "weekly" ||
+                        col.key === "annual" ||
+                        col.key === "contract_end"
+                          ? "ml-auto"
+                          : ""
+                      }`}
                     >
                       {col.label}
                       {sortKey === col.key ? (
@@ -329,10 +344,10 @@ function SalaryTableInner({ rows }: Props) {
                     <span className="text-xs text-zinc-400">—</span>
                   )}
                 </td>
-                <td className="hidden px-4 py-3 text-zinc-600 lg:table-cell dark:text-zinc-400">
+                <td className="hidden px-4 py-3 text-zinc-600 sm:table-cell dark:text-zinc-400">
                   {row.position ?? "—"}
                 </td>
-                <td className="hidden px-4 py-3 sm:table-cell">
+                <td className="hidden px-4 py-3 text-right sm:table-cell">
                   <span>{formatDate(row.contractEnd)}</span>
                   <ContractTimingBadge contractEnd={row.contractEnd} />
                 </td>

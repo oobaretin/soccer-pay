@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import { pageTitleFull } from "@/lib/brand";
 import { getArticle, getArticleSlugs } from "@/content/articles";
 
 type Params = Promise<{ slug: string }>;
@@ -23,12 +24,12 @@ export async function generateMetadata({
     title,
     description,
     openGraph: {
-      title: `${title} | FB Salaries`,
+      title: pageTitleFull(title),
       description,
     },
     twitter: {
       card: "summary",
-      title: `${title} | FB Salaries`,
+      title: pageTitleFull(title),
       description,
     },
   };

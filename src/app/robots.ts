@@ -1,10 +1,9 @@
 import type { MetadataRoute } from "next";
-import { getSiteUrl } from "@/lib/site-url";
+import { PREFERRED_SITE_DOMAIN } from "@/lib/brand";
 
 export default function robots(): MetadataRoute.Robots {
-  const base = getSiteUrl();
   return {
     rules: { userAgent: "*", allow: "/" },
-    sitemap: `${base}/sitemap.xml`,
+    sitemap: `${PREFERRED_SITE_DOMAIN}/sitemap.xml`,
   };
 }

@@ -6,6 +6,7 @@ import { WageStatusBadge } from "@/components/WageStatusBadge";
 import { getClubBySlug, getClubSlugs } from "@/lib/queries/get-clubs";
 import { StateMessage } from "@/components/StateMessage";
 import { formatDate, formatMoney, formatUsdEquivalent } from "@/lib/format";
+import { pageTitleFull } from "@/lib/brand";
 import { getSiteUrl } from "@/lib/site-url";
 
 type Params = Promise<{ slug: string }>;
@@ -30,12 +31,12 @@ export async function generateMetadata({
       ? `${club.name} player wages and salary bill for ${squad.length} squad members on file, with sources.`
       : `${club.name} player wages and salary data when the squad is published.`;
   const url = `${getSiteUrl()}/clubs/${slug}`;
-  const ogTitle = `${title} | FB Salaries`;
+  const fullTitle = pageTitleFull(title);
   return {
     title,
     description,
-    openGraph: { title: ogTitle, description, url },
-    twitter: { card: "summary", title: ogTitle, description },
+    openGraph: { title: fullTitle, description, url },
+    twitter: { card: "summary", title: fullTitle, description },
   };
 }
 

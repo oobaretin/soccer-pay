@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { SITE_NAME, SITE_TAGLINE } from "@/lib/brand";
+import { SITE_NAME } from "@/lib/brand";
 
 const links = [
   { href: "/", label: "Players" },
@@ -16,13 +16,8 @@ export function SiteHeader() {
   return (
     <header className="border-b border-zinc-200 bg-zinc-950 text-zinc-100 dark:border-zinc-800">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
-        <Link href="/" className="flex flex-col gap-0.5">
-          <span className="text-lg font-semibold tracking-tight">
-            {SITE_NAME}
-          </span>
-          <span className="max-w-[14rem] text-xs leading-snug text-zinc-400 sm:max-w-none">
-            {SITE_TAGLINE}
-          </span>
+        <Link href="/" className="text-lg font-semibold tracking-tight">
+          {SITE_NAME}
         </Link>
         <nav className="flex flex-wrap gap-1 text-sm">
           {links.map((link) => (

@@ -2,13 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SiteHeader } from "@/components/SiteHeader";
 import { TrustLegend } from "@/components/TrustLegend";
-import {
-  DEFAULT_TITLE,
-  SITE_DOMAIN,
-  SITE_NAME,
-  SITE_TAGLINE,
-  TITLE_TEMPLATE,
-} from "@/lib/brand";
+import { SITE_NAME, SITE_TAGLINE, pageTitleFull } from "@/lib/brand";
+import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -21,23 +16,25 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const siteBase = getSiteUrl();
+
 export const metadata: Metadata = {
-  metadataBase: new URL(SITE_DOMAIN),
+  metadataBase: new URL(siteBase),
   title: {
-    default: DEFAULT_TITLE,
-    template: TITLE_TEMPLATE,
+    default: "Football Player Salaries 2026 | FB Salaries",
+    template: "%s | FB Salaries",
   },
   description: SITE_TAGLINE,
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
-    title: DEFAULT_TITLE,
+    title: pageTitleFull("Football Player Salaries 2026"),
     description: SITE_TAGLINE,
-    url: SITE_DOMAIN,
+    url: siteBase,
   },
   twitter: {
     card: "summary_large_image",
-    title: DEFAULT_TITLE,
+    title: pageTitleFull("Football Player Salaries 2026"),
     description: SITE_TAGLINE,
   },
 };
@@ -54,9 +51,6 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           {children}
         </main>
         <footer className="border-t border-zinc-200 px-4 py-8 dark:border-zinc-800">
-          <p className="mx-auto mb-4 max-w-2xl text-center text-xs text-zinc-500">
-            {SITE_NAME} — {SITE_TAGLINE}
-          </p>
           <TrustLegend />
         </footer>
       </body>

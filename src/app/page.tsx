@@ -8,20 +8,21 @@ import { formatMoney, formatUsdEquivalent } from "@/lib/format";
 import { getLeagues } from "@/lib/queries/get-leagues";
 import { getSalaryTableRows } from "@/lib/queries/get-salary-table";
 import { sortSalaryRows } from "@/lib/sort-salary-rows";
-import { SITE_DOMAIN, SITE_TAGLINE } from "@/lib/brand";
+import { DEFAULT_TITLE, SITE_TAGLINE } from "@/lib/brand";
+import { getSiteUrl } from "@/lib/site-url";
 import type { League } from "@/lib/types";
 
 export const metadata: Metadata = {
-  title: "Football Player Salaries 2026",
+  title: { absolute: DEFAULT_TITLE },
   description: `${SITE_TAGLINE} Sortable wages across top leagues with sources and contract tracking.`,
   openGraph: {
-    title: "Football Player Salaries 2026 | FB Salaries",
+    title: DEFAULT_TITLE,
     description: SITE_TAGLINE,
-    url: SITE_DOMAIN,
+    url: getSiteUrl(),
   },
   twitter: {
     card: "summary_large_image",
-    title: "Football Player Salaries 2026 | FB Salaries",
+    title: DEFAULT_TITLE,
     description: SITE_TAGLINE,
   },
 };

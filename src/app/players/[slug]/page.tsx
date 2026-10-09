@@ -20,6 +20,7 @@ import {
   remainingContractValueGbp,
 } from "@/lib/format";
 import { CURRENT_SEASON } from "@/lib/queries/load-roster";
+import { pageTitleFull } from "@/lib/brand";
 import { getSiteUrl } from "@/lib/site-url";
 
 type Params = Promise<{ slug: string }>;
@@ -56,12 +57,12 @@ export async function generateMetadata({
     title,
     description,
     openGraph: {
-      title: `${title} | FB Salaries`,
+      title: pageTitleFull(title),
       description,
       url,
       type: "profile",
     },
-    twitter: { card: "summary", title: `${title} | FB Salaries`, description },
+    twitter: { card: "summary", title: pageTitleFull(title), description },
   };
 }
 

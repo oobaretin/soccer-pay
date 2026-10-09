@@ -4,7 +4,8 @@ import { Suspense } from "react";
 import { CompareColumn } from "@/components/CompareColumn";
 import { ComparePicker } from "@/components/ComparePicker";
 import { StateMessage } from "@/components/StateMessage";
-import { SITE_DOMAIN } from "@/lib/brand";
+import { pageTitleFull } from "@/lib/brand";
+import { siteUrl } from "@/lib/site-url";
 import { getPlayerBySlug, getPlayerOptions } from "@/lib/queries/get-player";
 
 export const metadata: Metadata = {
@@ -12,14 +13,14 @@ export const metadata: Metadata = {
   description:
     "Compare football player wages, contracts, and wage-per-goal side by side.",
   openGraph: {
-    title: "Compare Player Salaries | FB Salaries",
+    title: pageTitleFull("Compare Player Salaries"),
     description:
       "Side-by-side weekly and annual wages with USD approximations.",
-    url: `${SITE_DOMAIN}/compare`,
+    url: siteUrl("/compare"),
   },
   twitter: {
     card: "summary",
-    title: "Compare Player Salaries | FB Salaries",
+    title: pageTitleFull("Compare Player Salaries"),
     description: "Compare player wages and contract details.",
   },
 };
