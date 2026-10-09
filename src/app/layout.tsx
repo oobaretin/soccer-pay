@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { TrustLegend } from "@/components/TrustLegend";
 import { SITE_NAME, SITE_TAGLINE, pageTitleFull } from "@/lib/brand";
 import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
@@ -50,9 +50,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
           {children}
         </main>
-        <footer className="border-t border-zinc-200 px-4 py-8 dark:border-zinc-800">
-          <TrustLegend />
-        </footer>
+        <SiteFooter />
       </body>
     </html>
   );
