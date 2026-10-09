@@ -32,6 +32,10 @@ export async function getSalaryTableRows(): Promise<SalaryTableResult> {
       status: (row.contract?.status as WageStatus | undefined) ?? null,
       sourceName: row.contract?.source_name ?? null,
       sourceUrl: row.contract?.source_url ?? null,
+      reviewedAt:
+        row.contract?.reviewed_at ??
+        row.contract?.last_reviewed ??
+        null,
     };
   });
 

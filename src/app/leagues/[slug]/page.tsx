@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { ArticleRelatedLinks } from "@/components/ArticleRelatedLinks";
 import { LeagueSalarySection } from "@/components/LeagueSalarySection";
 import { pageTitleFull } from "@/lib/brand";
 import { getLeagueBySlug, getLeagueSlugs } from "@/lib/queries/get-leagues";
@@ -75,6 +76,7 @@ export default async function LeaguePage({ params }: { params: Params }) {
           tableUrlBasePath={`/leagues/${slug}`}
         />
       </Suspense>
+      <ArticleRelatedLinks leagueSlug={slug} />
     </div>
   );
 }

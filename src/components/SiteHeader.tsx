@@ -6,10 +6,7 @@ const links = [
   { href: "/expiring", label: "Expiring" },
   { href: "/clubs", label: "Clubs" },
   { href: "/compare", label: "Compare" },
-  {
-    href: "/articles/highest-paid-premier-league-players",
-    label: "Articles",
-  },
+  { href: "/articles", label: "Articles" },
 ];
 
 export function SiteHeader() {

@@ -89,6 +89,7 @@ export type SalaryTableRow = {
   status: WageStatus | null;
   sourceName: string | null;
   sourceUrl: string | null;
+  reviewedAt: string | null;
 };
 
 export type TableSortKey =

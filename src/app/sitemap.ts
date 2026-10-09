@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import { getArticleSlugs } from "@/content/articles";
+import { getArticleSlugs } from "@/content/article-definitions";
 import { getClubSlugs } from "@/lib/queries/get-clubs";
 import { getLeagueSlugs } from "@/lib/queries/get-leagues";
 import { getPlayerSlugs } from "@/lib/queries/get-player";
@@ -40,6 +40,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       url: `${base}/compare`,
       changeFrequency: "monthly",
       priority: 0.6,
+    },
+    {
+      url: `${base}/articles`,
+      changeFrequency: "weekly",
+      priority: 0.8,
+      lastModified: siteMod ?? undefined,
     },
     {
       url: `${base}/expiring`,
