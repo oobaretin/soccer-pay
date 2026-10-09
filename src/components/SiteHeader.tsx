@@ -2,6 +2,7 @@ import Link from "next/link";
 
 const links = [
   { href: "/", label: "Players" },
+  { href: "/expiring", label: "Expiring" },
   { href: "/clubs", label: "Clubs" },
   { href: "/compare", label: "Compare" },
   {

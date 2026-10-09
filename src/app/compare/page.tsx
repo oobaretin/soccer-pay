@@ -23,7 +23,10 @@ async function CompareSection({
   const options = await getPlayerOptions();
   if (!options.length) {
     return (
-      <StateMessage title="No players" message="Add players in Supabase first." />
+      <StateMessage
+        title="No players yet"
+        message="Player wages will appear here once the dataset is published."
+      />
     );
   }
   const slugA = sp.a ?? options[0]?.slug;

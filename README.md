@@ -13,18 +13,41 @@ Premier League player salaries — cited sources, contract expiry flags, wage-pe
 3. Copy [`.env.local.example`](./.env.local.example) → `.env.local` (URL + **anon** key for the app)
 4. `npm run check:env` → `npm run dev`
 
+## Deploy (Vercel)
+
+1. Import the GitHub repo in [Vercel](https://vercel.com/new).
+2. **Environment variables** (Production + Preview):
+
+   | Variable | Required | Notes |
+   |----------|----------|--------|
+   | `NEXT_PUBLIC_SUPABASE_URL` | Yes | Project URL from Supabase |
+   | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes | Anon public key (`eyJ…`) |
+   | `NEXT_PUBLIC_SITE_URL` | Yes | e.g. `https://your-domain.com` — used for sitemap, Open Graph, JSON-LD |
+
+   Do **not** add `SUPABASE_SERVICE_ROLE_KEY` or `SUPABASE_DB_URL` to Vercel unless you run imports in CI. Keep those local only.
+
+3. **Build:** `npm run build` pre-renders player/club pages via `generateStaticParams`, so Supabase must be reachable at **build time** with the env vars above.
+4. After deploy: open `/`, `/sitemap.xml`, and one `/players/[slug]` URL. Set Supabase **RLS** read policies (see `schema.sql`) so the anon key can read public tables.
+5. Optional: connect your domain and set `NEXT_PUBLIC_SITE_URL` to the canonical HTTPS URL, then redeploy.
+
 ## Bulk data (recommended)
 
 1. **Clubs** (already in `seed-clubs.sql`, or CSV):
    ```bash
    npm run import:clubs
-   # uses data/clubs.csv
    ```
-2. **Players + wages + stats** — edit [`data/players.example.csv`](./data/players.example.csv), add rows, then:
+2. **Players** — batch files in `data/`:
    ```bash
-   npm run import:players -- path/to/your.csv
+   npm run import:players -- data/players-batch-1.csv
+   npm run import:players -- data/players-batch-2.csv
    ```
    Requires `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` (server/scripts only).
+
+3. **Source quality** — before publishing, run:
+   ```bash
+   npm run validate:sources -- data/players-batch-1.csv
+   ```
+   Replace homepage `source_url` values with **article-level** links.
 
 Import behavior:
 
@@ -36,7 +59,8 @@ Import behavior:
 
 | Path | Description |
 |------|-------------|
-| `/` | Sortable/searchable salary table |
+| `/` | Sortable/searchable salary table (`?sort=annual&dir=desc&q=`) |
+| `/expiring` | Contracts ending within 12 months |
 | `/players/[slug]` | Profile, sources, stats, wage metrics |
 | `/clubs`, `/clubs/[slug]` | Wage bills |
 | `/compare?a=&b=` | Side-by-side |
@@ -53,4 +77,5 @@ Pin [`schema.sql`](./schema.sql) in Cursor (`@schema.sql`).
 | `npm run db:apply` | schema + clubs + sample seed via Postgres URI |
 | `npm run import:clubs` | Upsert clubs from CSV |
 | `npm run import:players -- file.csv` | Upsert players/contracts/stats |
+| `npm run validate:sources -- file.csv` | Warn on weak source URLs |
 | `npm run clean` | Remove `.next` (~50MB) |

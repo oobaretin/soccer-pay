@@ -1,8 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-
-type PlayerOption = { slug: string; name: string; club: string };
+import { PlayerCombobox, type PlayerOption } from "./PlayerCombobox";
 
 export function ComparePicker({
   players,
@@ -15,47 +14,35 @@ export function ComparePicker({
 }) {
   const router = useRouter();
 
-  function onChange(which: "a" | "b", slug: string) {
+  function navigate(a: string, b: string) {
     const params = new URLSearchParams();
-    params.set("a", which === "a" ? slug : (slugA ?? players[0]?.slug ?? ""));
-    params.set("b", which === "b" ? slug : (slugB ?? players[1]?.slug ?? ""));
+    params.set("a", a);
+    params.set("b", b);
     router.push(`/compare?${params.toString()}`);
+  }
+
+  function onChangeA(slug: string) {
+    navigate(slug, slugB ?? players[1]?.slug ?? slug);
+  }
+
+  function onChangeB(slug: string) {
+    navigate(slugA ?? players[0]?.slug ?? slug, slug);
   }
 
   return (
     <div className="flex flex-col gap-4 sm:flex-row">
-      <label className="flex flex-1 flex-col gap-1 text-sm">
-        <span className="font-medium text-zinc-700 dark:text-zinc-300">
-          Player A
-        </span>
-        <select
-          className="rounded-lg border border-zinc-300 bg-white px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
-          value={slugA ?? ""}
-          onChange={(e) => onChange("a", e.target.value)}
-        >
-          {players.map((p) => (
-            <option key={p.slug} value={p.slug}>
-              {p.name} ({p.club})
-            </option>
-          ))}
-        </select>
-      </label>
-      <label className="flex flex-1 flex-col gap-1 text-sm">
-        <span className="font-medium text-zinc-700 dark:text-zinc-300">
-          Player B
-        </span>
-        <select
-          className="rounded-lg border border-zinc-300 bg-white px-3 py-2 dark:border-zinc-700 dark:bg-zinc-950"
-          value={slugB ?? ""}
-          onChange={(e) => onChange("b", e.target.value)}
-        >
-          {players.map((p) => (
-            <option key={p.slug} value={p.slug}>
-              {p.name} ({p.club})
-            </option>
-          ))}
-        </select>
-      </label>
+      <PlayerCombobox
+        label="Player A"
+        value={slugA ?? players[0]?.slug ?? ""}
+        options={players}
+        onChange={onChangeA}
+      />
+      <PlayerCombobox
+        label="Player B"
+        value={slugB ?? players[1]?.slug ?? ""}
+        options={players}
+        onChange={onChangeB}
+      />
     </div>
   );
 }

@@ -1,14 +1,20 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useMemo, useState, type MouseEvent } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useEffect, useMemo, useState, type MouseEvent } from "react";
 import { formatDate, formatGbp, formatGbpCompact } from "@/lib/format";
 import {
   filterSalaryRows,
   sortSalaryRows,
   type TableSortDir,
 } from "@/lib/sort-salary-rows";
+import {
+  parsePayPeriod,
+  parseSortDir,
+  parseSortKey,
+  type PayPeriod,
+} from "@/lib/table-url-state";
 import type { SalaryTableRow, TableSortKey } from "@/lib/types";
 import { WageStatusBadge } from "./WageStatusBadge";
 
@@ -47,11 +53,33 @@ function sortAriaValue(
   return sortDir === "asc" ? "ascending" : "descending";
 }
 
-export function SalaryTable({ rows }: Props) {
+function SalaryTableInner({ rows }: Props) {
   const router = useRouter();
-  const [query, setQuery] = useState("");
-  const [sortKey, setSortKey] = useState<TableSortKey>("annual");
-  const [sortDir, setSortDir] = useState<TableSortDir>("desc");
+  const searchParams = useSearchParams();
+  const [query, setQuery] = useState(() => searchParams.get("q") ?? "");
+  const [sortKey, setSortKey] = useState<TableSortKey>(() =>
+    parseSortKey(searchParams.get("sort")),
+  );
+  const [sortDir, setSortDir] = useState<TableSortDir>(() =>
+    parseSortDir(searchParams.get("dir")),
+  );
+  const [period, setPeriod] = useState<PayPeriod>(() =>
+    parsePayPeriod(searchParams.get("period")),
+  );
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    const q = query.trim();
+    if (q) params.set("q", q);
+    if (sortKey !== "annual") params.set("sort", sortKey);
+    if (sortDir !== "desc") params.set("dir", sortDir);
+    if (period !== "annual") params.set("period", period);
+    const next = params.toString();
+    const current = searchParams.toString();
+    if (next !== current) {
+      router.replace(next ? `/?${next}` : "/", { scroll: false });
+    }
+  }, [query, sortKey, sortDir, period, router, searchParams]);
 
   const visible = useMemo(() => {
     const filtered = filterSalaryRows(rows, query);
@@ -71,6 +99,20 @@ export function SalaryTable({ rows }: Props) {
       );
     }
   }
+
+  function setPayPeriod(next: PayPeriod) {
+    setPeriod(next);
+    setSortKey(next === "weekly" ? "weekly" : "annual");
+    setSortDir("desc");
+  }
+
+  const primaryAmount = (row: SalaryTableRow) =>
+    period === "weekly" ? row.weeklyWageGbp : row.annualWageGbp;
+  const primaryLabel = period === "weekly" ? "per week" : "per year";
+  const secondaryAmount = (row: SalaryTableRow) =>
+    period === "weekly" ? row.annualWageGbp : row.weeklyWageGbp;
+  const secondaryLabel =
+    period === "weekly" ? "per year" : "/wk";
 
   function goToPlayer(slug: string, e: MouseEvent) {
     const target = e.target as HTMLElement;
@@ -110,6 +152,23 @@ export function SalaryTable({ rows }: Props) {
             </>
           ) : null}
         </p>
+        <div className="flex gap-1 pt-1">
+          <span className="sr-only">Show wages as</span>
+          {(["annual", "weekly"] as const).map((p) => (
+            <button
+              key={p}
+              type="button"
+              onClick={() => setPayPeriod(p)}
+              className={`rounded-md px-3 py-1.5 text-xs font-medium capitalize ${
+                period === p
+                  ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
+                  : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300"
+              }`}
+            >
+              {p}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Mobile: card list */}
@@ -141,11 +200,12 @@ export function SalaryTable({ rows }: Props) {
                 </div>
                 <div className="shrink-0 text-right">
                   <p className="text-lg font-semibold tabular-nums text-zinc-900 dark:text-zinc-50">
-                    {formatGbpCompact(row.annualWageGbp)}
+                    {formatGbpCompact(primaryAmount(row))}
                   </p>
-                  <p className="text-xs text-zinc-500">per year</p>
+                  <p className="text-xs text-zinc-500">{primaryLabel}</p>
                   <p className="mt-1 text-sm tabular-nums text-zinc-600 dark:text-zinc-400">
-                    {formatGbpCompact(row.weeklyWageGbp)}/wk
+                    {formatGbpCompact(secondaryAmount(row))}
+                    {period === "annual" ? "/wk" : ` ${secondaryLabel}`}
                   </p>
                 </div>
               </div>
@@ -252,10 +312,22 @@ export function SalaryTable({ rows }: Props) {
                   <td className="hidden px-4 py-3 text-zinc-600 lg:table-cell dark:text-zinc-400">
                     {row.position ?? "—"}
                   </td>
-                  <td className="hidden px-4 py-3 text-right tabular-nums text-zinc-600 md:table-cell dark:text-zinc-400">
+                  <td
+                    className={`hidden px-4 py-3 text-right tabular-nums md:table-cell ${
+                      period === "weekly"
+                        ? "text-base font-semibold text-zinc-900 dark:text-zinc-50"
+                        : "text-zinc-600 dark:text-zinc-400"
+                    }`}
+                  >
                     {formatGbp(row.weeklyWageGbp)}
                   </td>
-                  <td className="px-4 py-3 text-right text-base font-semibold tabular-nums text-zinc-900 dark:text-zinc-50">
+                  <td
+                    className={`px-4 py-3 text-right tabular-nums ${
+                      period === "annual"
+                        ? "text-base font-semibold text-zinc-900 dark:text-zinc-50"
+                        : "text-zinc-600 dark:text-zinc-400"
+                    }`}
+                  >
                     {formatGbp(row.annualWageGbp)}
                   </td>
                   <td className="px-4 py-3">
@@ -285,5 +357,17 @@ export function SalaryTable({ rows }: Props) {
         </div>
       </div>
     </div>
+  );
+}
+
+export function SalaryTable(props: Props) {
+  return (
+    <Suspense
+      fallback={
+        <div className="h-72 animate-pulse rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950" />
+      }
+    >
+      <SalaryTableInner {...props} />
+    </Suspense>
   );
 }

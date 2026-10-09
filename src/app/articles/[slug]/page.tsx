@@ -34,9 +34,20 @@ export default async function ArticlePage({ params }: { params: Params }) {
           <p key={p.slice(0, 24)}>{p}</p>
         ))}
       </div>
-      <Link href="/" className="text-emerald-700 hover:underline dark:text-emerald-400">
-        ← Salary table
-      </Link>
+      <div className="flex flex-wrap gap-4 text-sm font-medium">
+        <Link
+          href="/?sort=annual&dir=desc"
+          className="text-emerald-700 hover:underline dark:text-emerald-400"
+        >
+          Highest paid (salary table) →
+        </Link>
+        <Link
+          href="/expiring"
+          className="text-emerald-700 hover:underline dark:text-emerald-400"
+        >
+          Expiring contracts →
+        </Link>
+      </div>
     </article>
   );
 }

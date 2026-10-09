@@ -16,7 +16,7 @@ export const articles: Article[] = [
     body: [
       "Premier League wage figures are rarely confirmed by clubs. Soccer Pay lists reported numbers from reputable outlets and labels each figure as verified, reported, or estimated.",
       "When comparing earners, look beyond the headline weekly wage: contract length, bonuses (not yet modeled here), and output metrics such as wage per goal help explain value on the pitch.",
-      "Use the main wages table to sort by annual pay or contract end date. Our contract expiry tracker highlights deals ending within twelve months — useful for transfer and renewal speculation.",
+      "Browse the salary table sorted by highest annual pay, or open the expiring contracts list for deals ending within twelve months.",
     ],
   },
 ];

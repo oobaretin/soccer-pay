@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { PlayerJsonLd } from "@/components/PlayerJsonLd";
 import { SourceCitation } from "@/components/SourceCitation";
 import { StateMessage } from "@/components/StateMessage";
 import { WageStatusBadge } from "@/components/WageStatusBadge";
@@ -62,6 +63,7 @@ async function PlayerContent({ params }: { params: Params }) {
 
   return (
     <div className="space-y-8">
+      <PlayerJsonLd player={player} contract={contract} />
       <div className="space-y-3">
         <p className="text-sm text-zinc-500">
           {club ? (

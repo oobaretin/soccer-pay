@@ -12,7 +12,8 @@
     "check:env": "node scripts/check-env.mjs",
     "db:apply": "node scripts/apply-sql.mjs",
     "import:clubs": "node scripts/import-clubs.mjs",
-    "import:players": "node scripts/import-csv.mjs"
+    "import:players": "node scripts/import-csv.mjs",
+    "validate:sources": "node scripts/validate-sources.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.3",
