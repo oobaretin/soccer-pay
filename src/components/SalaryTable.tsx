@@ -16,6 +16,7 @@ import {
   type PayPeriod,
 } from "@/lib/table-url-state";
 import type { SalaryTableRow, TableSortKey } from "@/lib/types";
+import { PlayerPhoto } from "./PlayerPhoto";
 import { WageStatusBadge } from "./WageStatusBadge";
 
 type Props = {
@@ -187,7 +188,14 @@ function SalaryTableInner({ rows }: Props) {
               className="block rounded-xl border border-zinc-200 bg-white p-4 shadow-sm active:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950 dark:active:bg-zinc-900"
             >
               <div className="flex items-start justify-between gap-3">
-                <div className="min-w-0 flex-1">
+                <div className="flex min-w-0 flex-1 gap-3">
+                  <PlayerPhoto
+                    name={row.name}
+                    photoUrl={row.photoUrl}
+                    size="md"
+                    className="mt-0.5"
+                  />
+                  <div className="min-w-0 flex-1">
                   <p className="text-xs tabular-nums text-zinc-400">#{index + 1}</p>
                   <p className="truncate font-semibold text-zinc-900 dark:text-zinc-50">
                     {row.name}
@@ -203,6 +211,7 @@ function SalaryTableInner({ rows }: Props) {
                         Expiring
                       </span>
                     ) : null}
+                  </div>
                   </div>
                 </div>
                 <div className="shrink-0 text-right">
@@ -294,13 +303,20 @@ function SalaryTableInner({ rows }: Props) {
                   >
                     {index + 1}
                   </td>
-                  <td className="sticky left-12 z-10 min-w-[160px] bg-white px-4 py-3 group-hover:bg-zinc-50 dark:bg-zinc-950 dark:group-hover:bg-zinc-900/60">
-                    <Link
-                      href={`/players/${row.slug}`}
-                      className="font-medium text-zinc-900 hover:text-emerald-700 dark:text-zinc-100 dark:hover:text-emerald-400"
-                    >
-                      {row.name}
-                    </Link>
+                  <td className="sticky left-12 z-10 min-w-[200px] bg-white px-4 py-3 group-hover:bg-zinc-50 dark:bg-zinc-950 dark:group-hover:bg-zinc-900/60">
+                    <div className="flex items-center gap-2.5">
+                      <PlayerPhoto
+                        name={row.name}
+                        photoUrl={row.photoUrl}
+                        size="sm"
+                      />
+                      <Link
+                        href={`/players/${row.slug}`}
+                        className="font-medium text-zinc-900 hover:text-emerald-700 dark:text-zinc-100 dark:hover:text-emerald-400"
+                      >
+                        {row.name}
+                      </Link>
+                    </div>
                     <div className="mt-1 flex flex-wrap items-center gap-1.5">
                       {row.status ? (
                         <WageStatusBadge status={row.status} />

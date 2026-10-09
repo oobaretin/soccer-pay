@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { PlayerJsonLd } from "@/components/PlayerJsonLd";
+import { PlayerPhoto } from "@/components/PlayerPhoto";
 import { SourceCitation } from "@/components/SourceCitation";
 import { StateMessage } from "@/components/StateMessage";
 import { WageStatusBadge } from "@/components/WageStatusBadge";
@@ -84,9 +85,17 @@ async function PlayerContent({ params }: { params: Params }) {
           {player.position ? ` · ${player.position}` : ""}
           {player.nationality ? ` · ${player.nationality}` : ""}
         </p>
-        <h1 className="text-3xl font-semibold tracking-tight">
-          {player.name} salary
-        </h1>
+        <div className="flex items-center gap-4">
+          <PlayerPhoto
+            name={player.name}
+            photoUrl={player.photo_url}
+            size="lg"
+            priority
+          />
+          <h1 className="text-3xl font-semibold tracking-tight">
+            {player.name} salary
+          </h1>
+        </div>
         {contract ? (
           <div className="space-y-2 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
             <div className="flex flex-wrap items-center gap-2">

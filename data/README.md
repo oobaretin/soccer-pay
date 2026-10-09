@@ -37,6 +37,15 @@ Optional CSV column `currency` (defaults from the club’s league).
 
 Optional `wage_notes` on a contract row (shown on the player page) for bonuses, image rights, or revenue-share not captured in weekly/annual columns.
 
+## Player photos
+
+Portrait URLs live in `players.photo_url` (Wikimedia thumbnails are typical). Optional CSV column `photo_url` on player import rows, or maintain `data/player-photos.csv`:
+
+```bash
+npm run fetch:photos          # Wikipedia search → CSV + Supabase (missing only)
+npm run import:photos         # push data/player-photos.csv to Supabase
+```
+
 ## International batch 2 — `players-international-batch-2.csv`
 
 More flagship names (Mbappé, Bellingham, Musiala, Kvaratskhelia, Sané, Miami squad, etc.):

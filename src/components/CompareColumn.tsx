@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { PlayerPhoto } from "@/components/PlayerPhoto";
 import { SourceCitation } from "@/components/SourceCitation";
 import {
   formatDate,
@@ -23,7 +24,13 @@ export function CompareColumn({
 
   return (
     <article className="space-y-4 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
-      <div>
+      <div className="flex items-center gap-3">
+        <PlayerPhoto
+          name={player.name}
+          photoUrl={player.photo_url}
+          size="md"
+        />
+        <div>
         <h2 className="text-xl font-semibold">{player.name}</h2>
         <p className="text-sm text-zinc-500">
           vs {otherName}
@@ -40,6 +47,7 @@ export function CompareColumn({
             </>
           ) : null}
         </p>
+        </div>
       </div>
       <dl className="grid grid-cols-2 gap-3 text-sm">
         <CompareRow label="Weekly" value={formatGbp(contract?.weekly_wage_gbp)} />

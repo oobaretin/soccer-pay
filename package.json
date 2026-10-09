@@ -17,7 +17,9 @@
     "import:players": "node scripts/import-csv.mjs",
     "validate:sources": "node scripts/validate-sources.mjs",
     "update:sources": "node scripts/update-source-urls.mjs",
-    "sync:sources": "node scripts/sync-source-urls-to-player-csvs.mjs"
+    "sync:sources": "node scripts/sync-source-urls-to-player-csvs.mjs",
+    "import:photos": "node scripts/import-player-photos.mjs",
+    "fetch:photos": "node scripts/fetch-wikimedia-photos.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.3",

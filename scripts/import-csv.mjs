@@ -91,6 +91,7 @@ for (const r of records) {
         position: r.position,
         nationality: r.nationality,
         date_of_birth: r.dob,
+        photo_url: r.photo_url?.trim() || null,
       },
       { onConflict: "slug" },
     )

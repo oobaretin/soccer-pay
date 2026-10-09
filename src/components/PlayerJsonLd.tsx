@@ -23,6 +23,7 @@ export function PlayerJsonLd({ player, contract }: Props) {
       "@type": "Person",
       name: player.name,
       url,
+      image: player.photo_url ?? undefined,
       jobTitle: player.position ?? "Football player",
       nationality: player.nationality ?? undefined,
     },

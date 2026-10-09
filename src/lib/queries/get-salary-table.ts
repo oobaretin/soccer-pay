@@ -21,6 +21,7 @@ export async function getSalaryTableRows(): Promise<SalaryTableResult> {
       playerId: row.player.id,
       name: row.player.name,
       slug: row.player.slug,
+      photoUrl: row.player.photo_url ?? null,
       position: row.player.position,
       clubName: row.club?.name ?? null,
       clubSlug: row.club?.slug ?? null,
