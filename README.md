@@ -1,36 +1,56 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Soccer Pay
 
-## Getting Started
+Premier League player salaries — cited sources, contract expiry flags, wage-per-goal/assist, club wage bills, compare, and SEO articles.
 
-First, run the development server:
+## Setup
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1. Run in Supabase SQL editor (in order):
+   - [`schema.sql`](./schema.sql)
+   - [`scripts/seed-clubs.sql`](./scripts/seed-clubs.sql) — all 20 PL clubs
+   - [`scripts/seed.sql`](./scripts/seed.sql) — sample Arsenal/Chelsea players (optional)
+   - [`scripts/seed-season-stats.sql`](./scripts/seed-season-stats.sql) — if stats missing
+2. Or: `npm run db:apply` with `SUPABASE_DB_URL` in `.env.local`
+3. Copy [`.env.local.example`](./.env.local.example) → `.env.local` (URL + **anon** key for the app)
+4. `npm run check:env` → `npm run dev`
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Bulk data (recommended)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. **Clubs** (already in `seed-clubs.sql`, or CSV):
+   ```bash
+   npm run import:clubs
+   # uses data/clubs.csv
+   ```
+2. **Players + wages + stats** — edit [`data/players.example.csv`](./data/players.example.csv), add rows, then:
+   ```bash
+   npm run import:players -- path/to/your.csv
+   ```
+   Requires `SUPABASE_SERVICE_ROLE_KEY` in `.env.local` (server/scripts only).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Import behavior:
 
-## Learn More
+- **Players** upsert on `slug`
+- **Contracts** update when `player_id` + `reviewed_at` match, else insert (keeps history)
+- **Season stats** upsert on `(player_id, season)`; `annual_wage_gbp` defaults to `weekly × 52` if omitted
 
-To learn more about Next.js, take a look at the following resources:
+## Routes
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+| Path | Description |
+|------|-------------|
+| `/` | Sortable/searchable salary table |
+| `/players/[slug]` | Profile, sources, stats, wage metrics |
+| `/clubs`, `/clubs/[slug]` | Wage bills |
+| `/compare?a=&b=` | Side-by-side |
+| `/articles/[slug]` | SEO |
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Pin [`schema.sql`](./schema.sql) in Cursor (`@schema.sql`).
 
-## Deploy on Vercel
+## Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Command | Purpose |
+|---------|---------|
+| `npm run setup` | Create `.env.local` from example |
+| `npm run check:env` | Validate env (no secrets printed) |
+| `npm run db:apply` | schema + clubs + sample seed via Postgres URI |
+| `npm run import:clubs` | Upsert clubs from CSV |
+| `npm run import:players -- file.csv` | Upsert players/contracts/stats |
+| `npm run clean` | Remove `.next` (~50MB) |

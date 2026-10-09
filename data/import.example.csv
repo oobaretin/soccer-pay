@@ -1,0 +1,2 @@
+player_name,player_slug,club_slug,position,nationality,dob,weekly_wage_gbp,annual_wage_gbp,contract_start,contract_end,status,source_name,source_url,reviewed_at,season,appearances,goals,assists,minutes
+Example Player,example-player,manchester-city,Midfielder,England,1995-01-01,100000,5200000,2024-07-01,2028-06-30,reported,BBC Sport,https://www.bbc.co.uk/sport/football,2025-06-01,2024-25,10,1,2,900

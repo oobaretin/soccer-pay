@@ -1,0 +1,3 @@
+player_name,player_slug,club_slug,position,nationality,dob,weekly_wage_gbp,annual_wage_gbp,contract_start,contract_end,status,source_name,source_url,reviewed_at,season,appearances,goals,assists,minutes
+Bukayo Saka,bukayo-saka,arsenal,Winger,England,2001-09-05,300000,15600000,2023-04-01,2027-06-30,reported,Example Source,https://example.com/source,2025-10-01,2024-25,38,9,11,3180
+Cole Palmer,cole-palmer,chelsea,Midfielder,England,2002-05-06,180000,9360000,2024-07-01,2033-06-30,reported,Example Source,https://example.com/source,2025-10-01,2024-25,37,15,8,2950
