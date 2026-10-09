@@ -20,8 +20,26 @@ export async function getAllClubs(): Promise<Club[]> {
   const supabase = createSupabaseClient();
   if (!supabase) return [];
 
-  const { data } = await supabase.from("clubs").select("*").order("name");
-  return (data ?? []) as Club[];
+  let { data, error } = await supabase
+    .from("clubs")
+    .select("*, leagues(*)")
+    .order("name");
+  if (error) {
+    const retry = await supabase.from("clubs").select("*").order("name");
+    data = retry.data;
+  }
+  return (data ?? []).map((row) => {
+    const leagueRaw = row.leagues;
+    const league = Array.isArray(leagueRaw) ? leagueRaw[0] : leagueRaw;
+    return {
+      id: row.id,
+      name: row.name,
+      slug: row.slug,
+      badge_url: row.badge_url ?? null,
+      league_id: row.league_id,
+      league: league ?? null,
+    } as Club;
+  });
 }
 
 export async function getClubBySlug(slug: string): Promise<ClubDetail | null> {

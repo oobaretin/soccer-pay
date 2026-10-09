@@ -16,23 +16,23 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "Soccer Pay — Premier League wages",
+    default: "Soccer Pay — football salaries",
     template: "%s · Soccer Pay",
   },
   description:
-    "Premier League player wages with cited sources, contract expiry tracking, and wage-per-goal insights.",
+    "Football wages across Europe, Turkey, and Saudi Arabia, with cited sources and contract expiry tracking.",
   openGraph: {
     type: "website",
     siteName: "Soccer Pay",
-    title: "Soccer Pay — Premier League wages",
+    title: "Soccer Pay — football salaries",
     description:
-      "Premier League player wages with cited sources, contract expiry tracking, and wage-per-goal insights.",
+      "Football wages across Europe, Turkey, and Saudi Arabia, with cited sources and contract expiry tracking.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Soccer Pay — Premier League wages",
+    title: "Soccer Pay — football salaries",
     description:
-      "Premier League player wages with cited sources and contract expiry tracking.",
+      "Football wages with cited sources and contract expiry tracking.",
   },
 };
 

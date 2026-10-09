@@ -6,30 +6,63 @@ function referenceDate(): Date {
   return new Date(`${WAGE_REFERENCE_ISO}T12:00:00.000Z`);
 }
 
-const gbp = new Intl.NumberFormat("en-GB", {
-  style: "currency",
-  currency: "GBP",
-  maximumFractionDigits: 0,
-});
+const formatters = new Map<string, Intl.NumberFormat>();
 
-export function formatGbp(amount: number | null | undefined): string {
-  if (amount == null) return "—";
-  return gbp.format(amount);
+function moneyFormatter(currency: string): Intl.NumberFormat {
+  const code = currency || "GBP";
+  let fmt = formatters.get(code);
+  if (!fmt) {
+    fmt = new Intl.NumberFormat("en-GB", {
+      style: "currency",
+      currency: code,
+      maximumFractionDigits: 0,
+    });
+    formatters.set(code, fmt);
+  }
+  return fmt;
 }
 
-/** Shorter £ for dense mobile rows (e.g. £375k, £19.5m). */
-export function formatGbpCompact(amount: number | null | undefined): string {
+export function formatMoney(
+  amount: number | null | undefined,
+  currency = "GBP",
+): string {
   if (amount == null) return "—";
+  try {
+    return moneyFormatter(currency).format(amount);
+  } catch {
+    return moneyFormatter("GBP").format(amount);
+  }
+}
+
+export function formatGbp(amount: number | null | undefined): string {
+  return formatMoney(amount, "GBP");
+}
+
+const compactPrefix: Record<string, string> = {
+  GBP: "£",
+  EUR: "€",
+  USD: "$",
+  SAR: "SAR ",
+  TRY: "₺",
+};
+
+/** Shorter figures for dense mobile rows (e.g. £375k, €19.5m). */
+export function formatGbpCompact(
+  amount: number | null | undefined,
+  currency = "GBP",
+): string {
+  if (amount == null) return "—";
+  const prefix = compactPrefix[currency] ?? `${currency} `;
   const abs = Math.abs(amount);
   if (abs >= 1_000_000) {
     const m = amount / 1_000_000;
     const rounded = m >= 10 ? Math.round(m) : Math.round(m * 10) / 10;
-    return `£${rounded}m`;
+    return `${prefix}${rounded}m`;
   }
   if (abs >= 10_000) {
-    return `£${Math.round(amount / 1_000)}k`;
+    return `${prefix}${Math.round(amount / 1_000)}k`;
   }
-  return gbp.format(amount);
+  return formatMoney(amount, currency);
 }
 
 export function formatDate(iso: string | null | undefined): string {
@@ -45,9 +78,10 @@ export function formatPerMetric(
   annualWage: number | null | undefined,
   count: number | null | undefined,
   label: string,
+  currency = "GBP",
 ): string {
   if (annualWage == null || !count || count <= 0) return "—";
-  return `${gbp.format(Math.round(annualWage / count))} / ${label}`;
+  return `${formatMoney(Math.round(annualWage / count), currency)} / ${label}`;
 }
 
 /** Weeks remaining × weekly wage (approximate remaining contract value). */

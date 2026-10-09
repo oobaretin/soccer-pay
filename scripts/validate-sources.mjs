@@ -5,33 +5,35 @@
  */
 import fs from "node:fs";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { parseCsv } from "./lib/load-env.mjs";
 
+const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const file = process.argv[2];
 if (!file) {
   console.error("Usage: node scripts/validate-sources.mjs <csv>");
   process.exit(1);
 }
 
-const text = fs.readFileSync(path.resolve(file), "utf8");
-const lines = text.trim().split("\n");
-const header = lines[0].split(",");
-const urlIdx = header.indexOf("source_url");
-const nameIdx = header.indexOf("player_name");
-if (urlIdx === -1) {
-  console.error("CSV missing source_url column");
-  process.exit(1);
-}
+const { records } = parseCsv(fs.readFileSync(path.resolve(root, file), "utf8"));
 
 let warnings = 0;
-for (let i = 1; i < lines.length; i++) {
-  const cols = lines[i].split(",");
-  const name = cols[nameIdx] ?? `row ${i + 1}`;
-  const url = cols[urlIdx]?.trim();
+const urlToSlugs = new Map();
+for (const row of records) {
+  const name = row.player_name ?? row.player_slug ?? "row";
+  const url = row.source_url?.trim();
   if (!url) continue;
+  const slug = row.player_slug ?? row.player_name ?? "row";
+  const list = urlToSlugs.get(url) ?? [];
+  list.push(slug);
+  urlToSlugs.set(url, list);
   try {
     const u = new URL(url);
     const depth = u.pathname.replace(/\/$/, "").split("/").filter(Boolean).length;
-    if (depth <= 1) {
+    const looksLikeHome =
+      depth <= 1 ||
+      /\/(football|premier-league|calcio|futbol)\/?$/.test(u.pathname);
+    if (looksLikeHome) {
       console.warn(`⚠ ${name}: homepage-style URL (${url})`);
       warnings++;
     }
@@ -45,9 +47,20 @@ for (let i = 1; i < lines.length; i++) {
   }
 }
 
+for (const [url, slugs] of urlToSlugs) {
+  if (slugs.length > 1) {
+    console.warn(
+      `⚠ Shared URL (${slugs.join(", ")}): ${url}`,
+    );
+    warnings++;
+  }
+}
+
 if (warnings === 0) {
   console.log("No source URL warnings.");
 } else {
-  console.log(`\n${warnings} warning(s). Replace with article-level links before publishing.`);
+  console.log(
+    `\n${warnings} warning(s). Use article-level links — see data/source-urls-*.csv.`,
+  );
   process.exit(2);
 }

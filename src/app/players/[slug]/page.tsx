@@ -10,6 +10,7 @@ import { getPlayerBySlug, getPlayerSlugs } from "@/lib/queries/get-player";
 import {
   formatDate,
   formatGbp,
+  formatMoney,
   formatPerMetric,
   remainingContractValueGbp,
 } from "@/lib/format";
@@ -56,6 +57,12 @@ async function PlayerContent({ params }: { params: Params }) {
   if (!detail) notFound();
 
   const { player, club, contract, stats, contracts } = detail;
+  const wageCurrency =
+    contract?.currency?.toUpperCase() ??
+    club?.league?.currency?.toUpperCase() ??
+    "GBP";
+  const fmt = (amount: number | null | undefined) =>
+    formatMoney(amount, wageCurrency);
   const remaining = remainingContractValueGbp(
     contract?.weekly_wage_gbp,
     contract?.contract_end,
@@ -91,15 +98,20 @@ async function PlayerContent({ params }: { params: Params }) {
               ) : null}
             </div>
             <p className="text-2xl font-semibold tabular-nums tracking-tight sm:text-3xl">
-              {formatGbp(contract.weekly_wage_gbp)}
+              {fmt(contract.weekly_wage_gbp)}
               <span className="ml-2 text-lg font-medium text-zinc-500">
                 per week
               </span>
             </p>
             <p className="text-lg tabular-nums text-zinc-700 dark:text-zinc-300">
-              {formatGbp(contract.annual_wage_gbp)}{" "}
+              {fmt(contract.annual_wage_gbp)}{" "}
               <span className="text-base font-normal text-zinc-500">per year</span>
             </p>
+            {contract.wage_notes ? (
+              <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                {contract.wage_notes}
+              </p>
+            ) : null}
           </div>
         ) : (
           <StateMessage
@@ -116,15 +128,15 @@ async function PlayerContent({ params }: { params: Params }) {
       </div>
 
       <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Weekly wage" value={formatGbp(contract?.weekly_wage_gbp)} />
-        <StatCard label="Annual wage" value={formatGbp(contract?.annual_wage_gbp)} />
+        <StatCard label="Weekly wage" value={fmt(contract?.weekly_wage_gbp)} />
+        <StatCard label="Annual wage" value={fmt(contract?.annual_wage_gbp)} />
         <StatCard
           label="Contract ends"
           value={formatDate(contract?.contract_end)}
         />
         <StatCard
           label="Illustrative remaining value"
-          value={formatGbp(remaining)}
+          value={fmt(remaining)}
           hint="Weeks left × weekly wage — not guaranteed pay"
         />
       </section>
@@ -149,6 +161,7 @@ async function PlayerContent({ params }: { params: Params }) {
                   contract?.annual_wage_gbp,
                   stats.goals,
                   "goal",
+                  wageCurrency,
                 )}
               </li>
               <li>
@@ -157,6 +170,7 @@ async function PlayerContent({ params }: { params: Params }) {
                   contract?.annual_wage_gbp,
                   stats.assists,
                   "assist",
+                  wageCurrency,
                 )}
               </li>
             </ul>
@@ -179,7 +193,11 @@ async function PlayerContent({ params }: { params: Params }) {
               >
                 <div>
                   <span className="font-medium tabular-nums">
-                    {formatGbp(c.weekly_wage_gbp)}/wk
+                    {formatMoney(
+                      c.weekly_wage_gbp,
+                      c.currency?.toUpperCase() ?? wageCurrency,
+                    )}
+                    /wk
                   </span>
                   <span className="mx-2 text-zinc-400">·</span>
                   <span className="text-zinc-600 dark:text-zinc-400">

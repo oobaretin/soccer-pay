@@ -29,7 +29,7 @@ export async function getPlayerBySlug(
   const { data: player, error } = await supabase
     .from("players")
     .select(
-      "id, name, slug, club_id, position, nationality, date_of_birth, photo_url, clubs ( id, name, slug, badge_url )",
+      "id, name, slug, club_id, position, nationality, date_of_birth, photo_url, clubs ( id, name, slug, badge_url, league_id, leagues ( id, name, slug, country, currency ) )",
     )
     .eq("slug", slug)
     .maybeSingle();

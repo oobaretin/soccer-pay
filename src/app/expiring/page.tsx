@@ -10,11 +10,11 @@ import { sortSalaryRows } from "@/lib/sort-salary-rows";
 import { getSiteUrl } from "@/lib/site-url";
 
 export const metadata: Metadata = {
-  title: "Premier League contracts expiring within 12 months",
+  title: "Contracts expiring within 12 months",
   description:
     "Players whose deals end within the next year — useful for transfer and renewal tracking.",
   openGraph: {
-    title: "Expiring Premier League contracts",
+    title: "Expiring football contracts",
     url: `${getSiteUrl()}/expiring`,
   },
 };

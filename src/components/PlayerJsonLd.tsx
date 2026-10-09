@@ -10,8 +10,8 @@ type Props = {
 export function PlayerJsonLd({ player, contract }: Props) {
   const url = `${getSiteUrl()}/players/${player.slug}`;
   const description = contract
-    ? `${player.name} Premier League salary: ${formatGbp(contract.weekly_wage_gbp)} per week (${formatGbp(contract.annual_wage_gbp)} per year).`
-    : `${player.name} Premier League salary and contract information.`;
+    ? `${player.name} salary: ${formatGbp(contract.weekly_wage_gbp)} per week (${formatGbp(contract.annual_wage_gbp)} per year).`
+    : `${player.name} salary and contract information.`;
 
   const data = {
     "@context": "https://schema.org",

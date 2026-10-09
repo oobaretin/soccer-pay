@@ -4,11 +4,11 @@ import { connection } from "next/server";
 import { StateMessage } from "@/components/StateMessage";
 import { getAllClubs } from "@/lib/queries/get-clubs";
 import { loadRoster } from "@/lib/queries/load-roster";
-import { formatGbp } from "@/lib/format";
+import { formatMoney } from "@/lib/format";
 
 export const metadata: Metadata = {
   title: "Clubs",
-  description: "Premier League club wage bills and squads on file.",
+  description: "Club wage bills and squads on file, grouped by league.",
 };
 
 export default async function ClubsIndexPage() {
@@ -42,27 +42,49 @@ export default async function ClubsIndexPage() {
       <div>
         <h1 className="text-3xl font-semibold tracking-tight">Clubs</h1>
         <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-          Reported annual wage bill from players on file per club.
+          Wage bills from players on file, grouped by league.
         </p>
       </div>
-      <ul className="grid gap-4 sm:grid-cols-2">
-        {clubs.map((club) => (
-          <li key={club.id}>
-            <Link
-              href={`/clubs/${club.slug}`}
-              className="block rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:border-emerald-600/40 dark:border-zinc-800 dark:bg-zinc-950"
-            >
-              <h2 className="text-lg font-semibold">{club.name}</h2>
-              <p className="mt-1 text-sm text-zinc-500">
-                Annual bill on file:{" "}
-                <span className="font-medium tabular-nums text-zinc-800 dark:text-zinc-200">
-                  {formatGbp(billBySlug.get(club.slug) ?? 0)}
-                </span>
-              </p>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {Array.from(
+        clubs.reduce((map, club) => {
+          const key = club.league?.name ?? "Other";
+          const list = map.get(key) ?? [];
+          list.push(club);
+          map.set(key, list);
+          return map;
+        }, new Map<string, typeof clubs>()),
+      ).map(([leagueName, leagueClubs]) => (
+        <section key={leagueName} className="space-y-3">
+          <h2 className="text-lg font-semibold">{leagueName}</h2>
+          <ul className="grid gap-4 sm:grid-cols-2">
+            {leagueClubs.map((club) => (
+              <li key={club.id}>
+                <Link
+                  href={`/clubs/${club.slug}`}
+                  className="block rounded-xl border border-zinc-200 bg-white p-5 shadow-sm transition hover:border-emerald-600/40 dark:border-zinc-800 dark:bg-zinc-950"
+                >
+                  <h3 className="text-lg font-semibold">{club.name}</h3>
+                  <p className="mt-1 text-sm text-zinc-500">
+                    {billBySlug.get(club.slug) ? (
+                      <>
+                        Annual bill on file:{" "}
+                        <span className="font-medium tabular-nums text-zinc-800 dark:text-zinc-200">
+                          {formatMoney(
+                            billBySlug.get(club.slug),
+                            club.league?.currency ?? "GBP",
+                          )}
+                        </span>
+                      </>
+                    ) : (
+                      "No wages on file yet"
+                    )}
+                  </p>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
     </div>
   );
 }

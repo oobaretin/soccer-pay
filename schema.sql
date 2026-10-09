@@ -1,11 +1,20 @@
--- Premier League wage tracker (Soccer Pay)
+-- Football salary tracker (Soccer Pay)
 -- Reference this file in Cursor prompts for schema consistency.
+
+create table leagues (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  slug text unique not null,
+  country text not null,
+  currency text not null default 'GBP'
+);
 
 create table clubs (
   id uuid primary key default gen_random_uuid(),
   name text not null,
   slug text unique not null,
-  badge_url text
+  badge_url text,
+  league_id uuid references leagues(id)
 );
 
 create table players (
@@ -29,7 +38,9 @@ create table contracts (
   status text check (status in ('verified','reported','estimated')),
   source_name text,
   source_url text,
-  reviewed_at date
+  reviewed_at date,
+  currency text not null default 'GBP',
+  wage_notes text
 );
 
 create table season_stats (
@@ -43,6 +54,7 @@ create table season_stats (
 );
 
 create index players_club_id_idx on players (club_id);
+create index clubs_league_id_idx on clubs (league_id);
 create index contracts_player_id_idx on contracts (player_id);
 create index season_stats_player_season_idx on season_stats (player_id, season);
 create unique index season_stats_player_season_unique on season_stats (player_id, season);
@@ -63,11 +75,13 @@ from contracts c
 order by c.player_id, c.reviewed_at desc nulls last, c.contract_end desc;
 
 -- Allow read-only access for the public site (anon key)
+alter table leagues enable row level security;
 alter table clubs enable row level security;
 alter table players enable row level security;
 alter table contracts enable row level security;
 alter table season_stats enable row level security;
 
+create policy "Public read leagues" on leagues for select to anon, authenticated using (true);
 create policy "Public read clubs" on clubs for select to anon, authenticated using (true);
 create policy "Public read players" on players for select to anon, authenticated using (true);
 create policy "Public read contracts" on contracts for select to anon, authenticated using (true);

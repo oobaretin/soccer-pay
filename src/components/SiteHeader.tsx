@@ -17,7 +17,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
         <Link href="/" className="flex flex-col gap-0.5">
           <span className="text-lg font-semibold tracking-tight">Soccer Pay</span>
-          <span className="text-xs text-zinc-400">Premier League salaries</span>
+          <span className="text-xs text-zinc-400">Football salaries</span>
         </Link>
         <nav className="flex flex-wrap gap-1 text-sm">
           {links.map((link) => (

@@ -1,10 +1,20 @@
 export type WageStatus = "verified" | "reported" | "estimated";
 
+export type League = {
+  id: string;
+  name: string;
+  slug: string;
+  country: string;
+  currency: string;
+};
+
 export type Club = {
   id: string;
   name: string;
   slug: string;
   badge_url: string | null;
+  league_id?: string | null;
+  league?: League | null;
 };
 
 export type Player = {
@@ -29,6 +39,8 @@ export type Contract = {
   source_name: string | null;
   source_url: string | null;
   reviewed_at: string | null;
+  currency?: string | null;
+  wage_notes?: string | null;
 };
 
 export type SeasonStats = {
@@ -66,6 +78,9 @@ export type SalaryTableRow = {
   position: string | null;
   clubName: string | null;
   clubSlug: string | null;
+  leagueName: string | null;
+  leagueSlug: string | null;
+  currency: string;
   weeklyWageGbp: number | null;
   annualWageGbp: number | null;
   contractEnd: string | null;

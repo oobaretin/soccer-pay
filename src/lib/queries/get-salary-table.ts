@@ -24,6 +24,12 @@ export async function getSalaryTableRows(): Promise<SalaryTableResult> {
       position: row.player.position,
       clubName: row.club?.name ?? null,
       clubSlug: row.club?.slug ?? null,
+      leagueName: row.club?.league?.name ?? null,
+      leagueSlug: row.club?.league?.slug ?? null,
+      currency:
+        row.contract?.currency ||
+        row.club?.league?.currency ||
+        "GBP",
       weeklyWageGbp: row.contract?.weekly_wage_gbp ?? null,
       annualWageGbp: row.contract?.annual_wage_gbp ?? null,
       contractEnd: row.contract?.contract_end ?? null,

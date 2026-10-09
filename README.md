@@ -1,6 +1,6 @@
 # Soccer Pay
 
-Premier League player salaries — cited sources, contract expiry flags, wage-per-goal/assist, club wage bills, compare, and SEO articles.
+Football salaries across the Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Süper Lig, MLS, and the Saudi Pro League.
 
 ## Setup
 
@@ -10,8 +10,13 @@ Premier League player salaries — cited sources, contract expiry flags, wage-pe
    - [`scripts/seed.sql`](./scripts/seed.sql) — sample Arsenal/Chelsea players (optional)
    - [`scripts/seed-season-stats.sql`](./scripts/seed-season-stats.sql) — if stats missing
 2. Or: `npm run db:apply` with `SUPABASE_DB_URL` in `.env.local`
-3. Copy [`.env.local.example`](./.env.local.example) → `.env.local` (URL + **anon** key for the app)
-4. `npm run check:env` → `npm run dev`
+3. For extra leagues, run [`scripts/migrate-leagues.sql`](./scripts/migrate-leagues.sql) in the SQL editor (or `npm run db:leagues` once `SUPABASE_DB_URL` is a real URI). For contract breakdown text on player pages, also run [`scripts/add-wage-notes.sql`](./scripts/add-wage-notes.sql) (`npm run db:wage-notes`), then:
+   ```bash
+   npm run import:clubs -- data/clubs.csv
+   npm run import:clubs -- data/clubs-international.csv
+   ```
+4. Copy [`.env.local.example`](./.env.local.example) → `.env.local` (URL + **anon** key for the app)
+5. `npm run check:env` → `npm run dev`
 
 ## Deploy (Vercel)
 

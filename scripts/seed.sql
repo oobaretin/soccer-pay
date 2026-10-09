@@ -21,16 +21,16 @@ insert into contracts (
 select v.player_id, v.weekly_wage_gbp, v.annual_wage_gbp, v.contract_start, v.contract_end,
        v.status, v.source_name, v.source_url, v.reviewed_at
 from (values
-  ('b1111111-1111-1111-1111-111111111101'::uuid, 300000, 15600000, '2023-04-01'::date, '2027-06-30'::date, 'estimated', 'Placeholder source', 'https://example.com/sources/arsenal-saka', '2025-10-01'::date),
-  ('b1111111-1111-1111-1111-111111111102'::uuid, 240000, 12480000, '2021-08-01'::date, '2027-06-30'::date, 'estimated', 'Placeholder source', 'https://example.com/sources/arsenal-odegaard', '2025-10-01'::date),
-  ('b1111111-1111-1111-1111-111111111103'::uuid, 220000, 11440000, '2023-07-01'::date, '2028-06-30'::date, 'estimated', 'Placeholder source', 'https://example.com/sources/arsenal-rice', '2025-10-01'::date),
-  ('b1111111-1111-1111-1111-111111111104'::uuid, 190000, 9880000, '2022-07-01'::date, '2027-06-30'::date, 'estimated', 'Placeholder source', 'https://example.com/sources/arsenal-saliba', '2025-10-01'::date),
-  ('b1111111-1111-1111-1111-111111111105'::uuid, 120000, 6240000, '2024-07-01'::date, '2028-06-30'::date, 'estimated', 'Placeholder source', 'https://example.com/sources/arsenal-raya', '2025-10-01'::date),
-  ('b1111111-1111-1111-1111-111111111201'::uuid, 180000, 9360000, '2024-07-01'::date, '2033-06-30'::date, 'estimated', 'Placeholder source', 'https://example.com/sources/chelsea-palmer', '2025-10-01'::date),
-  ('b1111111-1111-1111-1111-111111111202'::uuid, 175000, 9100000, '2019-07-01'::date, '2027-06-30'::date, 'estimated', 'Placeholder source', 'https://example.com/sources/chelsea-james', '2025-10-01'::date),
-  ('b1111111-1111-1111-1111-111111111203'::uuid, 200000, 10400000, '2023-01-01'::date, '2032-06-30'::date, 'estimated', 'Placeholder source', 'https://example.com/sources/chelsea-enzo', '2025-10-01'::date),
-  ('b1111111-1111-1111-1111-111111111204'::uuid, 130000, 6760000, '2023-07-01'::date, '2029-06-30'::date, 'estimated', 'Placeholder source', 'https://example.com/sources/chelsea-jackson', '2025-10-01'::date),
-  ('b1111111-1111-1111-1111-111111111205'::uuid, 160000, 8320000, '2023-08-01'::date, '2031-06-30'::date, 'estimated', 'Placeholder source', 'https://example.com/sources/chelsea-caicedo', '2025-10-01'::date)
+  ('b1111111-1111-1111-1111-111111111101'::uuid, 300000, 15600000, '2023-04-01'::date, '2027-06-30'::date, 'reported', 'BBC Sport', 'https://www.bbc.co.uk/sport/football/65686263', '2025-10-01'::date),
+  ('b1111111-1111-1111-1111-111111111102'::uuid, 240000, 12480000, '2021-08-01'::date, '2027-06-30'::date, 'reported', 'BBC Sport', 'https://www.bbc.co.uk/sport/football/58279217', '2025-10-01'::date),
+  ('b1111111-1111-1111-1111-111111111103'::uuid, 220000, 11440000, '2023-07-01'::date, '2028-06-30'::date, 'reported', 'The Athletic', 'https://www.nytimes.com/athletic/4672030/2023/07/15/declan-rice-arsenal-transfer-complete/', '2025-10-01'::date),
+  ('b1111111-1111-1111-1111-111111111104'::uuid, 190000, 9880000, '2022-07-01'::date, '2027-06-30'::date, 'reported', 'BBC Sport', 'https://www.bbc.co.uk/sport/football/65868632', '2025-10-01'::date),
+  ('b1111111-1111-1111-1111-111111111105'::uuid, 120000, 6240000, '2024-07-01'::date, '2028-06-30'::date, 'reported', 'BBC Sport', 'https://www.bbc.co.uk/sport/football/articles/cvgy0542qjvo', '2025-10-01'::date),
+  ('b1111111-1111-1111-1111-111111111201'::uuid, 180000, 9360000, '2024-07-01'::date, '2033-06-30'::date, 'reported', 'Sky Sports', 'https://www.skysports.com/football/news/11668/13196429/cole-palmer-chelsea-forward-signs-two-year-contract-extension-at-stamford-bridge-until-summer-2033', '2025-10-01'::date),
+  ('b1111111-1111-1111-1111-111111111202'::uuid, 175000, 9100000, '2019-07-01'::date, '2027-06-30'::date, 'reported', 'BBC Sport', 'https://www.bbc.co.uk/sport/football/62795896', '2025-10-01'::date),
+  ('b1111111-1111-1111-1111-111111111203'::uuid, 200000, 10400000, '2023-01-01'::date, '2032-06-30'::date, 'reported', 'The Guardian', 'https://www.theguardian.com/football/2023/feb/01/chelsea-to-sign-enzo-fernandez-benfica-british-record-transfer-fee', '2025-10-01'::date),
+  ('b1111111-1111-1111-1111-111111111204'::uuid, 130000, 6760000, '2023-07-01'::date, '2029-06-30'::date, 'reported', 'BBC Sport', 'https://www.bbc.co.uk/sport/football/66007461', '2025-10-01'::date),
+  ('b1111111-1111-1111-1111-111111111205'::uuid, 160000, 8320000, '2023-08-01'::date, '2031-06-30'::date, 'reported', 'The Guardian', 'https://www.theguardian.com/football/2023/aug/14/chelsea-sign-moises-caicedo-british-record-115m-deal-brighton', '2025-10-01'::date)
 ) as v(player_id, weekly_wage_gbp, annual_wage_gbp, contract_start, contract_end, status, source_name, source_url, reviewed_at)
 where not exists (
   select 1 from contracts c where c.player_id = v.player_id

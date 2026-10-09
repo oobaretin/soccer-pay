@@ -32,8 +32,26 @@ const { url, key } = getSupabaseAdminConfig();
 const supabase = createClient(url, key);
 const { records } = parseCsv(fs.readFileSync(file, "utf8"));
 
-const { data: clubs } = await supabase.from("clubs").select("id,slug");
-const clubBySlug = new Map((clubs ?? []).map((c) => [c.slug, c.id]));
+const { data: clubs } = await supabase
+  .from("clubs")
+  .select("id,slug, leagues(currency)");
+const clubBySlug = new Map(
+  (clubs ?? []).map((c) => {
+    const league = Array.isArray(c.leagues) ? c.leagues[0] : c.leagues;
+    return [c.slug, { id: c.id, currency: league?.currency ?? "GBP" }];
+  }),
+);
+
+const { error: wageNotesProbe } = await supabase
+  .from("contracts")
+  .select("wage_notes")
+  .limit(0);
+const hasWageNotesColumn = !wageNotesProbe;
+if (wageNotesProbe) {
+  console.warn(
+    "contracts.wage_notes column missing — run scripts/add-wage-notes.sql (npm run db:wage-notes). Import continues without notes.",
+  );
+}
 
 function num(v) {
   if (v == null || v === "") return null;
@@ -50,12 +68,14 @@ for (const r of records) {
     continue;
   }
 
-  const clubId = clubBySlug.get(r.club_slug);
-  if (!clubId) {
+  const club = clubBySlug.get(r.club_slug);
+  if (!club) {
     console.warn(`Skip ${r.player_slug}: unknown club ${r.club_slug}`);
     skipped++;
     continue;
   }
+  const clubId = club.id;
+  const currency = (r.currency || club.currency || "GBP").toUpperCase();
 
   const weekly = num(r.weekly_wage_gbp);
   const annual =
@@ -94,7 +114,11 @@ for (const r of records) {
     source_name: r.source_name,
     source_url: r.source_url,
     reviewed_at: reviewedAt,
+    currency,
   };
+  if (hasWageNotesColumn) {
+    contractPayload.wage_notes = r.wage_notes?.trim() || null;
+  }
 
   const { data: existingContract } = await supabase
     .from("contracts")

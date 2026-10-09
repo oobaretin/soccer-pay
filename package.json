@@ -12,8 +12,12 @@
     "check:env": "node scripts/check-env.mjs",
     "db:apply": "node scripts/apply-sql.mjs",
     "import:clubs": "node scripts/import-clubs.mjs",
+    "db:leagues": "node scripts/apply-one-sql.mjs scripts/migrate-leagues.sql",
+    "db:wage-notes": "node scripts/apply-one-sql.mjs scripts/add-wage-notes.sql",
     "import:players": "node scripts/import-csv.mjs",
-    "validate:sources": "node scripts/validate-sources.mjs"
+    "validate:sources": "node scripts/validate-sources.mjs",
+    "update:sources": "node scripts/update-source-urls.mjs",
+    "sync:sources": "node scripts/sync-source-urls-to-player-csvs.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.3",

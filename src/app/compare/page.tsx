@@ -8,7 +8,7 @@ import { getPlayerBySlug, getPlayerOptions } from "@/lib/queries/get-player";
 
 export const metadata: Metadata = {
   title: "Compare players",
-  description: "Side-by-side Premier League wages and wage-per-goal metrics.",
+  description: "Side-by-side football wages and wage-per-goal metrics.",
 };
 
 type SearchParams = Promise<{ a?: string; b?: string }>;

@@ -1,0 +1,30 @@
+name,slug,league_slug
+Real Madrid,real-madrid,la-liga
+Barcelona,barcelona,la-liga
+Atlético Madrid,atletico-madrid,la-liga
+Sevilla,sevilla,la-liga
+Real Sociedad,real-sociedad,la-liga
+Villarreal,villarreal,la-liga
+Inter,inter,serie-a
+AC Milan,ac-milan,serie-a
+Juventus,juventus,serie-a
+Napoli,napoli,serie-a
+Roma,roma,serie-a
+Bayern Munich,bayern-munich,bundesliga
+Borussia Dortmund,borussia-dortmund,bundesliga
+Bayer Leverkusen,bayer-leverkusen,bundesliga
+RB Leipzig,rb-leipzig,bundesliga
+Paris Saint-Germain,paris-saint-germain,ligue-1
+Monaco,monaco,ligue-1
+Marseille,marseille,ligue-1
+Lyon,lyon,ligue-1
+Galatasaray,galatasaray,super-lig
+Fenerbahçe,fenerbahce,super-lig
+Beşiktaş,besiktas,super-lig
+Trabzonspor,trabzonspor,super-lig
+Al Nassr,al-nassr,saudi-pro-league
+Al Hilal,al-hilal,saudi-pro-league
+Al Ittihad,al-ittihad,saudi-pro-league
+Al Ahli,al-ahli,saudi-pro-league
+Al Ettifaq,al-ettifaq,saudi-pro-league
+Inter Miami,inter-miami,mls

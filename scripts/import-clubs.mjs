@@ -21,17 +21,35 @@ const { url, key } = getSupabaseAdminConfig();
 const supabase = createClient(url, key);
 const { records } = parseCsv(fs.readFileSync(file, "utf8"));
 
+const { data: leagues, error: leagueErr } = await supabase
+  .from("leagues")
+  .select("id,slug");
+if (leagueErr) {
+  console.error(
+    "Could not read leagues. Run scripts/migrate-leagues.sql first.",
+    leagueErr.message,
+  );
+  process.exit(1);
+}
+const leagueBySlug = new Map((leagues ?? []).map((l) => [l.slug, l.id]));
+
 let ok = 0;
 for (const r of records) {
   if (!r.name || !r.slug) continue;
-  const { error } = await supabase
-    .from("clubs")
-    .upsert({ name: r.name, slug: r.slug }, { onConflict: "slug" });
+  const leagueSlug = r.league_slug || "premier-league";
+  const leagueId = leagueBySlug.get(leagueSlug) ?? null;
+  if (r.league_slug && !leagueId) {
+    console.warn("Unknown league", r.league_slug, "for", r.slug);
+  }
+  const { error } = await supabase.from("clubs").upsert(
+    { name: r.name, slug: r.slug, league_id: leagueId },
+    { onConflict: "slug" },
+  );
   if (error) {
     console.error("Failed", r.slug, error.message);
   } else {
     ok++;
-    console.log("Club", r.slug);
+    console.log("Club", r.slug, leagueSlug);
   }
 }
 

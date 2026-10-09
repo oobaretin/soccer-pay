@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useMemo, useState, type MouseEvent } from "react";
-import { formatDate, formatGbp, formatGbpCompact } from "@/lib/format";
+import { formatDate, formatGbpCompact, formatMoney } from "@/lib/format";
 import {
   filterSalaryRows,
   sortSalaryRows,
@@ -66,9 +66,11 @@ function SalaryTableInner({ rows }: Props) {
   const [period, setPeriod] = useState<PayPeriod>(() =>
     parsePayPeriod(searchParams.get("period")),
   );
+  const league = searchParams.get("league") ?? "";
 
   useEffect(() => {
     const params = new URLSearchParams();
+    if (league) params.set("league", league);
     const q = query.trim();
     if (q) params.set("q", q);
     if (sortKey !== "annual") params.set("sort", sortKey);
@@ -79,12 +81,17 @@ function SalaryTableInner({ rows }: Props) {
     if (next !== current) {
       router.replace(next ? `/?${next}` : "/", { scroll: false });
     }
-  }, [query, sortKey, sortDir, period, router, searchParams]);
+  }, [query, sortKey, sortDir, period, league, router, searchParams]);
+
+  const inLeague = useMemo(() => {
+    if (!league) return rows;
+    return rows.filter((row) => row.leagueSlug === league);
+  }, [rows, league]);
 
   const visible = useMemo(() => {
-    const filtered = filterSalaryRows(rows, query);
+    const filtered = filterSalaryRows(inLeague, query);
     return sortSalaryRows(filtered, sortKey, sortDir);
-  }, [rows, query, sortKey, sortDir]);
+  }, [inLeague, query, sortKey, sortDir]);
 
   const trimmedQuery = query.trim();
   const isFiltering = trimmedQuery.length > 0;
@@ -137,8 +144,8 @@ function SalaryTableInner({ rows }: Props) {
         </label>
         <p className="text-xs text-zinc-500">
           {isFiltering
-            ? `${visible.length} of ${rows.length} players`
-            : `${rows.length} players`}
+            ? `${visible.length} of ${inLeague.length} players`
+            : `${inLeague.length} players`}
           {isFiltering ? (
             <>
               {" · "}
@@ -200,11 +207,11 @@ function SalaryTableInner({ rows }: Props) {
                 </div>
                 <div className="shrink-0 text-right">
                   <p className="text-lg font-semibold tabular-nums text-zinc-900 dark:text-zinc-50">
-                    {formatGbpCompact(primaryAmount(row))}
+                    {formatGbpCompact(primaryAmount(row), row.currency)}
                   </p>
                   <p className="text-xs text-zinc-500">{primaryLabel}</p>
                   <p className="mt-1 text-sm tabular-nums text-zinc-600 dark:text-zinc-400">
-                    {formatGbpCompact(secondaryAmount(row))}
+                    {formatGbpCompact(secondaryAmount(row), row.currency)}
                     {period === "annual" ? "/wk" : ` ${secondaryLabel}`}
                   </p>
                 </div>
@@ -214,14 +221,20 @@ function SalaryTableInner({ rows }: Props) {
         ))}
         {visible.length === 0 ? (
           <li className="rounded-xl border border-dashed border-zinc-300 px-4 py-10 text-center text-sm text-zinc-500 dark:border-zinc-700">
-            No players match &ldquo;{trimmedQuery}&rdquo;.{" "}
-            <button
-              type="button"
-              onClick={() => setQuery("")}
-              className="font-medium text-emerald-700 dark:text-emerald-400"
-            >
-              Clear search
-            </button>
+            {inLeague.length === 0
+              ? "No wages published for this league yet."
+              : (
+                <>
+                  No players match &ldquo;{trimmedQuery}&rdquo;.{" "}
+                  <button
+                    type="button"
+                    onClick={() => setQuery("")}
+                    className="font-medium text-emerald-700 dark:text-emerald-400"
+                  >
+                    Clear search
+                  </button>
+                </>
+              )}
           </li>
         ) : null}
       </ul>
@@ -319,7 +332,7 @@ function SalaryTableInner({ rows }: Props) {
                         : "text-zinc-600 dark:text-zinc-400"
                     }`}
                   >
-                    {formatGbp(row.weeklyWageGbp)}
+                    {formatMoney(row.weeklyWageGbp, row.currency)}
                   </td>
                   <td
                     className={`px-4 py-3 text-right tabular-nums ${
@@ -328,7 +341,7 @@ function SalaryTableInner({ rows }: Props) {
                         : "text-zinc-600 dark:text-zinc-400"
                     }`}
                   >
-                    {formatGbp(row.annualWageGbp)}
+                    {formatMoney(row.annualWageGbp, row.currency)}
                   </td>
                   <td className="px-4 py-3">
                     <span>{formatDate(row.contractEnd)}</span>
@@ -344,14 +357,20 @@ function SalaryTableInner({ rows }: Props) {
           </table>
           {visible.length === 0 ? (
             <p className="px-4 py-8 text-center text-sm text-zinc-500">
-              No players match &ldquo;{trimmedQuery}&rdquo;.{" "}
-              <button
-                type="button"
-                onClick={() => setQuery("")}
-                className="font-medium text-emerald-700 dark:text-emerald-400"
-              >
-                Clear search
-              </button>
+              {inLeague.length === 0
+                ? "No wages published for this league yet."
+                : (
+                  <>
+                    No players match &ldquo;{trimmedQuery}&rdquo;.{" "}
+                    <button
+                      type="button"
+                      onClick={() => setQuery("")}
+                      className="font-medium text-emerald-700 dark:text-emerald-400"
+                    >
+                      Clear search
+                    </button>
+                  </>
+                )}
             </p>
           ) : null}
         </div>

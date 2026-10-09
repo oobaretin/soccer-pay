@@ -1,21 +1,21 @@
-name,slug
-Arsenal,arsenal
-Chelsea,chelsea
-Liverpool,liverpool
-Manchester City,manchester-city
-Manchester United,manchester-united
-Tottenham Hotspur,tottenham-hotspur
-Newcastle United,newcastle-united
-Aston Villa,aston-villa
-Brighton & Hove Albion,brighton-and-hove-albion
-West Ham United,west-ham-united
-Crystal Palace,crystal-palace
-Fulham,fulham
-Brentford,brentford
-Wolverhampton Wanderers,wolverhampton-wanderers
-Everton,everton
-Nottingham Forest,nottingham-forest
-AFC Bournemouth,afc-bournemouth
-Leicester City,leicester-city
-Ipswich Town,ipswich-town
-Southampton,southampton
+name,slug,league_slug
+Arsenal,arsenal,premier-league
+Chelsea,chelsea,premier-league
+Liverpool,liverpool,premier-league
+Manchester City,manchester-city,premier-league
+Manchester United,manchester-united,premier-league
+Tottenham Hotspur,tottenham-hotspur,premier-league
+Newcastle United,newcastle-united,premier-league
+Aston Villa,aston-villa,premier-league
+Brighton & Hove Albion,brighton-and-hove-albion,premier-league
+West Ham United,west-ham-united,premier-league
+Crystal Palace,crystal-palace,premier-league
+Fulham,fulham,premier-league
+Brentford,brentford,premier-league
+Wolverhampton Wanderers,wolverhampton-wanderers,premier-league
+Everton,everton,premier-league
+Nottingham Forest,nottingham-forest,premier-league
+AFC Bournemouth,afc-bournemouth,premier-league
+Leicester City,leicester-city,premier-league
+Ipswich Town,ipswich-town,premier-league
+Southampton,southampton,premier-league

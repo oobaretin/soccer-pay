@@ -4,18 +4,20 @@ import Link from "next/link";
 import { Suspense } from "react";
 import { SalaryTable } from "@/components/SalaryTable";
 import { StateMessage } from "@/components/StateMessage";
-import { formatGbp } from "@/lib/format";
+import { formatMoney } from "@/lib/format";
+import { getLeagues } from "@/lib/queries/get-leagues";
 import { getSalaryTableRows } from "@/lib/queries/get-salary-table";
 import { sortSalaryRows } from "@/lib/sort-salary-rows";
+import type { League } from "@/lib/types";
 
 export const metadata: Metadata = {
-  title: "Premier League player salaries 2025",
+  title: "Football player salaries",
   description:
-    "Sortable Premier League wages by player and club. Weekly and annual pay, contract end dates, and source status.",
+    "Wages across the Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Süper Lig, MLS, and the Saudi Pro League.",
   openGraph: {
-    title: "Premier League player salaries",
+    title: "Football player salaries",
     description:
-      "Sortable Premier League wages with cited sources and contract expiry flags.",
+      "Sortable wages by league, with sources and contract expiry flags.",
   },
 };
 
@@ -36,14 +38,52 @@ function TableSkeleton() {
   );
 }
 
+function LeagueChips({
+  leagues,
+  active,
+}: {
+  leagues: League[];
+  active?: string;
+}) {
+  const chip = (key: string, href: string, label: string, on: boolean) => (
+    <Link
+      key={key}
+      href={href}
+      className={`rounded-full px-3 py-1.5 text-xs font-medium ${
+        on
+          ? "bg-zinc-900 text-white dark:bg-zinc-100 dark:text-zinc-900"
+          : "bg-white text-zinc-700 ring-1 ring-zinc-200 hover:bg-zinc-50 dark:bg-zinc-950 dark:text-zinc-300 dark:ring-zinc-700"
+      }`}
+    >
+      {label}
+    </Link>
+  );
+
+  return (
+    <nav className="flex flex-wrap gap-2" aria-label="Leagues">
+      {chip("all", "/", "All leagues", !active)}
+      {leagues.map((league) =>
+        chip(
+          league.slug,
+          `/?league=${league.slug}`,
+          league.name,
+          active === league.slug,
+        ),
+      )}
+    </nav>
+  );
+}
+
 function TopEarnerCallout({
   name,
   slug,
   annual,
+  currency,
 }: {
   name: string;
   slug: string;
   annual: number | null;
+  currency: string;
 }) {
   if (annual == null) return null;
   return (
@@ -55,15 +95,26 @@ function TopEarnerCallout({
       >
         {name}
       </Link>{" "}
-      at <span className="font-semibold tabular-nums">{formatGbp(annual)}</span>{" "}
+      at{" "}
+      <span className="font-semibold tabular-nums">
+        {formatMoney(annual, currency)}
+      </span>{" "}
       per year
     </p>
   );
 }
 
-async function SalaryTableSection() {
+async function SalaryTableSection({
+  searchParams,
+}: {
+  searchParams: Promise<{ league?: string }>;
+}) {
   await connection();
-  const result = await getSalaryTableRows();
+  const { league } = await searchParams;
+  const [result, leagues] = await Promise.all([
+    getSalaryTableRows(),
+    getLeagues(),
+  ]);
 
   if (!result.ok) {
     return (
@@ -84,15 +135,25 @@ async function SalaryTableSection() {
     );
   }
 
-  const top = sortSalaryRows(result.rows, "annual", "desc")[0];
+  const scoped = league
+    ? result.rows.filter((row) => row.leagueSlug === league)
+    : result.rows;
+  const top = sortSalaryRows(scoped, "annual", "desc")[0];
 
   return (
     <div className="space-y-4">
+      <LeagueChips leagues={leagues} active={league} />
       {top ? (
         <TopEarnerCallout
           name={top.name}
           slug={top.slug}
           annual={top.annualWageGbp}
+          currency={top.currency}
+        />
+      ) : league ? (
+        <StateMessage
+          title="No wages in this league yet"
+          message="Clubs are listed, but player salaries for this league have not been published."
         />
       ) : null}
       <SalaryTable rows={result.rows} />
@@ -100,19 +161,23 @@ async function SalaryTableSection() {
   );
 }
 
-export default function HomePage() {
+export default function HomePage({
+  searchParams,
+}: {
+  searchParams: Promise<{ league?: string }>;
+}) {
   return (
     <div className="space-y-6">
       <div className="max-w-2xl space-y-2">
         <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Premier League player salaries
+          Football player salaries
         </h1>
         <p className="text-zinc-600 dark:text-zinc-400">
-          Search, sort, and open any player for sources and contract detail.
+          Search by league, then open any player for sources and contract detail.
         </p>
       </div>
       <Suspense fallback={<TableSkeleton />}>
-        <SalaryTableSection />
+        <SalaryTableSection searchParams={searchParams} />
       </Suspense>
     </div>
   );
