@@ -37,17 +37,45 @@ const TITLE_OVERRIDES = {
   "rafael-leao": "Rafael Leão",
   "matheus-cunha": "Matheus Cunha",
   "lois-openda": "Loïs Openda",
-  "nicolas-jackson": "Nicolas Jackson (footballer)",
+  "nicolas-jackson": "Nicolas Jackson (footballer, born 2001)",
   "heung-min-son": "Son Heung-min",
   "bruno-guimaraes": "Bruno Guimarães",
   "matteo-politano": "Matteo Politano",
-  "nicolas-jackson": "Nicolas Jackson (footballer, born 2001)",
+};
+
+/** When Wikipedia has no lead image, use a known Commons file (basename only). */
+const COMMONS_FILE_OVERRIDES = {
+  "luis-suarez": "Luis-Suarez.jpg",
+  rodri:
+    "RODRI - SWE vs ESP - UEFA EURO 2020 QUALIFIERS - 2019.10.15 (cropped).jpg",
+  vitinha: "Vitinha (PSG).jpg",
+  "nicolas-jackson": "Nicolas Jackson 20042025 (1).jpg",
+  "matteo-politano": "Politano con uno striscione per Spinazzola.jpg",
 };
 
 function wikiTitlesForPlayer(slug, name) {
   const primary = TITLE_OVERRIDES[slug] ?? name;
   const base = primary.replace(/\s+\([^)]+\)$/, "");
   return [...new Set([primary, `${base} (footballer)`, `${base} (football)`])];
+}
+
+async function commonsThumbForFile(fileBaseName) {
+  const api = new URL("https://commons.wikimedia.org/w/api.php");
+  api.searchParams.set("action", "query");
+  api.searchParams.set("titles", `File:${fileBaseName}`);
+  api.searchParams.set("prop", "imageinfo");
+  api.searchParams.set("iiprop", "url");
+  api.searchParams.set("iiurlwidth", "500");
+  api.searchParams.set("format", "json");
+  api.searchParams.set("origin", "*");
+
+  const res = await fetch(api, { headers: { "User-Agent": UA } });
+  const text = await res.text();
+  if (!text.startsWith("{")) throw new Error(text.slice(0, 120));
+  const data = JSON.parse(text);
+  const page = Object.values(data.query?.pages ?? {})[0];
+  const src = page?.imageinfo?.[0]?.thumburl ?? page?.imageinfo?.[0]?.url;
+  return src?.includes("wikimedia.org") ? src : null;
 }
 
 async function wikiQueryTitles(titles) {
@@ -149,6 +177,23 @@ for (let attempt = 0; attempt < 3 && pending.size > 0; attempt++) {
     }
     await sleep(1500);
   }
+}
+
+for (const slug of [...pending.keys()]) {
+  const fileName = COMMONS_FILE_OVERRIDES[slug];
+  if (!fileName) continue;
+  try {
+    const src = await commonsThumbForFile(fileName);
+    if (!src) continue;
+    photoMap.set(slug, src);
+    pending.delete(slug);
+    await supabase.from("players").update({ photo_url: src }).eq("slug", slug);
+    updated++;
+    console.log("commons", slug);
+  } catch (e) {
+    console.warn("Commons failed", slug, e.message);
+  }
+  await sleep(2000);
 }
 
 for (const slug of pending.keys()) console.log("—", slug);
