@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="512" height="512">
+  <defs><clipPath id="fbs-disc"><circle cx="50" cy="50" r="34"/></clipPath></defs>
+  <circle cx="50" cy="50" r="44" fill="none" stroke="#34D399" stroke-width="8"/>
+  <g clip-path="url(#fbs-disc)" fill="#34D399">
+    <rect x="16" y="62" width="20" height="40"/>
+    <rect x="40" y="42" width="20" height="60"/>
+    <rect x="64" y="22" width="20" height="80"/>
+  </g>
+  <polygon fill="#34D399" points="32,24 39.61,29.53 36.70,38.47 27.30,38.47 24.39,29.53"/>
+</svg>
