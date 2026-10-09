@@ -16,6 +16,7 @@
     "db:wage-notes": "node scripts/apply-one-sql.mjs scripts/add-wage-notes.sql",
     "import:players": "node scripts/import-csv.mjs",
     "validate:sources": "node scripts/validate-sources.mjs",
+    "validate:currency": "node scripts/validate-currency-sanity.mjs",
     "update:sources": "node scripts/update-source-urls.mjs",
     "sync:sources": "node scripts/sync-source-urls-to-player-csvs.mjs",
     "import:photos": "node scripts/import-player-photos.mjs",

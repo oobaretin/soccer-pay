@@ -8,6 +8,7 @@ export const FX_USD_PER_UNIT: Record<string, number> = {
   GBP: 1.27,
   EUR: 1.1,
   SAR: 0.267,
+  QAR: 0.274,
   TRY: 0.029,
 };
 
