@@ -27,11 +27,11 @@ Football salaries across the Premier League, La Liga, Serie A, Bundesliga, Ligue
    |----------|----------|--------|
    | `NEXT_PUBLIC_SUPABASE_URL` | Yes | Project URL from Supabase |
    | `NEXT_PUBLIC_SUPABASE_ANON_KEY` | Yes | Anon public key (`eyJ…`) |
-   | `NEXT_PUBLIC_SITE_URL` | Yes | e.g. `https://your-domain.com` — used for sitemap, Open Graph, JSON-LD |
+   | `NEXT_PUBLIC_SITE_URL` | No (first deploy) | After deploy, set to your `https://….vercel.app` or custom domain; omit on first deploy (Vercel sets `VERCEL_URL` automatically) |
 
    Do **not** add `SUPABASE_SERVICE_ROLE_KEY` or `SUPABASE_DB_URL` to Vercel unless you run imports in CI. Keep those local only.
 
-3. **Build:** `npm run build` pre-renders player/club pages via `generateStaticParams`, so Supabase must be reachable at **build time** with the env vars above.
+3. **Build:** `npm run build` pre-renders player/club pages via `generateStaticParams`, so Supabase must be reachable at **build time**. Vercel injects env vars from the dashboard (no `.env.local` on the build machine)—add the two `NEXT_PUBLIC_*` vars **before** the first deploy or the build fails with empty static params.
 4. After deploy: open `/`, `/sitemap.xml`, and one `/players/[slug]` URL. Set Supabase **RLS** read policies (see `schema.sql`) so the anon key can read public tables.
 5. Optional: connect your domain and set `NEXT_PUBLIC_SITE_URL` to the canonical HTTPS URL, then redeploy.
 
