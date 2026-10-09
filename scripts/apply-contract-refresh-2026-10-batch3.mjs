@@ -99,16 +99,16 @@ await ensureClub("Bodrum FK", "bodrum-fk", "turkish-1-lig");
 await upsertContract(
   "dusan-tadic",
   {
-    weekly_wage_gbp: null,
-    annual_wage_gbp: null,
+    weekly_wage_gbp: 30_192,
+    annual_wage_gbp: 1_570_000,
     currency: "EUR",
     contract_start: "2026-07-27",
     contract_end: "2028-06-30",
     status: "estimated",
-    source_name: "No citable source on file",
-    source_url: null,
+    source_name: "Capology",
+    source_url: "https://www.capology.com/player/dusan-tadic-32467/",
     wage_notes:
-      "NEC move and contract to 2028 on file; wage and URL not published by editor — add when you have a link.",
+      "Capology gross fixed estimate €1.57M/yr; NEC confirmed deal to 2028 but did not publish pay.",
   },
   "nec-nijmegen",
 );
@@ -122,10 +122,11 @@ await upsertContract(
     contract_start: "2026-08-28",
     contract_end: "2027-06-30",
     status: "estimated",
-    source_name: "No citable source on file",
-    source_url: null,
+    source_name: "Habertürk",
+    source_url:
+      "https://www.haberturk.com/spor/vincent-aboubakar-bodrum-fk-ya-imzayi-atti-3908968",
     wage_notes:
-      "Bodrum FK move and 2027 end on file; fee/salary undisclosed — add source URL when available.",
+      "1+1 Bodrum deal Aug 2026; wage not disclosed. Prior Beşiktaş KAP €3.11M/yr is not current Bodrum pay.",
   },
   "bodrum-fk",
 );
