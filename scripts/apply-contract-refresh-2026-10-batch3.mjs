@@ -99,17 +99,16 @@ await ensureClub("Bodrum FK", "bodrum-fk", "turkish-1-lig");
 await upsertContract(
   "dusan-tadic",
   {
-    weekly_wage_gbp: 30_192,
-    annual_wage_gbp: 1_570_000,
+    weekly_wage_gbp: null,
+    annual_wage_gbp: null,
     currency: "EUR",
     contract_start: "2026-07-27",
     contract_end: "2028-06-30",
     status: "estimated",
-    source_name: "N.E.C.",
-    source_url:
-      "https://www.nec-nijmegen.nl/nieuws/nieuws/dusan-tadic-tekent-voor-twee-seizoenen-bij-n.e.c..htm",
+    source_name: "No citable source on file",
+    source_url: null,
     wage_notes:
-      "Two-year NEC deal; club did not publish salary — weekly is illustrative Eredivisie-tier estimate (~€1.57M/yr), well below Fenerbahçe terms.",
+      "NEC move and contract to 2028 on file; wage and URL not published by editor — add when you have a link.",
   },
   "nec-nijmegen",
 );
@@ -117,17 +116,16 @@ await upsertContract(
 await upsertContract(
   "vincent-aboubakar",
   {
-    weekly_wage_gbp: 19_231,
-    annual_wage_gbp: 1_000_000,
+    weekly_wage_gbp: null,
+    annual_wage_gbp: null,
     currency: "EUR",
     contract_start: "2026-08-28",
     contract_end: "2027-06-30",
     status: "estimated",
-    source_name: "DHA",
-    source_url:
-      "https://www.dha.com.tr/yerel-haberler/istanbul/bodrum-fk-vincent-aboubakar-transferini-acikla-2935113",
+    source_name: "No citable source on file",
+    source_url: null,
     wage_notes:
-      "1+1 Bodrum FK deal; mali koşullar açıklanmadı — €1M/yr placeholder for 1. Lig until KAP/club wage disclosure.",
+      "Bodrum FK move and 2027 end on file; fee/salary undisclosed — add source URL when available.",
   },
   "bodrum-fk",
 );
