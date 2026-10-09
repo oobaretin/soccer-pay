@@ -14,7 +14,8 @@ export type ArticleSection = {
 export type ArticleData =
   | {
       ok: true;
-      lastUpdated: string | null;
+      /** Newest contract reviewed_at among listed players (UTC). */
+      updatedAt: string | null;
       sections: ArticleSection[];
     }
   | { ok: false; error: string };
@@ -68,7 +69,7 @@ export async function getArticleData(slug: ArticleSlug): Promise<ArticleData> {
       const listed = topByAnnualUsd(rows, 20);
       return {
         ok: true,
-        lastUpdated: maxReviewedAt(listed),
+        updatedAt: maxReviewedAt(listed),
         sections: [{ rows: listed }],
       };
     }
@@ -77,7 +78,7 @@ export async function getArticleData(slug: ArticleSlug): Promise<ArticleData> {
       const listed = topByAnnualUsd(pl, 20);
       return {
         ok: true,
-        lastUpdated: maxReviewedAt(listed),
+        updatedAt: maxReviewedAt(listed),
         sections: [{ rows: listed }],
       };
     }
@@ -106,7 +107,7 @@ export async function getArticleData(slug: ArticleSlug): Promise<ArticleData> {
       }
       return {
         ok: true,
-        lastUpdated: maxReviewedAt(allListed),
+        updatedAt: maxReviewedAt(allListed),
         sections,
       };
     }
@@ -117,7 +118,7 @@ export async function getArticleData(slug: ArticleSlug): Promise<ArticleData> {
       const listed = sortSalaryRows(expiring, "contract_end", "asc");
       return {
         ok: true,
-        lastUpdated: maxReviewedAt(listed),
+        updatedAt: maxReviewedAt(listed),
         sections: [{ rows: listed }],
       };
     }
@@ -125,7 +126,7 @@ export async function getArticleData(slug: ArticleSlug): Promise<ArticleData> {
       const listed = topEarnerPerClub(rows, "premier-league");
       return {
         ok: true,
-        lastUpdated: maxReviewedAt(listed),
+        updatedAt: maxReviewedAt(listed),
         sections: [{ rows: listed }],
       };
     }
@@ -136,11 +137,11 @@ export async function getArticleData(slug: ArticleSlug): Promise<ArticleData> {
 
 /** Index card preview: last updated without loading full sections when possible. */
 export async function getArticlePreview(slug: ArticleSlug): Promise<{
-  lastUpdated: string | null;
+  updatedAt: string | null;
   rowCount: number;
 }> {
   const data = await getArticleData(slug);
-  if (!data.ok) return { lastUpdated: null, rowCount: 0 };
+  if (!data.ok) return { updatedAt: null, rowCount: 0 };
   const rowCount = data.sections.reduce((n, s) => n + s.rows.length, 0);
-  return { lastUpdated: data.lastUpdated, rowCount };
+  return { updatedAt: data.updatedAt, rowCount };
 }

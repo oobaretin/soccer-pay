@@ -59,7 +59,7 @@ export default async function ArticlePage({ params }: { params: Params }) {
 
   return (
     <article className="mx-auto max-w-4xl space-y-6">
-      <ArticleJsonLd article={article} dateModified={data.ok ? data.lastUpdated : null} />
+      <ArticleJsonLd article={article} dateModified={data.ok ? data.updatedAt : null} />
 
       <header className="max-w-2xl space-y-2">
         <p className="text-xs font-medium uppercase tracking-wide text-emerald-800 dark:text-emerald-400">
@@ -69,9 +69,9 @@ export default async function ArticlePage({ params }: { params: Params }) {
           {headline}
         </h1>
         <p className="text-zinc-600 dark:text-zinc-400">{article.description}</p>
-        {data.ok && data.lastUpdated ? (
+        {data.ok && data.updatedAt ? (
           <p className="text-sm text-zinc-500">
-            Last updated: {formatDate(data.lastUpdated)}
+            Last updated: {formatDate(data.updatedAt)}
           </p>
         ) : null}
       </header>

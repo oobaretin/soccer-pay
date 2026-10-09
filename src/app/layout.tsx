@@ -2,7 +2,12 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
-import { SITE_NAME, SITE_TAGLINE, pageTitleFull } from "@/lib/brand";
+import {
+  PREFERRED_SITE_DOMAIN,
+  SITE_NAME,
+  SITE_TAGLINE,
+  pageTitleFull,
+} from "@/lib/brand";
 import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
@@ -25,6 +30,11 @@ export const metadata: Metadata = {
     template: "%s | FB Salaries",
   },
   description: SITE_TAGLINE,
+  alternates: {
+    types: {
+      "application/rss+xml": `${PREFERRED_SITE_DOMAIN}/feed.xml`,
+    },
+  },
   openGraph: {
     type: "website",
     siteName: SITE_NAME,

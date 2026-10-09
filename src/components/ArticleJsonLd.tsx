@@ -16,6 +16,7 @@ export function ArticleJsonLd({ article, dateModified }: Props) {
     headline,
     description: article.description,
     url,
+    datePublished: article.publishedAt,
     dateModified: dateModified ?? undefined,
     publisher: {
       "@type": "Organization",

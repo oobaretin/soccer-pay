@@ -36,7 +36,15 @@ export function SiteFooter() {
             ))}
           </nav>
         </div>
-        <TrustLegend />
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <TrustLegend />
+          <Link
+            href="/feed.xml"
+            className="shrink-0 text-xs text-zinc-500 hover:text-zinc-800 dark:hover:text-zinc-200"
+          >
+            RSS
+          </Link>
+        </div>
       </div>
     </footer>
   );

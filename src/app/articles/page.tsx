@@ -64,8 +64,8 @@ export default async function ArticlesIndexPage() {
                 {article.summary}
               </p>
               <p className="mt-3 text-xs text-zinc-500">
-                {preview.lastUpdated
-                  ? `Last updated ${formatDate(preview.lastUpdated)}`
+                {preview.updatedAt
+                  ? `Last updated ${formatDate(preview.updatedAt)}`
                   : "Last updated —"}
                 {preview.rowCount > 0
                   ? ` · ${preview.rowCount} players listed`
