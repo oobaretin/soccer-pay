@@ -6,9 +6,22 @@ import { getAllClubs } from "@/lib/queries/get-clubs";
 import { loadRoster } from "@/lib/queries/load-roster";
 import { formatMoney } from "@/lib/format";
 
+import { SITE_DOMAIN } from "@/lib/brand";
+
 export const metadata: Metadata = {
-  title: "Clubs",
-  description: "Club wage bills and squads on file, grouped by league.",
+  title: "Club Wage Bills",
+  description:
+    "Football club wage bills and squad salaries on file, grouped by league.",
+  openGraph: {
+    title: "Club Wage Bills | FB Salaries",
+    description: "Browse club squads and total wage bills with cited sources.",
+    url: `${SITE_DOMAIN}/clubs`,
+  },
+  twitter: {
+    card: "summary",
+    title: "Club Wage Bills | FB Salaries",
+    description: "Club wage bills across leagues.",
+  },
 };
 
 export default async function ClubsIndexPage() {

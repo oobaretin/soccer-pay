@@ -24,17 +24,18 @@ export async function generateMetadata({
   const detail = await getClubBySlug(slug);
   if (!detail) return { title: "Club not found" };
   const { club, squad } = detail;
-  const title = `${club.name} wage bill`;
+  const title = `${club.name} Player Wages & Salaries`;
   const description =
     squad.length > 0
-      ? `${club.name} squad wages for ${squad.length} players on file.`
-      : `${club.name} — wage bill when squad data is published.`;
+      ? `${club.name} player wages and salary bill for ${squad.length} squad members on file, with sources.`
+      : `${club.name} player wages and salary data when the squad is published.`;
   const url = `${getSiteUrl()}/clubs/${slug}`;
+  const ogTitle = `${title} | FB Salaries`;
   return {
     title,
     description,
-    openGraph: { title, description, url },
-    twitter: { card: "summary", title, description },
+    openGraph: { title: ogTitle, description, url },
+    twitter: { card: "summary", title: ogTitle, description },
   };
 }
 

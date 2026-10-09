@@ -6,11 +6,14 @@ import { PlayerJsonLd } from "@/components/PlayerJsonLd";
 import { PlayerPhoto } from "@/components/PlayerPhoto";
 import { SourceCitation } from "@/components/SourceCitation";
 import { StateMessage } from "@/components/StateMessage";
+import {
+  ContractExpiredNote,
+  ContractTimingBadge,
+} from "@/components/ContractTimingBadge";
 import { WageStatusBadge } from "@/components/WageStatusBadge";
 import { getPlayerBySlug, getPlayerSlugs } from "@/lib/queries/get-player";
 import {
   formatDate,
-  formatGbp,
   formatMoney,
   formatPerMetric,
   formatUsdEquivalent,
@@ -35,21 +38,30 @@ export async function generateMetadata({
   const detail = await getPlayerBySlug(slug);
   if (!detail) return { title: "Player not found" };
 
-  const { player, contract } = detail;
-  const weekly = formatGbp(contract?.weekly_wage_gbp);
-  const annual = formatGbp(contract?.annual_wage_gbp);
-  const title = `${player.name} salary per week`;
+  const { player, contract, club } = detail;
+  const wageCurrency =
+    contract?.currency?.toUpperCase() ??
+    club?.league?.currency?.toUpperCase() ??
+    "GBP";
+  const weekly = formatMoney(contract?.weekly_wage_gbp, wageCurrency);
+  const annual = formatMoney(contract?.annual_wage_gbp, wageCurrency);
+  const title = `${player.name} Salary & Contract`;
   const description = contract
-    ? `${player.name} earns ${weekly} per week (${annual} per year). Contract, sources, and ${CURRENT_SEASON} stats.`
-    : `${player.name} — wages, contract, and ${CURRENT_SEASON} stats when available.`;
+    ? `${player.name} salary: ${weekly} per week (${annual} per year). Contract dates, sources, and ${CURRENT_SEASON} stats on FB Salaries.`
+    : `${player.name} wages, contract, and ${CURRENT_SEASON} stats when available on FB Salaries.`;
 
   const url = `${getSiteUrl()}/players/${slug}`;
 
   return {
     title,
     description,
-    openGraph: { title, description, url, type: "profile" },
-    twitter: { card: "summary", title, description },
+    openGraph: {
+      title: `${title} | FB Salaries`,
+      description,
+      url,
+      type: "profile",
+    },
+    twitter: { card: "summary", title: `${title} | FB Salaries`, description },
   };
 }
 
@@ -101,12 +113,15 @@ async function PlayerContent({ params }: { params: Params }) {
           <div className="space-y-2 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
             <div className="flex flex-wrap items-center gap-2">
               <WageStatusBadge status={contract.status} />
-              {contract.reviewed_at ? (
+              <ContractTimingBadge contractEnd={contract.contract_end} />
+              {contract.reviewed_at || contract.last_reviewed ? (
                 <span className="text-xs text-zinc-500">
-                  Reviewed {formatDate(contract.reviewed_at)}
+                  Last reviewed:{" "}
+                  {formatDate(contract.reviewed_at ?? contract.last_reviewed)}
                 </span>
               ) : null}
             </div>
+            <ContractExpiredNote contractEnd={contract.contract_end} />
             <p className="text-2xl font-semibold tabular-nums tracking-tight sm:text-3xl">
               {fmt(contract.weekly_wage_gbp)}
               <span className="ml-2 text-lg font-medium text-zinc-500">

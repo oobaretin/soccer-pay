@@ -39,6 +39,7 @@ export type Contract = {
   source_name: string | null;
   source_url: string | null;
   reviewed_at: string | null;
+  last_reviewed?: string | null;
   currency?: string | null;
   wage_notes?: string | null;
 };
@@ -88,7 +89,6 @@ export type SalaryTableRow = {
   status: WageStatus | null;
   sourceName: string | null;
   sourceUrl: string | null;
-  contractExpiringSoon?: boolean;
 };
 
 export type TableSortKey =

@@ -8,16 +8,21 @@ import { formatMoney, formatUsdEquivalent } from "@/lib/format";
 import { getLeagues } from "@/lib/queries/get-leagues";
 import { getSalaryTableRows } from "@/lib/queries/get-salary-table";
 import { sortSalaryRows } from "@/lib/sort-salary-rows";
+import { SITE_DOMAIN, SITE_TAGLINE } from "@/lib/brand";
 import type { League } from "@/lib/types";
 
 export const metadata: Metadata = {
-  title: "Football player salaries",
-  description:
-    "Wages across the Premier League, La Liga, Serie A, Bundesliga, Ligue 1, Süper Lig, MLS, and the Saudi Pro League.",
+  title: "Football Player Salaries 2026",
+  description: `${SITE_TAGLINE} Sortable wages across top leagues with sources and contract tracking.`,
   openGraph: {
-    title: "Football player salaries",
-    description:
-      "Sortable wages by league, with sources and contract expiry flags.",
+    title: "Football Player Salaries 2026 | FB Salaries",
+    description: SITE_TAGLINE,
+    url: SITE_DOMAIN,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Football Player Salaries 2026 | FB Salaries",
+    description: SITE_TAGLINE,
   },
 };
 
@@ -144,12 +149,7 @@ async function SalaryTableSection({
   const scoped = league
     ? result.rows.filter((row) => row.leagueSlug === league)
     : result.rows;
-  const top = sortSalaryRows(
-    scoped,
-    "annual",
-    "desc",
-    league ? "native" : "usd",
-  )[0];
+  const top = sortSalaryRows(scoped, "annual", "desc")[0];
 
   return (
     <div className="space-y-4">
@@ -183,7 +183,8 @@ export default function HomePage({
         <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
           Football player salaries
         </h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
+        <p className="text-lg text-zinc-600 dark:text-zinc-400">{SITE_TAGLINE}</p>
+        <p className="text-sm text-zinc-500">
           Search by league, then open any player for sources and contract detail.
         </p>
       </div>

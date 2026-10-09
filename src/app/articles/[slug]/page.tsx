@@ -17,7 +17,21 @@ export async function generateMetadata({
   const { slug } = await params;
   const article = getArticle(slug);
   if (!article) return { title: "Article not found" };
-  return { title: article.title, description: article.description };
+  const title = article.title;
+  const description = article.description;
+  return {
+    title,
+    description,
+    openGraph: {
+      title: `${title} | FB Salaries`,
+      description,
+    },
+    twitter: {
+      card: "summary",
+      title: `${title} | FB Salaries`,
+      description,
+    },
+  };
 }
 
 export default async function ArticlePage({ params }: { params: Params }) {

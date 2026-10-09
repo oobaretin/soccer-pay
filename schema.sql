@@ -1,4 +1,4 @@
--- Football salary tracker (Soccer Pay)
+-- Football salary tracker (FB Salaries)
 -- Reference this file in Cursor prompts for schema consistency.
 
 create table leagues (
@@ -39,6 +39,7 @@ create table contracts (
   source_name text,
   source_url text,
   reviewed_at date,
+  last_reviewed date,
   currency text not null default 'GBP',
   wage_notes text
 );

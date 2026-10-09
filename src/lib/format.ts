@@ -2,14 +2,14 @@ import {
   convertToUsd,
   type WageDisplay,
   wageForDisplay,
-} from "@/lib/fx-rates";
+} from "@/lib/fx";
 
 export type { WageDisplay };
-export { FX_DISCLAIMER } from "@/lib/fx-rates";
+export { FX_DISCLAIMER, fxRatesAsOfLabel, FX_RATES_AS_OF } from "@/lib/fx";
 
-/** Stable reference for SSG/prerender (contract remaining value, expiry flags). */
+/** Stable reference for SSG/prerender (contract remaining value). */
 export const WAGE_REFERENCE_ISO =
-  process.env.NEXT_PUBLIC_WAGE_REFERENCE_DATE ?? "2025-10-01";
+  process.env.NEXT_PUBLIC_WAGE_REFERENCE_DATE ?? "2026-10-09";
 
 function referenceDate(): Date {
   return new Date(`${WAGE_REFERENCE_ISO}T12:00:00.000Z`);

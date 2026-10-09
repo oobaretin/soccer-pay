@@ -4,11 +4,24 @@ import { Suspense } from "react";
 import { CompareColumn } from "@/components/CompareColumn";
 import { ComparePicker } from "@/components/ComparePicker";
 import { StateMessage } from "@/components/StateMessage";
+import { SITE_DOMAIN } from "@/lib/brand";
 import { getPlayerBySlug, getPlayerOptions } from "@/lib/queries/get-player";
 
 export const metadata: Metadata = {
-  title: "Compare players",
-  description: "Side-by-side football wages and wage-per-goal metrics.",
+  title: "Compare Player Salaries",
+  description:
+    "Compare football player wages, contracts, and wage-per-goal side by side.",
+  openGraph: {
+    title: "Compare Player Salaries | FB Salaries",
+    description:
+      "Side-by-side weekly and annual wages with USD approximations.",
+    url: `${SITE_DOMAIN}/compare`,
+  },
+  twitter: {
+    card: "summary",
+    title: "Compare Player Salaries | FB Salaries",
+    description: "Compare player wages and contract details.",
+  },
 };
 
 type SearchParams = Promise<{ a?: string; b?: string }>;

@@ -14,7 +14,7 @@ export const articles: Article[] = [
       "Reported weekly and annual wages for top earners, with sources and wage-per-goal context.",
     published: "2025-10-01",
     body: [
-      "Premier League wage figures are rarely confirmed by clubs. Soccer Pay lists reported numbers from reputable outlets and labels each figure as verified, reported, or estimated.",
+      "Premier League wage figures are rarely confirmed by clubs. FB Salaries lists reported numbers from reputable outlets and labels each figure as verified, reported, or estimated.",
       "When comparing earners, look beyond the headline weekly wage: contract length, bonuses (not yet modeled here), and output metrics such as wage per goal help explain value on the pitch.",
       "Browse the salary table sorted by highest annual pay, or open the expiring contracts list for deals ending within twelve months.",
     ],

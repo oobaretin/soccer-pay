@@ -1,4 +1,3 @@
-import { monthsUntil } from "@/lib/format";
 import { loadRoster } from "@/lib/queries/load-roster";
 import type { SalaryTableRow, WageStatus } from "@/lib/types";
 
@@ -13,10 +12,6 @@ export async function getSalaryTableRows(): Promise<SalaryTableResult> {
   }
 
   const rows: SalaryTableRow[] = roster.rows.map((row) => {
-    const months = monthsUntil(row.contract?.contract_end);
-    const contractExpiringSoon =
-      months != null && months >= 0 && months <= 12;
-
     return {
       playerId: row.player.id,
       name: row.player.name,
@@ -37,7 +32,6 @@ export async function getSalaryTableRows(): Promise<SalaryTableResult> {
       status: (row.contract?.status as WageStatus | undefined) ?? null,
       sourceName: row.contract?.source_name ?? null,
       sourceUrl: row.contract?.source_url ?? null,
-      contractExpiringSoon,
     };
   });
 
