@@ -7,9 +7,7 @@ import {
   type ArticleSlug,
 } from "@/content/article-definitions";
 import { SITE_NAME, SITE_TAGLINE } from "@/lib/brand";
-import { formatDate } from "@/lib/format";
 import { getLeagues } from "@/lib/queries/get-leagues";
-import { getSiteLastReviewed } from "@/lib/queries/get-site-freshness";
 import { siteNavLinks } from "@/lib/site-nav";
 
 const footerArticleSlugs: ArticleSlug[] = [
@@ -50,10 +48,7 @@ function FooterHeading({ children }: { children: ReactNode }) {
 }
 
 export async function SiteFooter() {
-  const [lastReviewed, leagues] = await Promise.all([
-    getSiteLastReviewed(),
-    getLeagues(),
-  ]);
+  const leagues = await getLeagues();
 
   return (
     <footer className="mt-auto border-t border-zinc-800 bg-zinc-950 text-zinc-300">
@@ -64,12 +59,6 @@ export async function SiteFooter() {
             <p className="max-w-xs text-sm leading-relaxed text-zinc-400">
               {SITE_TAGLINE}
             </p>
-            {lastReviewed ? (
-              <p className="text-xs text-zinc-500">
-                Wages last reviewed{" "}
-                <time dateTime={lastReviewed}>{formatDate(lastReviewed)}</time>
-              </p>
-            ) : null}
           </div>
 
           <nav className="space-y-3 lg:col-span-2" aria-label="Browse">

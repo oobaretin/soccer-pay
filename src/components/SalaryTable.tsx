@@ -7,7 +7,6 @@ import { ContractTimingBadge } from "@/components/ContractTimingBadge";
 import { WageAmountCell } from "@/components/WageAmountCell";
 import {
   formatDate,
-  fxRatesAsOfLabel,
   type WageDisplay,
 } from "@/lib/format";
 import { FX_DISCLAIMER } from "@/lib/fx";
@@ -403,7 +402,7 @@ function SalaryTableInner({ rows, urlBasePath = "/" }: Props) {
           </p>
         ) : null}
         <p className="border-t border-zinc-100 px-4 py-3 text-xs text-zinc-500 dark:border-zinc-800">
-          Rates as of {fxRatesAsOfLabel()} · Ranking uses USD-equivalent wages
+          {FX_DISCLAIMER}
         </p>
       </div>
     </div>

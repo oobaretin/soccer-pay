@@ -135,12 +135,6 @@ async function PlayerContent({ params }: { params: Params }) {
             <div className="flex flex-wrap items-center gap-2">
               <WageStatusBadge status={contract.status} />
               <ContractTimingBadge contractEnd={contract.contract_end} />
-              {contract.reviewed_at || contract.last_reviewed ? (
-                <span className="text-xs text-zinc-500">
-                  Last reviewed:{" "}
-                  {formatDate(contract.reviewed_at ?? contract.last_reviewed)}
-                </span>
-              ) : null}
             </div>
             <ContractExpiredNote contractEnd={contract.contract_end} />
             <p className="text-3xl font-semibold tabular-nums tracking-tight sm:text-4xl">
@@ -176,12 +170,6 @@ async function PlayerContent({ params }: { params: Params }) {
             <div className="flex flex-wrap items-center gap-2">
               <WageStatusBadge status={contract.status} />
               <ContractTimingBadge contractEnd={contract.contract_end} />
-              {contract.reviewed_at || contract.last_reviewed ? (
-                <span className="text-xs text-zinc-500">
-                  Last reviewed:{" "}
-                  {formatDate(contract.reviewed_at ?? contract.last_reviewed)}
-                </span>
-              ) : null}
             </div>
             <ContractExpiredNote contractEnd={contract.contract_end} />
             <StateMessage

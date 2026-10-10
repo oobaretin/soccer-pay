@@ -1,4 +1,3 @@
-import { formatDate } from "@/lib/format";
 import type { Contract } from "@/lib/types";
 import { WageStatusBadge } from "./WageStatusBadge";
 
@@ -7,11 +6,6 @@ export function SourceCitation({ contract }: { contract: Contract }) {
     <div className="rounded-lg border border-emerald-900/10 bg-white/60 p-4 text-sm dark:bg-white/5">
       <div className="mb-2 flex flex-wrap items-center gap-2">
         <WageStatusBadge status={contract.status} />
-        {contract.reviewed_at ? (
-          <span className="text-zinc-500">
-            Reviewed {formatDate(contract.reviewed_at)}
-          </span>
-        ) : null}
       </div>
       {contract.source_name ? (
         <p className="text-zinc-700 dark:text-zinc-300">

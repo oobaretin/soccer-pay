@@ -13,7 +13,6 @@ import {
 } from "@/content/article-definitions";
 import { pageTitleFull } from "@/lib/brand";
 import { siteUrl } from "@/lib/site-url";
-import { formatDate } from "@/lib/format";
 import { getArticleData } from "@/lib/queries/get-article-data";
 
 type Params = Promise<{ slug: string }>;
@@ -76,9 +75,6 @@ export default async function ArticlePage({ params }: { params: Params }) {
             <p className="text-xs font-medium uppercase tracking-wide text-emerald-800 dark:text-emerald-400">
               {article.tag}
             </p>
-            {data.ok && data.updatedAt ? (
-              <p>Last updated: {formatDate(data.updatedAt)}</p>
-            ) : null}
           </>
         }
       />

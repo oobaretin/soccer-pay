@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/PageHeader";
-import { formatDate } from "@/lib/format";
 import { articleDefinitions } from "@/content/article-definitions";
 import { getArticlePreview } from "@/lib/queries/get-article-data";
 import { siteUrl } from "@/lib/site-url";
@@ -60,14 +59,11 @@ export default async function ArticlesIndexPage() {
               <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
                 {article.summary}
               </p>
-              <p className="mt-3 text-xs text-zinc-500">
-                {preview.updatedAt
-                  ? `Last updated ${formatDate(preview.updatedAt)}`
-                  : "Last updated —"}
-                {preview.rowCount > 0
-                  ? ` · ${preview.rowCount} players listed`
-                  : null}
-              </p>
+              {preview.rowCount > 0 ? (
+                <p className="mt-3 text-xs text-zinc-500">
+                  {preview.rowCount} players listed
+                </p>
+              ) : null}
             </Link>
           </li>
         ))}
