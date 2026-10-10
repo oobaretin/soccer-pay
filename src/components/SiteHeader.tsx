@@ -1,14 +1,6 @@
 import Link from "next/link";
 import { SiteLogo } from "@/components/SiteLogo";
-
-const links = [
-  { href: "/", label: "Salaries" },
-  { href: "/leagues", label: "Leagues" },
-  { href: "/expiring", label: "Expiring" },
-  { href: "/clubs", label: "Clubs" },
-  { href: "/compare", label: "Compare" },
-  { href: "/articles", label: "Articles" },
-];
+import { siteNavLinks } from "@/lib/site-nav";
 
 export function SiteHeader() {
   return (
@@ -16,7 +8,7 @@ export function SiteHeader() {
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
         <SiteLogo variant="header" />
         <nav className="flex flex-wrap gap-1 text-sm">
-          {links.map((link) => (
+          {siteNavLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}

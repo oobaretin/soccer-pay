@@ -1,8 +1,12 @@
 import { WageStatusBadge } from "./WageStatusBadge";
 
-export function TrustLegend() {
+export function TrustLegend({ variant = "light" }: { variant?: "light" | "dark" }) {
+  const muted =
+    variant === "dark" ? "text-zinc-400" : "text-zinc-500 dark:text-zinc-400";
   return (
-    <div className="max-w-2xl space-y-2 text-xs text-zinc-500 dark:text-zinc-400 sm:mx-auto sm:text-center">
+    <div
+      className={`max-w-2xl space-y-2 text-xs ${muted} sm:mx-auto sm:text-center`}
+    >
       <p>
         Not official club disclosures. We label each figure by how it was sourced.
       </p>

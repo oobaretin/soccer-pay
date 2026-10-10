@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Geist, Geist_Mono, Sora } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
@@ -61,7 +62,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
           {children}
         </main>
-        <SiteFooter />
+        <Suspense
+          fallback={
+            <footer
+              className="mt-auto border-t border-zinc-800 bg-zinc-950 px-4 py-10"
+              aria-hidden
+            >
+              <div className="mx-auto h-40 max-w-6xl animate-pulse rounded-lg bg-zinc-900/60" />
+            </footer>
+          }
+        >
+          <SiteFooter />
+        </Suspense>
       </body>
     </html>
   );

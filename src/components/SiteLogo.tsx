@@ -9,8 +9,8 @@ const wordmarkClass: Record<Variant, { fb: string; sal: string }> = {
     sal: "text-zinc-100",
   },
   footer: {
-    fb: "text-emerald-700 dark:text-emerald-400",
-    sal: "text-zinc-800 dark:text-zinc-200",
+    fb: "text-emerald-400",
+    sal: "text-zinc-100",
   },
 };
 
