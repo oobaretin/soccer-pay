@@ -9,6 +9,8 @@ import {
   remainingContractValueGbp,
 } from "@/lib/format";
 import { seasonStatsHasFigures } from "@/lib/stats-display";
+import { WageStatusBadge } from "@/components/WageStatusBadge";
+import { CURRENT_SEASON } from "@/lib/queries/load-roster";
 import type { PlayerDetail } from "@/lib/types";
 
 export function CompareColumn({
@@ -19,6 +21,7 @@ export function CompareColumn({
   otherName: string;
 }) {
   const { player, club, contract, stats } = detail;
+  const league = club?.league;
   const wageCurrency =
     contract?.currency?.toUpperCase() ??
     club?.league?.currency?.toUpperCase() ??
@@ -36,25 +39,41 @@ export function CompareColumn({
         <PlayerPhoto
           name={player.name}
           photoUrl={player.photo_url}
-          size="md"
+          size="lg"
         />
-        <div>
-        <h2 className="text-xl font-semibold">{player.name}</h2>
-        <p className="text-sm text-zinc-500">
-          vs {otherName}
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-2">
+            <h2 className="text-xl font-semibold">{player.name}</h2>
+            {contract?.status ? (
+              <WageStatusBadge status={contract.status} />
+            ) : null}
+          </div>
+          <p className="text-sm text-zinc-500">
+            vs {otherName}
+            {player.position ? <> · {player.position}</> : null}
+          </p>
           {club ? (
-            <>
-              {" "}
-              ·{" "}
+            <p className="text-sm text-zinc-500">
               <Link
                 href={`/clubs/${club.slug}`}
                 className="text-emerald-700 hover:underline dark:text-emerald-400"
               >
                 {club.name}
               </Link>
-            </>
+              {league ? (
+                <>
+                  {" "}
+                  ·{" "}
+                  <Link
+                    href={`/leagues/${league.slug}`}
+                    className="text-emerald-700 hover:underline dark:text-emerald-400"
+                  >
+                    {league.name}
+                  </Link>
+                </>
+              ) : null}
+            </p>
           ) : null}
-        </p>
         </div>
       </div>
       <dl className="grid grid-cols-2 gap-3 text-sm">
@@ -75,6 +94,10 @@ export function CompareColumn({
         <CompareRow label="Remaining value" value={fmt(remaining)} />
         {stats && seasonStatsHasFigures(stats) ? (
           <>
+            <CompareRow
+              label={`Apps (${CURRENT_SEASON})`}
+              value={String(stats.appearances ?? "—")}
+            />
             <CompareRow label="Goals" value={String(stats.goals ?? "—")} />
             <CompareRow label="Assists" value={String(stats.assists ?? "—")} />
             <CompareRow

@@ -2,10 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { ArticleRelatedLinks } from "@/components/ArticleRelatedLinks";
+import { LeagueClubsSection } from "@/components/LeagueClubsSection";
 import { LeagueSalarySection } from "@/components/LeagueSalarySection";
 import { PageHeader } from "@/components/PageHeader";
 import { pageTitleFull } from "@/lib/brand";
+import { getAllClubs } from "@/lib/queries/get-clubs";
 import { getLeagueBySlug, getLeagueSlugs } from "@/lib/queries/get-leagues";
+import { loadRoster } from "@/lib/queries/load-roster";
 import { getSiteUrl } from "@/lib/site-url";
 
 type Params = Promise<{ slug: string }>;
@@ -58,12 +61,34 @@ export default async function LeaguePage({ params }: { params: Params }) {
   const league = await getLeagueBySlug(slug);
   if (!league) notFound();
 
+  const [clubs, roster] = await Promise.all([getAllClubs(), loadRoster()]);
+  const leagueClubs = clubs.filter((c) => c.league?.slug === slug);
+  const billByClubSlug = new Map<string, number>();
+  if (roster.ok) {
+    for (const row of roster.rows) {
+      if (!row.club?.slug) continue;
+      billByClubSlug.set(
+        row.club.slug,
+        (billByClubSlug.get(row.club.slug) ?? 0) +
+          (row.contract?.annual_wage_gbp ?? 0),
+      );
+    }
+  }
+
+  const subtitle = [
+    league.country,
+    league.currency ? `Contracts in ${league.currency}` : null,
+    "Verified, reported, and estimated wages with sources",
+  ]
+    .filter(Boolean)
+    .join(" · ");
+
   return (
-    <div className="space-y-6">
+    <div className="space-y-8">
       <PageHeader
         title={`${league.name} Player Salaries 2026`}
-        subtitle="Football player salaries, contracts and net worth."
-        hint="Search by league, then open any player for sources and contract detail."
+        subtitle={subtitle}
+        hint="Use the table to sort and search; open a player for contract sources and 2024-25 stats when available."
         breadcrumbs={[
           { label: "Salaries", href: "/" },
           { label: "Leagues", href: "/leagues" },
@@ -76,6 +101,11 @@ export default async function LeaguePage({ params }: { params: Params }) {
           tableUrlBasePath={`/leagues/${slug}`}
         />
       </Suspense>
+      <LeagueClubsSection
+        leagueName={league.name}
+        clubs={leagueClubs}
+        billByClubSlug={billByClubSlug}
+      />
       <ArticleRelatedLinks leagueSlug={slug} />
     </div>
   );
