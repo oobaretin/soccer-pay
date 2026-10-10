@@ -31,6 +31,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: siteMod ?? undefined,
     },
     {
+      url: `${base}/leagues`,
+      changeFrequency: "weekly",
+      priority: 0.85,
+      lastModified: siteMod ?? undefined,
+    },
+    {
       url: `${base}/clubs`,
       changeFrequency: "weekly",
       priority: 0.8,

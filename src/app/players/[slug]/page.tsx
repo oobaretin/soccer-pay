@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { PlayerJsonLd } from "@/components/PlayerJsonLd";
 import { PlayerPhoto } from "@/components/PlayerPhoto";
 import { SourceCitation } from "@/components/SourceCitation";
@@ -91,10 +92,20 @@ async function PlayerContent({ params }: { params: Params }) {
     contract != null &&
     (contract.weekly_wage_gbp != null || contract.annual_wage_gbp != null);
 
+  const league = club?.league;
+  const breadcrumbs = [
+    { label: "Salaries", href: "/" },
+    ...(league?.slug && league.name
+      ? [{ label: league.name, href: `/leagues/${league.slug}` }]
+      : []),
+    { label: player.name },
+  ];
+
   return (
     <div className="space-y-8">
       <PlayerJsonLd player={player} contract={contract} />
       <div className="space-y-3">
+        <Breadcrumbs items={breadcrumbs} />
         <p className="text-sm text-zinc-500">
           {club ? (
             <Link
@@ -131,26 +142,26 @@ async function PlayerContent({ params }: { params: Params }) {
               ) : null}
             </div>
             <ContractExpiredNote contractEnd={contract.contract_end} />
-            <p className="text-2xl font-semibold tabular-nums tracking-tight sm:text-3xl">
-              {fmt(contract.weekly_wage_gbp)}
+            <p className="text-3xl font-semibold tabular-nums tracking-tight sm:text-4xl">
+              {fmt(contract.annual_wage_gbp)}
               <span className="ml-2 text-lg font-medium text-zinc-500">
-                per week
+                per year
               </span>
-            </p>
-            {formatUsdEquivalent(contract.weekly_wage_gbp, wageCurrency) ? (
-              <p className="text-sm tabular-nums text-zinc-500">
-                {formatUsdEquivalent(contract.weekly_wage_gbp, wageCurrency)} per
-                week
-              </p>
-            ) : null}
-            <p className="text-lg tabular-nums text-zinc-700 dark:text-zinc-300">
-              {fmt(contract.annual_wage_gbp)}{" "}
-              <span className="text-base font-normal text-zinc-500">per year</span>
             </p>
             {formatUsdEquivalent(contract.annual_wage_gbp, wageCurrency) ? (
               <p className="text-sm tabular-nums text-zinc-500">
                 {formatUsdEquivalent(contract.annual_wage_gbp, wageCurrency)} per
                 year
+              </p>
+            ) : null}
+            <p className="text-xl tabular-nums text-zinc-700 dark:text-zinc-300">
+              {fmt(contract.weekly_wage_gbp)}{" "}
+              <span className="text-base font-normal text-zinc-500">per week</span>
+            </p>
+            {formatUsdEquivalent(contract.weekly_wage_gbp, wageCurrency) ? (
+              <p className="text-sm tabular-nums text-zinc-500">
+                {formatUsdEquivalent(contract.weekly_wage_gbp, wageCurrency)} per
+                week
               </p>
             ) : null}
             {contract.wage_notes ? (
@@ -188,6 +199,7 @@ async function PlayerContent({ params }: { params: Params }) {
             message="We don’t have a published figure for this player yet. Check back after the next data update."
           />
         )}
+        {contract ? <SourceCitation contract={contract} /> : null}
         <Link
           href={`/compare?a=${encodeURIComponent(player.slug)}`}
           className="inline-block text-sm font-medium text-emerald-700 hover:underline dark:text-emerald-400"
@@ -196,21 +208,21 @@ async function PlayerContent({ params }: { params: Params }) {
         </Link>
       </div>
 
-      <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Weekly wage" value={fmt(contract?.weekly_wage_gbp)} />
-        <StatCard label="Annual wage" value={fmt(contract?.annual_wage_gbp)} />
-        <StatCard
-          label="Contract ends"
-          value={formatDate(contract?.contract_end)}
-        />
-        <StatCard
-          label="Illustrative remaining value"
-          value={fmt(remaining)}
-          hint="Weeks left × weekly wage — not guaranteed pay"
-        />
-      </section>
-
-      {contract ? <SourceCitation contract={contract} /> : null}
+      {contract ? (
+        <section className="grid gap-4 sm:grid-cols-2">
+          <StatCard
+            label="Contract ends"
+            value={formatDate(contract.contract_end)}
+          />
+          {hasPublishedWage ? (
+            <StatCard
+              label="Illustrative remaining value"
+              value={fmt(remaining)}
+              hint="Weeks left × weekly wage — not guaranteed pay"
+            />
+          ) : null}
+        </section>
+      ) : null}
 
       {stats ? (
         <section className="space-y-3">

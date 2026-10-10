@@ -3,8 +3,10 @@ import { SalaryTable } from "@/components/SalaryTable";
 import { LeagueChips } from "@/components/LeagueChips";
 import { StateMessage } from "@/components/StateMessage";
 import { formatMoney, formatUsdEquivalent } from "@/lib/format";
+import { formatDate } from "@/lib/format";
 import { getLeagues } from "@/lib/queries/get-leagues";
 import { getSalaryTableRows } from "@/lib/queries/get-salary-table";
+import { getSiteLastReviewed } from "@/lib/queries/get-site-freshness";
 import { sortSalaryRows } from "@/lib/sort-salary-rows";
 import type { SalaryTableRow } from "@/lib/types";
 
@@ -54,9 +56,10 @@ export async function LeagueSalarySection({
   leagueSlug,
   tableUrlBasePath = "/",
 }: Props) {
-  const [result, leagues] = await Promise.all([
+  const [result, leagues, lastReviewed] = await Promise.all([
     getSalaryTableRows(),
     getLeagues(),
+    getSiteLastReviewed(),
   ]);
 
   if (!result.ok) {
@@ -85,6 +88,13 @@ export async function LeagueSalarySection({
 
   return (
     <div className="space-y-4">
+      {lastReviewed ? (
+        <p className="text-xs text-zinc-500">
+          Wages last reviewed {formatDate(lastReviewed)} · {scoped.length}{" "}
+          players on file
+          {leagueSlug ? " in this league" : ""}
+        </p>
+      ) : null}
       <LeagueChips leagues={leagues} activeSlug={leagueSlug} />
       {top ? (
         <TopEarnerCallout

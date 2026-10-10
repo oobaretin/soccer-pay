@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { LeagueSalarySection } from "@/components/LeagueSalarySection";
+import { PageHeader } from "@/components/PageHeader";
 import { DEFAULT_TITLE, SITE_TAGLINE } from "@/lib/brand";
 import { getSiteUrl } from "@/lib/site-url";
 
@@ -39,17 +40,11 @@ function TableSkeleton() {
 export default function HomePage() {
   return (
     <div className="space-y-6">
-      <div className="max-w-2xl space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Football Player Salaries 2026
-        </h1>
-        <p className="text-lg text-zinc-600 dark:text-zinc-400">
-          {SITE_TAGLINE}
-        </p>
-        <p className="text-sm text-zinc-500">
-          Search by league, then open any player for sources and contract detail.
-        </p>
-      </div>
+      <PageHeader
+        title="Football Player Salaries 2026"
+        subtitle={SITE_TAGLINE}
+        hint="Pick a league, then open any player for sources and contract detail."
+      />
       <Suspense fallback={<TableSkeleton />}>
         <LeagueSalarySection />
       </Suspense>

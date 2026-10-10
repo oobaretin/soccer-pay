@@ -2,7 +2,8 @@ import Link from "next/link";
 import { SiteLogo } from "@/components/SiteLogo";
 
 const links = [
-  { href: "/", label: "Players" },
+  { href: "/", label: "Salaries" },
+  { href: "/leagues", label: "Leagues" },
   { href: "/expiring", label: "Expiring" },
   { href: "/clubs", label: "Clubs" },
   { href: "/compare", label: "Compare" },

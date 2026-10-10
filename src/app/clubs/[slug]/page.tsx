@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { PageHeader } from "@/components/PageHeader";
 import { WageStatusBadge } from "@/components/WageStatusBadge";
 import { getClubBySlug, getClubSlugs } from "@/lib/queries/get-clubs";
 import { StateMessage } from "@/components/StateMessage";
@@ -55,17 +56,19 @@ async function ClubContent({ params }: { params: Params }) {
 
   return (
     <div className="space-y-8">
-      <div>
-        <Link href="/clubs" className="text-sm text-emerald-700 hover:underline dark:text-emerald-400">
-          ← All clubs
-        </Link>
-        <h1 className="mt-2 text-3xl font-semibold tracking-tight">{club.name}</h1>
-        <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-          {squad.length > 0
+      <PageHeader
+        title={club.name}
+        subtitle={
+          squad.length > 0
             ? `${squad.length} players on file. Bonuses and academy players not included.`
-            : "No squad wages published for this club yet."}
-        </p>
-      </div>
+            : "No squad wages published for this club yet."
+        }
+        breadcrumbs={[
+          { label: "Salaries", href: "/" },
+          { label: "Clubs", href: "/clubs" },
+          { label: club.name },
+        ]}
+      />
 
       {squad.length === 0 ? (
         <StateMessage

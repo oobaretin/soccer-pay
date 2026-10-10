@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { connection } from "next/server";
+import { PageHeader } from "@/components/PageHeader";
 import { StateMessage } from "@/components/StateMessage";
 import { getAllClubs } from "@/lib/queries/get-clubs";
 import { loadRoster } from "@/lib/queries/load-roster";
@@ -34,7 +35,7 @@ export default async function ClubsIndexPage() {
     return (
       <StateMessage
         title="No clubs yet"
-        message="Run schema.sql and scripts/seed.sql in Supabase."
+        message="Club pages will appear here once squads are published in our database."
       />
     );
   }
@@ -53,12 +54,11 @@ export default async function ClubsIndexPage() {
 
   return (
     <div className="space-y-6">
-      <div>
-        <h1 className="text-3xl font-semibold tracking-tight">Clubs</h1>
-        <p className="mt-2 text-zinc-600 dark:text-zinc-400">
-          Wage bills from players on file, grouped by league.
-        </p>
-      </div>
+      <PageHeader
+        title="Clubs"
+        subtitle="Wage bills from players on file, grouped by league."
+        breadcrumbs={[{ label: "Salaries", href: "/" }, { label: "Clubs" }]}
+      />
       {Array.from(
         clubs.reduce((map, club) => {
           const key = club.league?.name ?? "Other";

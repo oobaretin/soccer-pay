@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { ArticleRelatedLinks } from "@/components/ArticleRelatedLinks";
 import { LeagueSalarySection } from "@/components/LeagueSalarySection";
+import { PageHeader } from "@/components/PageHeader";
 import { pageTitleFull } from "@/lib/brand";
 import { getLeagueBySlug, getLeagueSlugs } from "@/lib/queries/get-leagues";
 import { getSiteUrl } from "@/lib/site-url";
@@ -59,17 +60,16 @@ export default async function LeaguePage({ params }: { params: Params }) {
 
   return (
     <div className="space-y-6">
-      <div className="max-w-2xl space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          {league.name} Player Salaries 2026
-        </h1>
-        <p className="text-lg text-zinc-600 dark:text-zinc-400">
-          Football player salaries, contracts and net worth.
-        </p>
-        <p className="text-sm text-zinc-500">
-          Search by league, then open any player for sources and contract detail.
-        </p>
-      </div>
+      <PageHeader
+        title={`${league.name} Player Salaries 2026`}
+        subtitle="Football player salaries, contracts and net worth."
+        hint="Search by league, then open any player for sources and contract detail."
+        breadcrumbs={[
+          { label: "Salaries", href: "/" },
+          { label: "Leagues", href: "/leagues" },
+          { label: league.name },
+        ]}
+      />
       <Suspense fallback={<TableSkeleton />}>
         <LeagueSalarySection
           leagueSlug={slug}

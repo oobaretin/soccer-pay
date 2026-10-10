@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArticleJsonLd } from "@/components/ArticleJsonLd";
+import { PageHeader } from "@/components/PageHeader";
 import { ArticleRankedTable } from "@/components/ArticleRankedTable";
 import { ArticleSourcingNote } from "@/components/ArticleSourcingNote";
 import { StateMessage } from "@/components/StateMessage";
@@ -62,20 +63,25 @@ export default async function ArticlePage({ params }: { params: Params }) {
     <article className="mx-auto max-w-4xl space-y-6">
       <ArticleJsonLd article={article} dateModified={data.ok ? data.updatedAt : null} />
 
-      <header className="max-w-2xl space-y-2">
-        <p className="text-xs font-medium uppercase tracking-wide text-emerald-800 dark:text-emerald-400">
-          {article.tag}
-        </p>
-        <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          {headline}
-        </h1>
-        <p className="text-zinc-600 dark:text-zinc-400">{article.description}</p>
-        {data.ok && data.updatedAt ? (
-          <p className="text-sm text-zinc-500">
-            Last updated: {formatDate(data.updatedAt)}
-          </p>
-        ) : null}
-      </header>
+      <PageHeader
+        title={headline}
+        subtitle={article.description}
+        breadcrumbs={[
+          { label: "Salaries", href: "/" },
+          { label: "Articles", href: "/articles" },
+          { label: article.title },
+        ]}
+        meta={
+          <>
+            <p className="text-xs font-medium uppercase tracking-wide text-emerald-800 dark:text-emerald-400">
+              {article.tag}
+            </p>
+            {data.ok && data.updatedAt ? (
+              <p>Last updated: {formatDate(data.updatedAt)}</p>
+            ) : null}
+          </>
+        }
+      />
 
       <p className="max-w-2xl leading-relaxed text-zinc-700 dark:text-zinc-300">
         {article.intro}

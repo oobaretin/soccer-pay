@@ -156,6 +156,52 @@ function SalaryTableInner({ rows, urlBasePath = "/" }: Props) {
 
   const weeklyEmphasis = period === "weekly";
   const annualEmphasis = period === "annual";
+  const [displayOptionsOpen, setDisplayOptionsOpen] = useState(false);
+
+  const displayOptions = (
+    <>
+      <div className="flex flex-wrap items-center gap-3">
+        <div className="flex gap-1" role="group" aria-label="Show wages as">
+          {(["annual", "weekly"] as const).map((p) => (
+            <button
+              key={p}
+              type="button"
+              aria-pressed={period === p}
+              onClick={() => setPayPeriod(p)}
+              className={`capitalize ${
+                period === p ? TOGGLE_ACTIVE : TOGGLE_INACTIVE
+              }`}
+            >
+              {p}
+            </button>
+          ))}
+        </div>
+        <div className="flex gap-1" role="group" aria-label="Currency display">
+          {(
+            [
+              ["native", "Local"],
+              ["usd", "USD (approx.)"],
+            ] as const
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              aria-pressed={wageDisplay === value}
+              onClick={() => setWageDisplay(value)}
+              className={
+                wageDisplay === value ? TOGGLE_ACTIVE : TOGGLE_INACTIVE
+              }
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      </div>
+      <p className="text-xs text-zinc-500">
+        Rank uses USD-equivalent annual wage. {FX_DISCLAIMER}
+      </p>
+    </>
+  );
 
   return (
     <div className="max-w-full space-y-4">
@@ -189,54 +235,23 @@ function SalaryTableInner({ rows, urlBasePath = "/" }: Props) {
             </>
           ) : null}
         </p>
-        <div className="flex flex-wrap items-center gap-3 pt-1">
-          <div
-            className="flex gap-1"
-            role="group"
-            aria-label="Show wages as"
+        <div className="pt-1 md:hidden">
+          <button
+            type="button"
+            aria-expanded={displayOptionsOpen}
+            onClick={() => setDisplayOptionsOpen((open) => !open)}
+            className="flex min-h-11 w-full items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm font-medium text-zinc-800 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-200"
           >
-            {(["annual", "weekly"] as const).map((p) => (
-              <button
-                key={p}
-                type="button"
-                aria-pressed={period === p}
-                onClick={() => setPayPeriod(p)}
-                className={`capitalize ${
-                  period === p ? TOGGLE_ACTIVE : TOGGLE_INACTIVE
-                }`}
-              >
-                {p}
-              </button>
-            ))}
-          </div>
-          <div
-            className="flex gap-1"
-            role="group"
-            aria-label="Currency display"
-          >
-            {(
-              [
-                ["native", "Local"],
-                ["usd", "USD (approx.)"],
-              ] as const
-            ).map(([value, label]) => (
-              <button
-                key={value}
-                type="button"
-                aria-pressed={wageDisplay === value}
-                onClick={() => setWageDisplay(value)}
-                className={
-                  wageDisplay === value ? TOGGLE_ACTIVE : TOGGLE_INACTIVE
-                }
-              >
-                {label}
-              </button>
-            ))}
-          </div>
+            Display options
+            <span aria-hidden>{displayOptionsOpen ? "−" : "+"}</span>
+          </button>
+          {displayOptionsOpen ? (
+            <div className="mt-2 space-y-2 rounded-lg border border-zinc-200 p-3 dark:border-zinc-700">
+              {displayOptions}
+            </div>
+          ) : null}
         </div>
-        <p className="text-xs text-zinc-500">
-          Rank uses USD-equivalent annual wage. {FX_DISCLAIMER}
-        </p>
+        <div className="hidden space-y-2 pt-1 md:block">{displayOptions}</div>
       </div>
 
       <div className="max-w-full overflow-x-auto overscroll-x-contain rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-950">

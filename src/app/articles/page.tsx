@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { PageHeader } from "@/components/PageHeader";
 import { formatDate } from "@/lib/format";
 import { articleDefinitions } from "@/content/article-definitions";
 import { getArticlePreview } from "@/lib/queries/get-article-data";
@@ -38,15 +39,11 @@ export default async function ArticlesIndexPage() {
 
   return (
     <div className="space-y-8">
-      <div className="max-w-2xl space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">
-          Football salary rankings & analysis
-        </h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
-          Live lists built from our wage database — figures refresh when
-          contracts are updated.
-        </p>
-      </div>
+      <PageHeader
+        title="Football salary rankings & analysis"
+        subtitle="Live lists built from our wage database — figures refresh when contracts are updated."
+        breadcrumbs={[{ label: "Salaries", href: "/" }, { label: "Articles" }]}
+      />
       <ul className="grid gap-4 sm:grid-cols-2">
         {previews.map(({ article, preview }) => (
           <li key={article.slug}>

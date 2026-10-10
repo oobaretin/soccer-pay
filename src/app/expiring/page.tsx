@@ -3,6 +3,7 @@ import Link from "next/link";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { ContractTimingBadge } from "@/components/ContractTimingBadge";
+import { PageHeader } from "@/components/PageHeader";
 import { StateMessage } from "@/components/StateMessage";
 import { WageStatusBadge } from "@/components/WageStatusBadge";
 import { pageTitleFull } from "@/lib/brand";
@@ -141,21 +142,19 @@ async function ExpiringList() {
 export default function ExpiringPage() {
   return (
     <div className="space-y-6">
-      <div className="max-w-2xl space-y-2">
-        <h1 className="text-3xl font-semibold tracking-tight">
-          Contracts expiring soon
-        </h1>
-        <p className="text-zinc-600 dark:text-zinc-400">
-          Based on today&apos;s date. Expiring deals end within the next 12
-          months; recently expired rows may need a source refresh.
-        </p>
-        <Link
-          href="/?sort=contract_end&dir=asc"
-          className="text-sm font-medium text-emerald-700 hover:underline dark:text-emerald-400"
-        >
-          View full table sorted by contract end →
-        </Link>
-      </div>
+      <PageHeader
+        title="Contracts expiring soon"
+        subtitle="Based on today's date. Expiring deals end within the next 12 months; recently expired rows may need a source refresh."
+        breadcrumbs={[{ label: "Salaries", href: "/" }, { label: "Expiring" }]}
+        meta={
+          <Link
+            href="/?sort=contract_end&dir=asc"
+            className="font-medium text-emerald-700 hover:underline dark:text-emerald-400"
+          >
+            View full table sorted by contract end →
+          </Link>
+        }
+      />
       <Suspense
         fallback={
           <div className="h-48 animate-pulse rounded-xl bg-zinc-100 dark:bg-zinc-900" />

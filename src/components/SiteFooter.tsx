@@ -4,7 +4,8 @@ import { TrustLegend } from "@/components/TrustLegend";
 import { SITE_NAME } from "@/lib/brand";
 
 const links = [
-  { href: "/", label: "Players" },
+  { href: "/", label: "Salaries" },
+  { href: "/leagues", label: "Leagues" },
   { href: "/expiring", label: "Expiring" },
   { href: "/clubs", label: "Clubs" },
   { href: "/compare", label: "Compare" },

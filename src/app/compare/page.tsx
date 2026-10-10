@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { connection } from "next/server";
 import { Suspense } from "react";
 import { CompareColumn } from "@/components/CompareColumn";
+import { PageHeader } from "@/components/PageHeader";
 import { ComparePicker } from "@/components/ComparePicker";
 import { StateMessage } from "@/components/StateMessage";
 import { pageTitleFull } from "@/lib/brand";
@@ -69,7 +70,11 @@ export default function ComparePage({
 }) {
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-semibold">Compare players</h1>
+      <PageHeader
+        title="Compare player salaries"
+        subtitle="Side-by-side weekly and annual wages with contract context."
+        breadcrumbs={[{ label: "Salaries", href: "/" }, { label: "Compare" }]}
+      />
       <Suspense fallback={<div className="h-72 animate-pulse rounded-xl bg-zinc-100" />}>
         <CompareSection searchParams={searchParams} />
       </Suspense>
