@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { SiteLogo } from "@/components/SiteLogo";
 import { TrustLegend } from "@/components/TrustLegend";
+import { SITE_NAME } from "@/lib/brand";
 
 const links = [
   { href: "/", label: "Players" },
@@ -40,6 +41,9 @@ export function SiteFooter() {
             RSS
           </Link>
         </div>
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          © 2026 {SITE_NAME}. All rights reserved.
+        </p>
       </div>
     </footer>
   );
