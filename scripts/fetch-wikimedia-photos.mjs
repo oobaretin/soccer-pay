@@ -41,6 +41,42 @@ const TITLE_OVERRIDES = {
   "heung-min-son": "Son Heung-min",
   "bruno-guimaraes": "Bruno Guimarães",
   "matteo-politano": "Matteo Politano",
+  "aurelien-tchouameni": "Aurélien Tchouaméni",
+  "desire-doue": "Désiré Doué",
+  "ngolo-kante": "N'Golo Kanté",
+  "jeremy-jacquet": "Jérémy Jacquet",
+  "jose-sa": "José Sá",
+  "goncalo-inacio": "Gonçalo Inácio",
+  "francisco-trincao": "Francisco Trincão",
+  "francisco-conceicao": "Francisco Conceição",
+  "warren-zaire-emery": "Warren Zaïre-Emery",
+  "maghnes-akliouche": "Maghnes Akliouche",
+  "nico-orielly": "Nico O'Reilly",
+  "joao-cancelo": "João Cancelo",
+  "joao-felix": "João Félix",
+  "ruben-dias": "Rúben Dias",
+  "ruben-neves": "Rúben Neves",
+  "nuno-mendes": "Nuno Mendes (footballer, born 2002)",
+  "dayot-upamecano": "Dayot Upamecano",
+  "jules-kounde": "Jules Koundé",
+  "leny-yoro": "Leny Yoro",
+  "ibrahima-konate": "Ibrahima Konaté",
+  "bradley-barcola": "Bradley Barcola",
+  "phil-foden": "Phil Foden",
+  "jordan-pickford": "Jordan Pickford",
+  "marc-guehi": "Marc Guéhi",
+  "ivan-toney": "Ivan Toney",
+  "elliot-anderson": "Elliot Anderson (footballer, born 2001)",
+  "jarell-quansah": "Jarell Quansah",
+  "diogo-costa": "Diogo Costa",
+  "joao-neves": "João Neves",
+  "lucas-hernandez": "Lucas Hernández",
+  "theo-hernandez": "Theo Hernández",
+  "rui-silva": "Rui Silva (footballer, born 1994)",
+  "lucas-da-cunha": "Lucas Da Cunha",
+  "samu-costa": "Samú Costa",
+  "tino-livramento": "Tino Livramento",
+  "esteban-lepaul": "Esteban Lepaul (footballer)",
 };
 
 /** When Wikipedia has no lead image, use a known Commons file (basename only). */
@@ -51,12 +87,24 @@ const COMMONS_FILE_OVERRIDES = {
   vitinha: "Vitinha (PSG).jpg",
   "nicolas-jackson": "Nicolas Jackson 20042025 (1).jpg",
   "matteo-politano": "Politano con uno striscione per Spinazzola.jpg",
+  "lucas-hernandez": "Lucas Hernández.jpg",
+  "theo-hernandez": "Theo Hernandez France v Norway 26 June 26-122.jpg",
+  "lucas-da-cunha": "Lucas da Cunha france.jpg",
+  "tino-livramento":
+    "Newcastle United vs AFC Bournemouth, 5 September 2026 (17).jpg",
 };
 
 function wikiTitlesForPlayer(slug, name) {
   const primary = TITLE_OVERRIDES[slug] ?? name;
-  const base = primary.replace(/\s+\([^)]+\)$/, "");
-  return [...new Set([primary, `${base} (footballer)`, `${base} (football)`])];
+  const base = primary.replace(/\s+\([^)]+\)$/, "").trim();
+  return [
+    ...new Set([
+      primary,
+      base,
+      `${base} (footballer)`,
+      `${base} (football)`,
+    ]),
+  ];
 }
 
 async function commonsThumbForFile(fileBaseName) {
@@ -141,7 +189,7 @@ for (const p of players ?? []) {
 
 let updated = 0;
 
-for (let attempt = 0; attempt < 3 && pending.size > 0; attempt++) {
+for (let attempt = 0; attempt < 4 && pending.size > 0; attempt++) {
   const slugs = [...pending.keys()];
   for (let i = 0; i < slugs.length; i += 50) {
     const chunk = slugs.slice(i, i + 50);
