@@ -23,7 +23,11 @@
     "update:sources": "node scripts/update-source-urls.mjs",
     "sync:sources": "node scripts/sync-source-urls-to-player-csvs.mjs",
     "import:photos": "node scripts/import-player-photos.mjs",
-    "fetch:photos": "node scripts/fetch-wikimedia-photos.mjs"
+    "fetch:photos": "node scripts/fetch-wikimedia-photos.mjs",
+    "db:stats-meta": "node scripts/apply-one-sql.mjs scripts/add-season-stats-meta.sql",
+    "cleanup:stats": "node scripts/cleanup-season-stats.mjs",
+    "fetch:stats": "node scripts/fetch-season-stats.mjs",
+    "tag:stats-manual": "node scripts/tag-manual-season-stats.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.117.3",

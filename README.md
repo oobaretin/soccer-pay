@@ -58,7 +58,7 @@ Import behavior:
 
 - **Players** upsert on `slug`
 - **Contracts** update when `player_id` + `reviewed_at` match, else insert (keeps history)
-- **Season stats** upsert on `(player_id, season)`; `annual_wage_gbp` defaults to `weekly × 52` if omitted
+- **Season stats** upsert on `(player_id, season)`; optional `stats_source_name`, `stats_source_url`, `stats_scope` on CSV import. Run `npm run fetch:stats` for Wikipedia/Soccerbase-backed club totals (assists/minutes often still from CSV).
 
 ## Routes
 
@@ -83,4 +83,8 @@ Pin [`schema.sql`](./schema.sql) in Cursor (`@schema.sql`).
 | `npm run import:clubs` | Upsert clubs from CSV |
 | `npm run import:players -- file.csv` | Upsert players/contracts/stats |
 | `npm run validate:sources -- file.csv` | Warn on weak source URLs |
+| `npm run db:stats-meta` | Add stats source columns (`source_name`, `source_url`, `scope`) |
+| `npm run cleanup:stats` | Delete mis-keyed `season_stats` rows |
+| `npm run fetch:stats` | Backfill **2024-25** apps/goals from English Wikipedia (club, all comps) |
+| `npm run tag:stats-manual` | Label legacy CSV stats rows after `db:stats-meta` |
 | `npm run clean` | Remove `.next` (~50MB) |

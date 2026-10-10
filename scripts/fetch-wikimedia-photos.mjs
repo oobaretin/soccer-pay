@@ -9,75 +9,12 @@ import fs from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { getSupabaseAdminConfig, parseCsv } from "./lib/load-env.mjs";
+import { wikiTitlesForPlayer } from "./lib/wikipedia-titles.mjs";
 
 const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
 const outCsv = path.join(root, "data/player-photos.csv");
 const force = process.argv.includes("--force");
 const UA = "SoccerPay/1.0 (https://github.com/oobaretin/soccer-pay; batch photo import)";
-
-const TITLE_OVERRIDES = {
-  "dusan-tadic": "Dušan Tadić",
-  "dusan-vlahovic": "Dušan Vlahović",
-  "mauro-icardi": "Mauro Icardi",
-  "sergio-busquets": "Sergio Busquets",
-  "luis-suarez": "Luis Suárez",
-  "kylian-mbappe": "Kylian Mbappé",
-  "ousmane-dembele": "Ousmane Dembélé",
-  "leroy-sane": "Leroy Sané",
-  "vitinha": "Vitinha (footballer, born 2000)",
-  "rodri": "Rodri (footballer, born 1996)",
-  "vinicius-junior": "Vinícius Júnior",
-  "lamine-yamal": "Lamine Yamal",
-  "khvicha-kvaratskhelia": "Khvicha Kvaratskhelia",
-  "takefusa-kubo": "Takefusa Kubo",
-  "youssef-en-nesyri": "Youssef En-Nesyri",
-  "moises-caicedo": "Moisés Caicedo",
-  "martin-odegaard": "Martin Ødegaard",
-  "joao-pedro": "João Pedro (footballer, born 2001)",
-  "rafael-leao": "Rafael Leão",
-  "matheus-cunha": "Matheus Cunha",
-  "lois-openda": "Loïs Openda",
-  "nicolas-jackson": "Nicolas Jackson (footballer, born 2001)",
-  "heung-min-son": "Son Heung-min",
-  "bruno-guimaraes": "Bruno Guimarães",
-  "matteo-politano": "Matteo Politano",
-  "aurelien-tchouameni": "Aurélien Tchouaméni",
-  "desire-doue": "Désiré Doué",
-  "ngolo-kante": "N'Golo Kanté",
-  "jeremy-jacquet": "Jérémy Jacquet",
-  "jose-sa": "José Sá",
-  "goncalo-inacio": "Gonçalo Inácio",
-  "francisco-trincao": "Francisco Trincão",
-  "francisco-conceicao": "Francisco Conceição",
-  "warren-zaire-emery": "Warren Zaïre-Emery",
-  "maghnes-akliouche": "Maghnes Akliouche",
-  "nico-orielly": "Nico O'Reilly",
-  "joao-cancelo": "João Cancelo",
-  "joao-felix": "João Félix",
-  "ruben-dias": "Rúben Dias",
-  "ruben-neves": "Rúben Neves",
-  "nuno-mendes": "Nuno Mendes (footballer, born 2002)",
-  "dayot-upamecano": "Dayot Upamecano",
-  "jules-kounde": "Jules Koundé",
-  "leny-yoro": "Leny Yoro",
-  "ibrahima-konate": "Ibrahima Konaté",
-  "bradley-barcola": "Bradley Barcola",
-  "phil-foden": "Phil Foden",
-  "jordan-pickford": "Jordan Pickford",
-  "marc-guehi": "Marc Guéhi",
-  "ivan-toney": "Ivan Toney",
-  "elliot-anderson": "Elliot Anderson (footballer, born 2001)",
-  "jarell-quansah": "Jarell Quansah",
-  "diogo-costa": "Diogo Costa",
-  "joao-neves": "João Neves",
-  "lucas-hernandez": "Lucas Hernández",
-  "theo-hernandez": "Theo Hernández",
-  "rui-silva": "Rui Silva (footballer, born 1994)",
-  "lucas-da-cunha": "Lucas Da Cunha",
-  "samu-costa": "Samú Costa",
-  "tino-livramento": "Tino Livramento",
-  "esteban-lepaul": "Esteban Lepaul (footballer)",
-};
 
 /** When Wikipedia has no lead image, use a known Commons file (basename only). */
 const COMMONS_FILE_OVERRIDES = {
@@ -93,19 +30,6 @@ const COMMONS_FILE_OVERRIDES = {
   "tino-livramento":
     "Newcastle United vs AFC Bournemouth, 5 September 2026 (17).jpg",
 };
-
-function wikiTitlesForPlayer(slug, name) {
-  const primary = TITLE_OVERRIDES[slug] ?? name;
-  const base = primary.replace(/\s+\([^)]+\)$/, "").trim();
-  return [
-    ...new Set([
-      primary,
-      base,
-      `${base} (footballer)`,
-      `${base} (football)`,
-    ]),
-  ];
-}
 
 async function commonsThumbForFile(fileBaseName) {
   const api = new URL("https://commons.wikimedia.org/w/api.php");

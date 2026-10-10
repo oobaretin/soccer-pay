@@ -52,6 +52,9 @@ export type SeasonStats = {
   goals: number | null;
   assists: number | null;
   minutes: number | null;
+  source_name?: string | null;
+  source_url?: string | null;
+  scope?: string | null;
 };
 
 export type PlayerListRow = {

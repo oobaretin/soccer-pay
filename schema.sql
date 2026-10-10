@@ -51,7 +51,10 @@ create table season_stats (
   appearances int,
   goals int,
   assists int,
-  minutes int
+  minutes int,
+  source_name text,
+  source_url text,
+  scope text
 );
 
 create index players_club_id_idx on players (club_id);

@@ -21,6 +21,7 @@ import {
   remainingContractValueGbp,
 } from "@/lib/format";
 import { CURRENT_SEASON } from "@/lib/queries/load-roster";
+import { seasonStatsHasFigures } from "@/lib/stats-display";
 import { pageTitleFull } from "@/lib/brand";
 import { getSiteUrl } from "@/lib/site-url";
 
@@ -224,7 +225,7 @@ async function PlayerContent({ params }: { params: Params }) {
         </section>
       ) : null}
 
-      {stats ? (
+      {stats && seasonStatsHasFigures(stats) ? (
         <section className="space-y-3">
           <h2 className="text-lg font-semibold">{stats.season} stats</h2>
           <dl className="grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -233,6 +234,26 @@ async function PlayerContent({ params }: { params: Params }) {
             <MiniStat label="Assists" value={stats.assists} />
             <MiniStat label="Minutes" value={stats.minutes} />
           </dl>
+          {stats.scope ? (
+            <p className="text-xs text-zinc-500">{stats.scope}</p>
+          ) : null}
+          {stats.source_name ? (
+            <p className="text-xs text-zinc-500">
+              Stats source:{" "}
+              {stats.source_url ? (
+                <a
+                  href={stats.source_url}
+                  className="text-emerald-700 underline-offset-2 hover:underline dark:text-emerald-400"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                >
+                  {stats.source_name}
+                </a>
+              ) : (
+                stats.source_name
+              )}
+            </p>
+          ) : null}
           <div className="rounded-lg border border-dashed border-zinc-300 bg-zinc-50 p-4 text-sm dark:border-zinc-700 dark:bg-zinc-900/50">
             <p className="font-medium">Wage efficiency ({stats.season})</p>
             <ul className="mt-2 space-y-1 text-zinc-600 dark:text-zinc-400">

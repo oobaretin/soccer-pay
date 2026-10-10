@@ -12,7 +12,8 @@
  * Columns: player_name, player_slug, club_slug, position, nationality, dob,
  *   weekly_wage_gbp, annual_wage_gbp, contract_start, contract_end,
  *   status, source_name, source_url, reviewed_at,
- *   season, appearances, goals, assists, minutes
+ *   season, appearances, goals, assists, minutes,
+ *   stats_source_name, stats_source_url, stats_scope (optional)
  *
  * Re-importing the same player_slug updates the player row.
  * Contracts: updates row matching player_id + reviewed_at, else inserts.
@@ -138,17 +139,38 @@ for (const r of records) {
   }
 
   if (r.season) {
-    await supabase.from("season_stats").upsert(
-      {
+    const appearances = num(r.appearances);
+    const goals = num(r.goals);
+    const assists = num(r.assists);
+    const minutes = num(r.minutes);
+    const hasFigures =
+      appearances != null ||
+      goals != null ||
+      assists != null ||
+      minutes != null;
+    if (!hasFigures) {
+      /* season label only — do not wipe existing season_stats */
+    } else {
+      const statPayload = {
         player_id: player.id,
         season: r.season,
-        appearances: num(r.appearances),
-        goals: num(r.goals),
-        assists: num(r.assists),
-        minutes: num(r.minutes),
-      },
-      { onConflict: "player_id,season" },
-    );
+        appearances,
+        goals,
+        assists,
+        minutes,
+        source_name:
+          r.stats_source_name?.trim() ||
+          "CSV import",
+        scope:
+          r.stats_scope?.trim() ||
+          "Club totals (import CSV; curated manual entry).",
+      };
+      const srcUrl = r.stats_source_url?.trim();
+      if (srcUrl) statPayload.source_url = srcUrl;
+      await supabase.from("season_stats").upsert(statPayload, {
+        onConflict: "player_id,season",
+      });
+    }
   }
 
   imported++;

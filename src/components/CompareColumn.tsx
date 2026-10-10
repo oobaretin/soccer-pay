@@ -8,6 +8,7 @@ import {
   formatUsdEquivalent,
   remainingContractValueGbp,
 } from "@/lib/format";
+import { seasonStatsHasFigures } from "@/lib/stats-display";
 import type { PlayerDetail } from "@/lib/types";
 
 export function CompareColumn({
@@ -72,7 +73,7 @@ export function CompareColumn({
           value={formatDate(contract?.contract_end)}
         />
         <CompareRow label="Remaining value" value={fmt(remaining)} />
-        {stats ? (
+        {stats && seasonStatsHasFigures(stats) ? (
           <>
             <CompareRow label="Goals" value={String(stats.goals ?? "—")} />
             <CompareRow label="Assists" value={String(stats.assists ?? "—")} />
