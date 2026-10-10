@@ -34,6 +34,17 @@ function topByAnnualUsd(rows: SalaryTableRow[], limit: number): SalaryTableRow[]
   return sortSalaryRows(rows, "annual", "desc").slice(0, limit);
 }
 
+const NATIONAL_TEAM_ARTICLES: Partial<
+  Record<ArticleSlug, { nationality: string; limit: number }>
+> = {
+  "portugal-world-cup-2026-salaries": { nationality: "Portugal", limit: 40 },
+  "france-national-team-salaries-2026": { nationality: "France", limit: 45 },
+  "england-national-team-salaries-2026": { nationality: "England", limit: 40 },
+  "spain-national-team-salaries-2026": { nationality: "Spain", limit: 40 },
+  "brazil-national-team-salaries-2026": { nationality: "Brazil", limit: 40 },
+  "argentina-national-team-salaries-2026": { nationality: "Argentina", limit: 40 },
+};
+
 function topEarnerPerClub(
   rows: SalaryTableRow[],
   leagueSlug: string,
@@ -130,19 +141,23 @@ export async function getArticleData(slug: ArticleSlug): Promise<ArticleData> {
         sections: [{ rows: listed }],
       };
     }
-    case "portugal-world-cup-2026-salaries": {
-      const pt = rows.filter(
-        (r) => r.nationality?.toLowerCase() === "portugal",
-      );
-      const listed = topByAnnualUsd(pt, 40);
-      return {
-        ok: true,
-        updatedAt: maxReviewedAt(listed),
-        sections: [{ rows: listed }],
-      };
-    }
-    default:
+    default: {
+      const national = NATIONAL_TEAM_ARTICLES[slug];
+      if (national) {
+        const filtered = rows.filter(
+          (r) =>
+            r.nationality?.toLowerCase() ===
+            national.nationality.toLowerCase(),
+        );
+        const listed = topByAnnualUsd(filtered, national.limit);
+        return {
+          ok: true,
+          updatedAt: maxReviewedAt(listed),
+          sections: [{ rows: listed }],
+        };
+      }
       return { ok: false, error: "Unknown article." };
+    }
   }
 }
 

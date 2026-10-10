@@ -4,7 +4,12 @@ export type ArticleSlug =
   | "highest-paid-players-by-league"
   | "contracts-expiring-2027"
   | "highest-paid-player-at-every-premier-league-club"
-  | "portugal-world-cup-2026-salaries";
+  | "portugal-world-cup-2026-salaries"
+  | "france-national-team-salaries-2026"
+  | "england-national-team-salaries-2026"
+  | "spain-national-team-salaries-2026"
+  | "brazil-national-team-salaries-2026"
+  | "argentina-national-team-salaries-2026";
 
 export type ArticleDefinition = {
   slug: ArticleSlug;
@@ -87,6 +92,61 @@ export const articleDefinitions: ArticleDefinition[] = [
       "Portugal FIFA World Cup 2026 squad salaries: club wages for internationals on file, with sources and reported vs estimated labels.",
     intro:
       "Figures below are club wages for players we track who appear in Portugal’s World Cup squad pool — not FPF match fees. Rankings use USD-equivalent annual pay like our main salary table.",
+    publishedAt: "2026-10-09",
+  },
+  {
+    slug: "france-national-team-salaries-2026",
+    title: "France National Team Salaries",
+    summary: "Club wages for Les Bleus players on file, ranked by annual pay.",
+    tag: "France",
+    description:
+      "France international football salaries in 2026: club wages for French nationals in our database with sources and verification labels.",
+    intro:
+      "Amounts are club wages, not FFF appearance fees. Only players with a published weekly or annual wage on file appear below.",
+    publishedAt: "2026-10-09",
+  },
+  {
+    slug: "england-national-team-salaries-2026",
+    title: "England National Team Salaries",
+    summary: "Club wages for Three Lions players on file ahead of World Cup 2026.",
+    tag: "England · World Cup",
+    description:
+      "England international salaries in 2026: Premier League and overseas club wages for English nationals on file.",
+    intro:
+      "Figures reflect the latest contract row we hold at each player’s club. Rankings use USD-equivalent annual pay.",
+    publishedAt: "2026-10-09",
+  },
+  {
+    slug: "spain-national-team-salaries-2026",
+    title: "Spain National Team Salaries",
+    summary: "Top club wages for Spanish internationals on file.",
+    tag: "Spain",
+    description:
+      "Spain national team player salaries in 2026 from club contracts on file — La Liga and other leagues.",
+    intro:
+      "Coverage follows our club-based wage database; not every La Roja squad member may appear until sourced.",
+    publishedAt: "2026-10-09",
+  },
+  {
+    slug: "brazil-national-team-salaries-2026",
+    title: "Brazil National Team Salaries",
+    summary: "Club wages for Seleção players on file across Europe and beyond.",
+    tag: "Brazil",
+    description:
+      "Brazil international football wages in 2026: ranked club salaries for Brazilian players in our database.",
+    intro:
+      "Includes players at European clubs and other leagues we track. Amounts stay in contract currency with USD context in sort.",
+    publishedAt: "2026-10-09",
+  },
+  {
+    slug: "argentina-national-team-salaries-2026",
+    title: "Argentina National Team Salaries",
+    summary: "Club wages for Albiceleste players on file.",
+    tag: "Argentina",
+    description:
+      "Argentina national team salaries in 2026 from sourced club contracts — Serie A, La Liga, and other leagues on file.",
+    intro:
+      "Rankings use the same USD-equivalent annual sort as the main salary table.",
     publishedAt: "2026-10-09",
   },
 ];

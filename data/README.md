@@ -54,7 +54,21 @@ Club wages for Seleção players (same workflow as French squad). Pending Liga /
 npm run check:pt-squad
 ```
 
-Article: `/articles/portugal-world-cup-2026-salaries`.
+Article: `/articles/portugal-world-cup-2026-salaries`. Batch 2: `players-pt-squad-batch-2.csv`.
+
+## England national team — `players-en-squad-batch-1.csv`
+
+WC squad gap-fill for players not in earlier PL batches. Pending: `players-pending-en-squad.csv`. Check: `npm run check:en-squad`. Article: `/articles/england-national-team-salaries-2026`.
+
+## National team articles (live from DB)
+
+France, Spain, Brazil, and Argentina also have ranking articles under `/articles/*-national-team-salaries-2026` (plus Portugal above).
+
+## Squad queue checker
+
+```bash
+node scripts/check-squad-queue.mjs data/players-pending-<country>-squad.csv
+```
 
 ## International batch 2 — `players-international-batch-2.csv`
 

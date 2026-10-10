@@ -1,0 +1,8 @@
+player_name,player_slug,club_slug,position,nationality,dob,weekly_wage_gbp,annual_wage_gbp,contract_start,contract_end,status,source_name,source_url,reviewed_at,season,appearances,goals,assists,minutes,currency,wage_notes
+John Stones,john-stones,,Defender,England,1994-05-28,,,,,,,,,,,,,,,Left Man City Jun 2026 — free agent; add club+wage when signed
+Dan Burn,dan-burn,newcastle-united,Defender,England,1992-05-09,,,,,,,,,,,,,,,
+Jarell Quansah,jarell-quansah,bayer-leverkusen,Defender,England,2003-01-29,,,,,,,,,,,,,,,
+Djed Spence,djed-spence,tottenham-hotspur,Defender,England,2000-08-09,,,,,,,,,,,,,,,
+Nico O'Reilly,nico-orielly,manchester-city,Defender,England,2005-03-21,,,,,,,,,,,,,,,
+Elliot Anderson,elliot-anderson,manchester-city,Midfielder,England,2001-11-06,,,,,,,,,,,,,,,
+Jordan Henderson,jordan-henderson,brentford,Midfielder,England,1990-06-17,,,,,,,,,,,,,,,Refresh wage after Brentford move (was Ajax/free agent row)

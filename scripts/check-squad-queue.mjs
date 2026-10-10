@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 /**
- * Compare data/players-pending-pt-squad.csv against Supabase (club + player + salary list).
- * Usage: node scripts/check-pt-squad-queue.mjs
+ * Compare a pending squad CSV against Supabase (club + player + salary list).
+ * Usage: node scripts/check-squad-queue.mjs data/players-pending-pt-squad.csv
  */
 import { createClient } from "@supabase/supabase-js";
 import fs from "node:fs";
@@ -11,8 +11,11 @@ import { loadEnvLocal, parseCsv } from "./lib/load-env.mjs";
 
 loadEnvLocal();
 
-const root = path.join(path.dirname(fileURLToPath(import.meta.url)), "..");
-const queuePath = path.join(root, "data/players-pending-pt-squad.csv");
+const queuePath = process.argv[2];
+if (!queuePath || !fs.existsSync(queuePath)) {
+  console.error("Usage: node scripts/check-squad-queue.mjs <pending.csv>");
+  process.exit(1);
+}
 
 const url = process.env.NEXT_PUBLIC_SUPABASE_URL ?? process.env.SUPABASE_URL;
 const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
@@ -43,21 +46,8 @@ function latestContract(playerId) {
   )[0];
 }
 
-const alreadyOnList = [
-  "cristiano-ronaldo",
-  "bruno-fernandes",
-  "bernardo-silva",
-  "vitinha",
-  "rafael-leao",
-];
-
-console.log("Portugal — already on salary list (not in queue CSV):");
-for (const slug of alreadyOnList) {
-  const p = playerBySlug.get(slug);
-  console.log(`  ✓ ${slug}${p ? "" : " (missing from DB?)"}`);
-}
-
-console.log("\nImport queue:", records.length, "rows\n");
+console.log("Queue file:", path.basename(queuePath));
+console.log("Rows:", records.length, "\n");
 
 let ready = 0;
 let needClub = 0;
@@ -98,9 +88,5 @@ for (const r of records) {
 console.log("\nSummary");
 console.log("  Clubs missing in DB:", [...new Set(records.filter((r) => !clubSlugs.has(r.club_slug)).map((r) => r.club_slug))].join(", ") || "none");
 console.log("  Queue rows in DB already:", inDb);
-console.log("  Rows ready to import (club + wage + source in CSV):", ready);
+console.log("  Rows ready to import:", ready);
 console.log("  Rows still need wage/source in CSV:", needWage);
-console.log("\nNext steps:");
-console.log("  1. npm run import:clubs -- data/clubs-international.csv  (if any club_slug missing)");
-console.log("  2. Fill wages + sources in data/players-pending-pt-squad.csv");
-console.log("  3. npm run import:players -- data/players-pending-pt-squad.csv");
