@@ -15,6 +15,7 @@
     "db:leagues": "node scripts/apply-one-sql.mjs scripts/migrate-leagues.sql",
     "db:wage-notes": "node scripts/apply-one-sql.mjs scripts/add-wage-notes.sql",
     "import:players": "node scripts/import-csv.mjs",
+    "check:fr-squad": "node scripts/check-fr-squad-queue.mjs",
     "validate:sources": "node scripts/validate-sources.mjs",
     "validate:currency": "node scripts/validate-currency-sanity.mjs",
     "update:sources": "node scripts/update-source-urls.mjs",

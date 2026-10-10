@@ -1,0 +1,21 @@
+player_name,player_slug,club_slug,position,nationality,dob,weekly_wage_gbp,annual_wage_gbp,contract_start,contract_end,status,source_name,source_url,reviewed_at,season,appearances,goals,assists,minutes,currency,wage_notes
+Dayot Upamecano,dayot-upamecano,bayern-munich,Defender,France,,,,,,,,,,,,,,,Fill sourced wage before import — club link only in queue
+Jules Koundé,jules-kounde,barcelona,Defender,France,,,,,,,,,,,,,,,
+Adrien Truffert,adrien-truffert,afc-bournemouth,Defender,France,,,,,,,,,,,,,,,
+Pierre Kalulu,pierre-kalulu,juventus,Defender,France,,,,,,,,,,,,,,,
+Leny Yoro,leny-yoro,manchester-united,Defender,France,,,,,,,,,,,,,,,
+Jérémy Jacquet,jeremy-jacquet,liverpool,Defender,France,,,,,,,,,,,,,,,Liverpool (from Rennes; Sky Sports Aug 2026 squad list)
+Theo Hernández,theo-hernandez,al-hilal,Defender,France,1997-10-06,,,,,,,,,,,,,,,Club: Al-Hilal since Jul 2025 (was Milan). See data/fr-squad-club-research.csv
+Lucas Hernández,lucas-hernandez,paris-saint-germain,Defender,France,1996-02-14,,,,,,,,,,,,,,,PSG through 2028 per club site
+Ibrahima Konaté,ibrahima-konate,real-madrid,Defender,France,1999-05-25,,,,,,,,,,,,,,,Real Madrid from Jul 2026 (free from Liverpool). See research CSV
+Lucas Da Cunha,lucas-da-cunha,como,Midfielder,France,,,,,,,,,,,,,,,
+Andy Diouf,andy-diouf,inter,Midfielder,France,,,,,,,,,,,,,,,
+Manu Koné,manu-kone,roma,Midfielder,France,,,,,,,,,,,,,,,
+Eduardo Camavinga,eduardo-camavinga,real-madrid,Midfielder,France,,,,,,,,,,,,,,,
+Maghnes Akliouche,maghnes-akliouche,paris-saint-germain,Midfielder,France,,,,,,,,,,,,,,,
+Adrien Rabiot,adrien-rabiot,ac-milan,Midfielder,France,,,,,,,,,,,,,,,
+Aurélien Tchouaméni,aurelien-tchouameni,real-madrid,Midfielder,France,2000-01-27,,,,,,,,,,,,,,,Real Madrid since 2022
+N'Golo Kanté,ngolo-kante,fenerbahce,Midfielder,France,1991-03-29,,,,,,,,,,,,,,,Fenerbahçe from Feb 2026 (left Al-Ittihad)
+Esteban Lepaul,esteban-lepaul,rennes,Forward,France,,,,,,,,,,,,,,,
+Bradley Barcola,bradley-barcola,liverpool,Forward,France,2002-09-02,,,,,,,,,,,,,,,Liverpool from Aug 2026 (from PSG). BBC/Sky Aug 2026
+Désiré Doué,desire-doue,paris-saint-germain,Forward,France,2005-06-03,,,,,,,,,,,,,,,
