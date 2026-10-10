@@ -3,7 +3,7 @@ import { Geist, Geist_Mono, Sora } from "next/font/google";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SITE_NAME, SITE_TAGLINE, pageTitleFull } from "@/lib/brand";
-import { getSiteUrl, siteUrl } from "@/lib/site-url";
+import { getSiteUrl } from "@/lib/site-url";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,11 +31,6 @@ export const metadata: Metadata = {
     template: "%s | FB Salaries",
   },
   description: SITE_TAGLINE,
-  alternates: {
-    types: {
-      "application/rss+xml": siteUrl("/feed.xml"),
-    },
-  },
   openGraph: {
     type: "website",
     siteName: SITE_NAME,
