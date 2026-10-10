@@ -22,7 +22,8 @@ insert into leagues (name, slug, country, currency) values
   ('Süper Lig', 'super-lig', 'Turkey', 'TRY'),
   ('Saudi Pro League', 'saudi-pro-league', 'Saudi Arabia', 'SAR'),
   ('MLS', 'mls', 'United States', 'USD'),
-  ('Eredivisie', 'eredivisie', 'Netherlands', 'EUR')
+  ('Eredivisie', 'eredivisie', 'Netherlands', 'EUR'),
+  ('Primeira Liga', 'primeira-liga', 'Portugal', 'EUR')
 on conflict (slug) do nothing;
 
 update clubs

@@ -130,6 +130,17 @@ export async function getArticleData(slug: ArticleSlug): Promise<ArticleData> {
         sections: [{ rows: listed }],
       };
     }
+    case "portugal-world-cup-2026-salaries": {
+      const pt = rows.filter(
+        (r) => r.nationality?.toLowerCase() === "portugal",
+      );
+      const listed = topByAnnualUsd(pt, 40);
+      return {
+        ok: true,
+        updatedAt: maxReviewedAt(listed),
+        sections: [{ rows: listed }],
+      };
+    }
     default:
       return { ok: false, error: "Unknown article." };
   }

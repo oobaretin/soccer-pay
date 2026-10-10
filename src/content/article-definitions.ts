@@ -3,7 +3,8 @@ export type ArticleSlug =
   | "highest-paid-premier-league-players"
   | "highest-paid-players-by-league"
   | "contracts-expiring-2027"
-  | "highest-paid-player-at-every-premier-league-club";
+  | "highest-paid-player-at-every-premier-league-club"
+  | "portugal-world-cup-2026-salaries";
 
 export type ArticleDefinition = {
   slug: ArticleSlug;
@@ -74,6 +75,18 @@ export const articleDefinitions: ArticleDefinition[] = [
       "Highest paid player at each Premier League club in 2026 — one wage leader per team with contract details and source badges.",
     intro:
       "For every Premier League club with at least one wage on file, we show the highest annual earner in the squad. Ties follow our standard USD-equivalent annual sort.",
+    publishedAt: "2026-10-09",
+  },
+  {
+    slug: "portugal-world-cup-2026-salaries",
+    title: "Portugal World Cup Squad Salaries",
+    summary:
+      "Wages on file for Seleção players at club level — ranked for the 2026 World Cup cycle.",
+    tag: "Portugal · World Cup",
+    description:
+      "Portugal FIFA World Cup 2026 squad salaries: club wages for internationals on file, with sources and reported vs estimated labels.",
+    intro:
+      "Figures below are club wages for players we track who appear in Portugal’s World Cup squad pool — not FPF match fees. Rankings use USD-equivalent annual pay like our main salary table.",
     publishedAt: "2026-10-09",
   },
 ];

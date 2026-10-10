@@ -46,6 +46,16 @@ npm run fetch:photos          # Wikipedia search → CSV + Supabase (missing onl
 npm run import:photos         # push data/player-photos.csv to Supabase
 ```
 
+## Portugal World Cup squad — `players-pt-squad-batch-1.csv`
+
+Club wages for Seleção players (same workflow as French squad). Pending Liga / home-market names: `players-pending-pt-squad.csv`. Check queue:
+
+```bash
+npm run check:pt-squad
+```
+
+Article: `/articles/portugal-world-cup-2026-salaries`.
+
 ## International batch 2 — `players-international-batch-2.csv`
 
 More flagship names (Mbappé, Bellingham, Musiala, Kvaratskhelia, Sané, Miami squad, etc.):

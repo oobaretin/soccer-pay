@@ -76,6 +76,7 @@ export type SalaryTableRow = {
   playerId: string;
   name: string;
   slug: string;
+  nationality: string | null;
   photoUrl: string | null;
   position: string | null;
   clubName: string | null;
