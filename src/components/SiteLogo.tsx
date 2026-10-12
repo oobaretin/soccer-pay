@@ -5,12 +5,12 @@ type Variant = "header" | "footer";
 
 const wordmarkClass: Record<Variant, { fb: string; sal: string }> = {
   header: {
-    fb: "text-emerald-400",
-    sal: "text-zinc-100",
+    fb: "text-emerald-700 dark:text-emerald-400",
+    sal: "text-zinc-900 dark:text-zinc-100",
   },
   footer: {
-    fb: "text-emerald-400",
-    sal: "text-zinc-100",
+    fb: "text-emerald-700 dark:text-emerald-400",
+    sal: "text-zinc-900 dark:text-zinc-100",
   },
 };
 

@@ -32,7 +32,7 @@ function FooterLink({
   return (
     <Link
       href={href}
-      className="block rounded-md py-1.5 text-sm text-zinc-400 transition hover:text-white"
+      className="block rounded-md py-1.5 text-sm text-zinc-600 transition hover:text-emerald-800 dark:text-zinc-400 dark:hover:text-white"
     >
       {children}
     </Link>
@@ -51,12 +51,12 @@ export async function SiteFooter() {
   const leagues = await getLeagues();
 
   return (
-    <footer className="mt-auto border-t border-zinc-800 bg-zinc-950 text-zinc-300">
+    <footer className="mt-auto border-t border-zinc-200 bg-zinc-100 text-zinc-700 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-300">
       <div className="mx-auto max-w-6xl px-4 py-10">
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-12 lg:gap-8">
           <div className="space-y-3 lg:col-span-4">
             <SiteLogo variant="footer" className="text-base" />
-            <p className="max-w-xs text-sm leading-relaxed text-zinc-400">
+            <p className="max-w-xs text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
               {SITE_TAGLINE}
             </p>
           </div>
@@ -102,16 +102,16 @@ export async function SiteFooter() {
           </nav>
         </div>
 
-        <div className="mt-10 border-t border-zinc-800 pt-8">
-          <TrustLegend variant="dark" />
+        <div className="mt-10 border-t border-zinc-200 pt-8 dark:border-zinc-800">
+          <TrustLegend />
         </div>
 
-        <div className="mt-8 flex flex-col gap-3 border-t border-zinc-800 pt-6 text-xs text-zinc-500 sm:flex-row sm:items-center sm:justify-between">
+        <div className="mt-8 flex flex-col gap-3 border-t border-zinc-200 pt-6 text-xs text-zinc-500 dark:border-zinc-800 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 {SITE_NAME}. All rights reserved.</p>
           <p className="flex flex-wrap gap-x-4 gap-y-1">
             <Link
               href="/sitemap.xml"
-              className="hover:text-zinc-300"
+              className="hover:text-zinc-800 dark:hover:text-zinc-300"
             >
               Sitemap
             </Link>
