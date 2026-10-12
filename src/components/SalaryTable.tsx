@@ -253,7 +253,92 @@ function SalaryTableInner({ rows, urlBasePath = "/" }: Props) {
         <div className="hidden space-y-2 pt-1 md:block">{displayOptions}</div>
       </div>
 
-      <div className="max-w-full overflow-x-auto overscroll-x-contain rounded-xl border border-zinc-200 bg-white shadow-sm dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="space-y-2 md:hidden">
+        {visible.length === 0 ? (
+          <p className="rounded-xl border border-zinc-200 bg-white px-4 py-8 text-center text-sm text-zinc-500 dark:border-zinc-800 dark:bg-zinc-950">
+            {rows.length === 0
+              ? "No wages published for this league yet."
+              : (
+                <>
+                  No players match &ldquo;{trimmedQuery}&rdquo;.{" "}
+                  <button
+                    type="button"
+                    onClick={() => setQuery("")}
+                    className="font-medium text-emerald-700 dark:text-emerald-400"
+                  >
+                    Clear search
+                  </button>
+                </>
+              )}
+          </p>
+        ) : (
+          visible.map((row, index) => (
+            <Link
+              key={row.playerId}
+              href={`/players/${row.slug}`}
+              className="block rounded-xl border border-zinc-200 bg-white p-4 shadow-sm transition hover:border-emerald-600/40 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-emerald-500/40"
+            >
+              <div className="flex items-start gap-3">
+                <span className="w-6 shrink-0 pt-1 text-sm tabular-nums text-zinc-500">
+                  {index + 1}
+                </span>
+                <PlayerPhoto
+                  name={row.name}
+                  photoUrl={row.photoUrl}
+                  size="sm"
+                />
+                <div className="min-w-0 flex-1">
+                  <p className="font-semibold text-zinc-900 dark:text-zinc-100">
+                    {row.name}
+                  </p>
+                  <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                    {row.clubName ?? "—"}
+                    {row.position ? ` · ${row.position}` : ""}
+                  </p>
+                  <div className="mt-2 flex flex-wrap items-center gap-2">
+                    {row.status ? (
+                      <WageStatusBadge status={row.status} />
+                    ) : null}
+                    <ContractTimingBadge contractEnd={row.contractEnd} />
+                  </div>
+                </div>
+              </div>
+              <div className="mt-3 grid grid-cols-2 gap-3 border-t border-zinc-100 pt-3 dark:border-zinc-800">
+                <div className="[&>div]:text-left">
+                  <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                    Weekly
+                  </p>
+                  <WageAmountCell
+                    amount={row.weeklyWageGbp}
+                    currency={row.currency}
+                    display={wageDisplay}
+                    emphasized={weeklyEmphasis}
+                  />
+                </div>
+                <div className="[&>div]:text-left">
+                  <p className="text-xs font-medium uppercase tracking-wide text-zinc-500">
+                    Annual
+                  </p>
+                  <WageAmountCell
+                    amount={row.annualWageGbp}
+                    currency={row.currency}
+                    display={wageDisplay}
+                    emphasized={annualEmphasis}
+                  />
+                </div>
+              </div>
+              {row.contractEnd ? (
+                <p className="mt-2 text-xs text-zinc-500">
+                  Contract ends {formatDate(row.contractEnd)}
+                </p>
+              ) : null}
+            </Link>
+          ))
+        )}
+        <p className="text-xs text-zinc-500">{FX_DISCLAIMER}</p>
+      </div>
+
+      <div className="hidden max-w-full overflow-x-auto overscroll-x-contain rounded-xl border border-zinc-200 bg-white shadow-sm md:block dark:border-zinc-800 dark:bg-zinc-950">
         <table className="w-full min-w-[36rem] text-left text-sm">
           <caption className="sr-only">Football player salaries</caption>
           <thead className="border-b border-zinc-200 bg-zinc-50 text-xs uppercase tracking-wide text-zinc-600 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-400">
@@ -413,7 +498,17 @@ export function SalaryTable(props: Props) {
   return (
     <Suspense
       fallback={
-        <div className="h-72 max-w-full animate-pulse rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950" />
+        <>
+          <div className="space-y-2 md:hidden">
+            {[1, 2, 3, 4].map((i) => (
+              <div
+                key={i}
+                className="h-36 animate-pulse rounded-xl border border-zinc-200 bg-white dark:border-zinc-800 dark:bg-zinc-950"
+              />
+            ))}
+          </div>
+          <div className="hidden h-72 max-w-full animate-pulse rounded-xl border border-zinc-200 bg-white md:block dark:border-zinc-800 dark:bg-zinc-950" />
+        </>
       }
     >
       <SalaryTableInner {...props} />

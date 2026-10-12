@@ -1,15 +1,19 @@
 import Link from "next/link";
+import { MobileNav } from "@/components/MobileNav";
 import { SiteLogo } from "@/components/SiteLogo";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { siteNavLinks } from "@/lib/site-nav";
 
 export function SiteHeader() {
   return (
-    <header className="border-b border-zinc-200 bg-white text-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-4 py-4">
+    <header className="relative border-b border-zinc-200 bg-white text-zinc-900 dark:border-zinc-800 dark:bg-zinc-950 dark:text-zinc-100">
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-4">
         <SiteLogo variant="header" />
-        <div className="flex flex-wrap items-center gap-2">
-          <nav className="flex flex-wrap gap-1 text-sm">
+        <div className="flex items-center gap-1 sm:gap-2">
+          <nav
+            className="hidden flex-wrap gap-1 text-sm md:flex"
+            aria-label="Primary"
+          >
             {siteNavLinks.map((link) => (
               <Link
                 key={link.href}
@@ -21,6 +25,7 @@ export function SiteHeader() {
             ))}
           </nav>
           <ThemeToggle />
+          <MobileNav />
         </div>
       </div>
     </header>

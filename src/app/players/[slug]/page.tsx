@@ -119,14 +119,14 @@ async function PlayerContent({ params }: { params: Params }) {
           {player.position ? ` · ${player.position}` : ""}
           {player.nationality ? ` · ${player.nationality}` : ""}
         </p>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <PlayerPhoto
             name={player.name}
             photoUrl={player.photo_url}
             size="lg"
             priority
           />
-          <h1 className="text-3xl font-semibold tracking-tight">
+          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
             {player.name} salary
           </h1>
         </div>
