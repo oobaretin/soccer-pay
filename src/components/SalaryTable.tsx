@@ -105,22 +105,12 @@ function SalaryTableInner({ rows, urlBasePath = "/" }: Props) {
     if (period !== "annual") params.set("period", period);
     if (wageDisplay === "usd") params.set("display", "usd");
     const next = params.toString();
-    const pathQuery = searchParams.toString();
+    const pathQuery = window.location.search.replace(/^\?/, "");
     if (next !== pathQuery) {
-      router.replace(next ? `${urlBasePath}?${next}` : urlBasePath, {
-        scroll: false,
-      });
+      const href = next ? `${urlBasePath}?${next}` : urlBasePath;
+      window.history.replaceState(window.history.state, "", href);
     }
-  }, [
-    query,
-    sortKey,
-    sortDir,
-    period,
-    wageDisplay,
-    urlBasePath,
-    router,
-    searchParams,
-  ]);
+  }, [query, sortKey, sortDir, period, wageDisplay, urlBasePath]);
 
   const visible = useMemo(() => {
     const filtered = filterSalaryRows(rows, query);
