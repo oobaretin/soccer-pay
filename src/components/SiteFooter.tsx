@@ -41,7 +41,7 @@ function FooterLink({
 
 function FooterHeading({ children }: { children: ReactNode }) {
   return (
-    <p className="text-xs font-semibold uppercase tracking-wider text-zinc-500">
+    <p className="footer-col-heading text-zinc-500">
       {children}
     </p>
   );

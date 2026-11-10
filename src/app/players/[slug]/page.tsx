@@ -126,9 +126,7 @@ async function PlayerContent({ params }: { params: Params }) {
             size="lg"
             priority
           />
-          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
-            {player.name} salary
-          </h1>
+          <h1 className="display">{player.name} salary</h1>
         </div>
         {contract && hasPublishedWage ? (
           <div className="space-y-2 rounded-xl border border-zinc-200 bg-white p-5 shadow-sm dark:border-zinc-800 dark:bg-zinc-950">

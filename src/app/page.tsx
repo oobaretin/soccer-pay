@@ -41,7 +41,11 @@ export default function HomePage() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="Football Player Salaries 2026"
+        title={
+          <>
+            Football player <em>salaries</em> 2026
+          </>
+        }
         subtitle={SITE_TAGLINE}
         hint="Pick a league, then open any player for sources and contract detail."
       />

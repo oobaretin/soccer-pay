@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Geist, Geist_Mono, Sora } from "next/font/google";
+import { siteFontClassName } from "@/lib/site-fonts";
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { ThemeProvider } from "@/components/ThemeProvider";
@@ -57,7 +58,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html
       lang="en"
       suppressHydrationWarning
-      className={`${geistSans.variable} ${geistMono.variable} ${sora.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${sora.variable} ${siteFontClassName} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col overflow-x-hidden bg-[#f4f7f5] text-zinc-900 dark:bg-zinc-950 dark:text-zinc-100">
         <ThemeProvider>

@@ -1,0 +1,292 @@
+/* Site typography — Fraunces / Inter / JetBrains Mono */
+
+body {
+  --display: var(--font-fraunces), "Iowan Old Style", Georgia, "Times New Roman",
+    serif;
+  --sans: var(--font-inter), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  --mono: var(--font-jetbrains), ui-monospace, "SF Mono", Menlo, monospace;
+
+  --fs-display: clamp(2.9rem, 7.2vw, 6.4rem);
+  --fs-h2: clamp(1.9rem, 3.6vw, 3.1rem);
+  --fs-h3: clamp(1.15rem, 1.6vw, 1.4rem);
+  --fs-body: 1rem;
+  --fs-small: 0.875rem;
+  --fs-micro: 0.6875rem;
+  --fs-nano: 0.5625rem;
+
+  --ink: #18181b;
+  --ink-muted: color-mix(in srgb, var(--ink) 66%, transparent);
+  --gold: #c9a227;
+
+  font-family: var(--sans);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.dark body {
+  --ink: #fafafa;
+  --ink-muted: color-mix(in srgb, var(--ink) 66%, transparent);
+  --gold: #e8c547;
+}
+
+.display,
+main > header h1,
+main h1.display {
+  font-family: var(--display);
+  font-size: var(--fs-display);
+  font-weight: 380;
+  line-height: 0.94;
+  letter-spacing: -0.025em;
+  font-variation-settings: "SOFT" 30, "WONK" 1;
+  font-synthesis: none;
+  text-wrap: balance;
+  color: var(--ink);
+  text-transform: none;
+}
+
+.display em,
+main h1 em {
+  font-style: italic;
+  font-weight: 340;
+  letter-spacing: -0.03em;
+  color: var(--gold);
+}
+
+main h2,
+.card-title {
+  font-family: var(--display);
+  font-size: var(--fs-h2);
+  font-weight: 420;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-variation-settings: "SOFT" 20, "WONK" 1;
+  font-synthesis: none;
+  color: var(--ink);
+  text-transform: none;
+}
+
+main article h2,
+main li h2.text-lg,
+main .section-title {
+  font-size: var(--fs-h3);
+  font-weight: 480;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  font-variation-settings: "SOFT" 10, "WONK" 1;
+}
+
+main h3 {
+  font-family: var(--display);
+  font-size: 1.22rem;
+  font-weight: 480;
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  font-synthesis: none;
+  color: var(--ink);
+  text-transform: none;
+}
+
+main blockquote {
+  font-family: var(--display);
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-weight: 340;
+  line-height: 1.35;
+  letter-spacing: -0.01em;
+  font-synthesis: none;
+  color: var(--ink);
+}
+
+main p,
+main li {
+  font-family: var(--sans);
+  font-size: var(--fs-body);
+  line-height: 1.6;
+  font-weight: 400;
+  letter-spacing: 0;
+  max-width: 75ch;
+}
+
+.lede {
+  font-family: var(--sans);
+  font-size: clamp(1rem, 1.25vw, 1.125rem);
+  line-height: 1.65;
+  font-weight: 400;
+  max-width: 34ch;
+  color: var(--ink-muted);
+}
+
+.copy-small {
+  font-family: var(--sans);
+  font-size: var(--fs-small);
+  line-height: 1.6;
+  font-weight: 400;
+  color: var(--ink-muted);
+  max-width: 75ch;
+}
+
+.eyebrow {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.type-label,
+.type-tail {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+main .tag,
+main .badge,
+main span.rounded-full.px-2 {
+  font-family: var(--mono);
+  font-size: var(--fs-nano);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+  text-shadow: none;
+}
+
+main button,
+header button {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  text-shadow: none;
+}
+
+header nav a {
+  font-family: var(--sans);
+  font-size: var(--fs-small);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+main label,
+main label span.font-medium {
+  font-family: var(--mono);
+  font-size: var(--fs-nano);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+main input[type="search"],
+main input[type="text"] {
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+footer .footer-col-heading {
+  font-family: var(--mono);
+  font-size: var(--fs-nano);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+footer .text-xs,
+footer .text-sm,
+footer a.text-sm {
+  font-family: var(--sans);
+  font-size: var(--fs-small);
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+footer .mt-8 p,
+footer .mt-8 span {
+  font-family: var(--mono);
+  font-size: 0.625rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+
+header a span.font-sora,
+footer a span.font-sora {
+  font-family: var(--sans);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+main .tabular-nums,
+main td.tabular-nums,
+main .font-semibold.tabular-nums,
+main p.tabular-nums {
+  font-family: var(--display);
+  font-weight: 420;
+  font-variant-numeric: tabular-nums;
+  font-synthesis: none;
+}
+
+main table thead {
+  font-family: var(--mono);
+  font-size: var(--fs-nano);
+  font-weight: 500;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+main table tbody {
+  font-family: var(--sans);
+  font-size: var(--fs-small);
+  font-weight: 400;
+}
+
+main a.font-medium,
+main .font-semibold:not(.tabular-nums):not(header h1 *) {
+  font-family: var(--sans);
+  font-weight: 500;
+  text-transform: none;
+}
+
+main .text-xs.text-zinc-500 {
+  font-family: var(--mono);
+  font-size: var(--fs-micro);
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: none;
+}
+
+main nav[aria-label="Leagues"] a.rounded-full,
+main nav[aria-label="Primary"] a.rounded-full {
+  font-family: var(--mono);
+  font-size: var(--fs-nano);
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+main nav[aria-label="Breadcrumb"] {
+  font-family: var(--sans);
+  font-size: var(--fs-small);
+  font-weight: 400;
+  text-transform: none;
+}
+
+main span.rounded-full.px-2.py-0\.5 {
+  font-family: var(--mono);
+  font-size: var(--fs-nano);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
